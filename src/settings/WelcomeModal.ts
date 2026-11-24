@@ -9,7 +9,7 @@
  * Left column: the plugin name and a one-line slogan, centered. Right
  * column: a real {@link LiveCalloutPreview} rendering a short sample whose copy
  * itself explains the three callout roles (heading, inline, regular) and links
- * to the user guide on GitHub, so the preview both demonstrates and describes what
+ * to the user guide's website, so the preview both demonstrates and describes what
  * the plugin can do. Closing the modal (Escape, click-outside, or the preview's
  * own link) resolves the first-run `prompt()` promise the same way.
  *
@@ -31,8 +31,8 @@ import type { BrushMascot } from "../ui/mascot/brushMascot";
 /** How long the mascot waits for the window to finish opening before it smiles and winks. */
 const GREETING_DELAY_MS = 350;
 
-const USER_GUIDE_URL =
-	"https://github.com/Niv20/obsidian-plugin-callout-studio/tree/fa1c8e29aa1f9a40b7a90226d12197c6fe96f1f4/docs/user-guide";
+/** The home page of Callout Studio Docs, the user guide's website. */
+const USER_GUIDE_URL = "https://callout-studio.github.io/docs/";
 
 export class WelcomeModal extends Modal {
 	private resolved = false;

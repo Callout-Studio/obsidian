@@ -1,7 +1,7 @@
 {
 	"name": "callout-studio",
 	"version": "3.1.0",
-	"description": "Ultimate callout manager for Obsidian with custom types, Material Icons, native context menu actions, and full dark/light mode color control.",
+	"description": "Create custom callouts as blocks, headings, or inline text. Choose icons from several libraries, emoji, or your own images, set light and dark colors, and keep them looking right in themes and on published sites.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

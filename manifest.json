@@ -3,7 +3,7 @@
 	"name": "Callout Studio",
 	"version": "3.1.0",
 	"minAppVersion": "1.13.4",
-	"description": "Manage callouts with custom types, Material icons, native context menu actions, and full light and dark mode color control.",
+	"description": "Create custom callouts as blocks, headings, or inline text. Choose icons from several libraries, emoji, or your own images, set light and dark colors, and keep them looking right in themes and on published sites.",
 	"author": "Niv Libovitch",
 	"authorUrl": "https://github.com/Niv20",
 	"isDesktopOnly": false

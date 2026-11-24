@@ -396,7 +396,7 @@ Simple Icons source is selected, and again in its credits.
 
 A brand owner who would rather their logo were not offered through Callout
 Studio can say so in an
-[issue](https://github.com/Niv20/obsidian-plugin-callout-studio/issues), and it
+[issue](https://github.com/Callout-Studio/obsidian/issues), and it
 is withdrawn from the pack. Simple Icons runs its own removal process,
 described in the disclaimer linked above; a logo removed there leaves this pack
 the next time it is refreshed.

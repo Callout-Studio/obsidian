@@ -36,7 +36,7 @@ const RAW = en["welcome.sample"] as string;
 /** The sample as the modal renders it. */
 const SAMPLE = RAW.replace(/\{\{id\}\}/g, WELCOME_DEMO_ID).replace(
 	/\{\{repoUrl\}\}/g,
-	"https://github.com/Niv20/obsidian-plugin-callout-studio",
+	"https://callout-studio.github.io/docs/",
 );
 
 /** Every callout token in the sample, in document order. */
@@ -60,11 +60,11 @@ describe("the welcome sample's copy", () => {
 		}
 	});
 
-	it("still links to the repo through the interpolated placeholder", () => {
+	it("still links to the user guide through the interpolated placeholder", () => {
 		// Hard-coding the URL in the string would put it in 31 translations,
-		// where a stale copy of it would outlive every rename of the repo.
+		// where a stale copy of it would outlive every move of the guide.
 		assert.ok(RAW.includes("{{repoUrl}}"), "welcome.sample lost {{repoUrl}}");
-		assert.ok(/\[Learn more\]\(https:\/\/github\.com\//.test(SAMPLE));
+		assert.ok(SAMPLE.includes("[Learn more](https://callout-studio.github.io/docs/)"));
 	});
 });
 

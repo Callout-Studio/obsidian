@@ -1,6 +1,6 @@
 # Callout Studio for Quartz
 
-A [Quartz](https://quartz.jzhao.xyz) plugin that draws the heading callouts and inline callouts of the [Callout Studio](https://github.com/Niv20/obsidian-plugin-callout-studio) Obsidian plugin while your site is built.
+A [Quartz](https://quartz.jzhao.xyz) plugin that draws the heading callouts and inline callouts of the [Callout Studio](https://github.com/Callout-Studio/obsidian) Obsidian plugin while your site is built.
 
 Without it, a heading callout such as `## [!tip] Title` or an inline callout such as `[!warning]` shows on your site as the text you typed. Quartz draws block callouts itself, and this plugin's stylesheet gives them the colors and icons you set up in Callout Studio.
 
@@ -81,6 +81,6 @@ The plugin makes no network requests. It reads the notes in your content folder 
 
 ## Source
 
-This repository holds the built plugin. Its source is in the Callout Studio repository, under [`src/web/`](https://github.com/Niv20/obsidian-plugin-callout-studio/tree/master/src/web), and the full guide is [Publish to the web](https://github.com/Niv20/obsidian-plugin-callout-studio/blob/master/docs/user-guide/19-publish-to-the-web.md).
+This repository holds the built plugin. Its source is in the Callout Studio repository, under [`src/web/`](https://github.com/Callout-Studio/obsidian/tree/master/src/web), and the full guide is [Publish to the web](https://callout-studio.github.io/docs/19-publish-to-the-web).
 
 Released under the license in [LICENSE](LICENSE).

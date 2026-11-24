@@ -12,7 +12,7 @@
 import { t } from "../i18n";
 
 /** The plugin's home on GitHub. */
-export const REPOSITORY_URL = "https://github.com/Niv20/obsidian-plugin-callout-studio";
+export const REPOSITORY_URL = "https://github.com/Callout-Studio/obsidian";
 
 /** The plugin's license, on GitHub. */
 export const LICENSE_URL = `${REPOSITORY_URL}/blob/master/LICENSE`;

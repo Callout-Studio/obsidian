@@ -350,4 +350,4 @@ the community-plugin registry key, so it can never change.
 ## Questions
 
 Open an issue at
-https://github.com/Niv20/obsidian-Plugin-Callout-Studio/issues.
+https://github.com/Callout-Studio/obsidian/issues.

@@ -33,7 +33,7 @@ export function quartzPluginIndex({ coreJs, coreGlobal, hostJs, hostGlobal, vers
 		" * Reads the content folder's notes only, to find that one. Writes",
 		" * nothing, and makes no network requests.",
 		" *",
-		" * Built from https://github.com/Niv20/obsidian-plugin-callout-studio",
+		" * Built from https://github.com/Callout-Studio/obsidian",
 		" * (src/web/). Do not edit: it is replaced on every update.",
 		" */",
 	].join("\n");

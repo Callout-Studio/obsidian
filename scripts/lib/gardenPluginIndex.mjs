@@ -25,7 +25,7 @@ export function gardenPluginIndex({ coreJs, coreGlobal, hostJs, hostGlobal, vers
 		" * Reads src/site/notes/ only. Writes nothing to the repository, and",
 		" * makes no network requests.",
 		" *",
-		" * Built from https://github.com/Niv20/obsidian-plugin-callout-studio",
+		" * Built from https://github.com/Callout-Studio/obsidian",
 		" * (src/web/). Do not edit: it is replaced on every update.",
 		" */",
 	].join("\n");

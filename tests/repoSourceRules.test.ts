@@ -636,6 +636,7 @@ describe("the network surface is exactly what the README discloses", () => {
 			"fonts.gstatic.com", // Material Symbols artwork and webfont
 			"fonts.googleapis.com", // the webfont's stylesheet
 			"github.com", // user-clicked links only
+			"callout-studio.github.io", // Callout Studio Docs: user-clicked links only
 			"docs.obsidian.md",
 			"obsidian.md",
 			"www.gnu.org", // licence links in the credits

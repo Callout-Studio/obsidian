@@ -1302,10 +1302,46 @@ discovery; for the VS Code ESLint extension the committed
 `scripts/eslint.config.mts`. The Prettier extension finds its options and
 `.prettierignore` without help.
 
+## The repository's address
+
+The repository is `Callout-Studio/obsidian`. Until November 2026 it was
+`Niv20/obsidian-plugin-callout-studio`, and every release up to 3.1.0 has that
+address built in: `REPO` in `src/i18n/LocaleStore.ts` and
+`src/icons/data/packManifest.ts`, which the locale files and the icon packs are
+downloaded from, and the links in `src/settings/aboutLinks.ts`,
+`src/icons/packs/simpleIcons.ts` and `src/settings/WelcomeModal.ts`. Those
+installs keep working only because GitHub forwards the old address, on
+`github.com` and `raw.githubusercontent.com`, and jsDelivr follows it. The
+community-plugin registry keeps its own copy of the address (`repo` in
+obsidian-releases' `community-plugins.json`), which only Obsidian's admins
+change, on request in the `#community-directory` channel of Obsidian's Discord.
+
+Three things would break every one of those installs, with no way to reach
+them afterwards:
+
+- **A repository at the old address.** Creating one, or forking this
+  repository back into the `Niv20` account, ends the forwarding.
+- **Renaming or deleting the `Niv20` account.** Whoever takes the name next can
+  create that repository and serve those installs their translations and icon
+  packs.
+- **Deleting or moving a tag, or rewriting `master`'s history.** Locale files
+  are fetched at the release's own tag (`3.1.0`), icon packs at `packs-v1` to
+  `packs-v3`, and releases up to 3.1.0 link the user guide at commit
+  `fa1c8e29`.
+
+The same holds for every file a release links to on `master`: moving it breaks
+the link in every version that has it. `LICENSE`, `docs/THIRD-PARTY-NOTICES.md`
+and `docs/CONTRIBUTING.md` are such files. `THIRD-PARTY-NOTICES.md` at the root
+is only a pointer to `docs/`, for releases 2.4.0 to 2.14.1, which link there
+from their settings. Releases 2.15.0 to 2.18.0 link to
+`docs/THIRD-PARTY-NOTICES.md` without `blob/master/`, an address GitHub does not
+serve, so their link stays broken.
+
 ## Repository layout
 
 Public API documentation, contribution guidance, and third-party notices live
-in `docs/`. README and the plugin's contribution/credits links point to those
+in `docs/` (the root `THIRD-PARTY-NOTICES.md` only points there; see
+[The repository's address](#the-repositorys-address)). README and the plugin's contribution/credits links point to those
 paths. Development configuration and hooks live in `scripts/` alongside the
 build tools. `web-plugins/` holds the hand-written files of the plugins
 Callout Studio publishes for site generators, each released from a repository

@@ -55,10 +55,7 @@ describe("License", () => {
 			);
 			const link = promise.querySelector("a")!;
 			assert.equal(link.textContent, "here");
-			assert.equal(
-				link.getAttribute("href"),
-				"https://github.com/Niv20/obsidian-plugin-callout-studio/blob/master/LICENSE",
-			);
+			assert.equal(link.getAttribute("href"), "https://github.com/Callout-Studio/obsidian/blob/master/LICENSE");
 			assert.equal(link.getAttribute("target"), "_blank");
 		} finally {
 			modal.onClose();

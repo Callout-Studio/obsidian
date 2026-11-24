@@ -28,7 +28,12 @@ export const PACK_FORMAT = 1;
  */
 export const PACKS_TAG = "packs-v3";
 
-const REPO = "Niv20/obsidian-plugin-callout-studio";
+/**
+ * This repository on GitHub. Releases up to 3.1.0 have its first address here,
+ * which works only while GitHub forwards it: see "The repository's address" in
+ * docs/internals-docs/20-build-test-release.md.
+ */
+const REPO = "Callout-Studio/obsidian";
 
 /** Primary and fallback URLs for a pack file, in the order they are tried. */
 export function packUrls(id: IconPackId): string[] {

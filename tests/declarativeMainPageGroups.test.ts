@@ -256,9 +256,9 @@ describe("the footer", () => {
 			.filter((tile) => tile.tagName === "A")
 			.map((a) => [nameOf(a), a.getAttribute("href")]);
 		assert.deepEqual(links, [
-			["Open an issue", "https://github.com/Niv20/obsidian-plugin-callout-studio/issues/new/choose"],
-			["Source code", "https://github.com/Niv20/obsidian-plugin-callout-studio"],
-			["v2.18.0", "https://github.com/Niv20/obsidian-plugin-callout-studio/releases/tag/2.18.0"],
+			["Open an issue", "https://github.com/Callout-Studio/obsidian/issues/new/choose"],
+			["Source code", "https://github.com/Callout-Studio/obsidian"],
+			["v2.18.0", "https://github.com/Callout-Studio/obsidian/releases/tag/2.18.0"],
 		]);
 		// A web page opens in the browser, never in Obsidian's window.
 		const issue = tilesOf(harness).find((tile) => tile.tagName === "A" && nameOf(tile) === "Open an issue")!;

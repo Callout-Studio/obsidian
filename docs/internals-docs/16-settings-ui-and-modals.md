@@ -3339,8 +3339,13 @@ dev-convenience protocol handler `obsidian://callout-studio-welcome`
 registered in `main.ts`.
 
 The sample's **Learn more** link uses `USER_GUIDE_URL` in `WelcomeModal.ts`,
-passed through the existing `repoUrl` translation placeholder. It targets
-`docs/user-guide` on GitHub at revision `fa1c8e29aa1f9a40b7a90226d12197c6fe96f1f4`.
+passed through the existing `repoUrl` translation placeholder. It opens
+`https://callout-studio.github.io/docs/`, the home page of the user guide's
+website (see
+[the two docs sites](20-build-test-release.md#docs-siteyml-and-internal-docs-siteyml---the-two-docs-sites)).
+Releases up to 3.1.0 open `docs/user-guide` on GitHub at revision
+`fa1c8e29aa1f9a40b7a90226d12197c6fe96f1f4` instead: the guide as it was on
+2026-10-04.
 
 Only the automatic first-launch welcome (`new WelcomeModal(plugin, true)`) adds
 `welcome.syncNote` below the tagline: a user joining from another device should
