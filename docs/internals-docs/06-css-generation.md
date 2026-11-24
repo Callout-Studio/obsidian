@@ -953,6 +953,12 @@ The properties of that block that are the whole design:
   a swatch with; a colour the user picked survives in every theme. Same line
   `hasAuthoredTextColors` draws in `settings/editor/authoredStyle.ts` and
   `dropDerivedBackgrounds` applies retroactively to backgrounds.
+- **A print rule is not a surface.** The facts are read with `eachScreenBlock`,
+  which leaves out `@media print` and every other `@media` no screen can match,
+  so a theme's print design never becomes a cancel rule on screen. Ukiyo prints
+  callouts white under a tinted title; read as a screen rule, that painted every
+  callout with a background of its own white. See
+  [18-theme-callout-discovery.md § The generic callout surface](18-theme-callout-discovery.md#the-generic-callout-surface).
 
 One veto, and it is deliberately **global rather than per guard**: if the active
 styling colours a generic callout frame *anywhere*, the frame half stands down

@@ -90,9 +90,71 @@ export function stripComments(css: string): string {
  *
  * Callers strip comments first; this does not do it for them, because
  * `themeReport` reads the `@settings` block out of the raw text.
+ *
+ * Every at-rule is walked into, `@media print` included — see
+ * {@link eachScreenBlock} for the walk that leaves that out.
  */
 export function eachBlock(text: string, visit: BlockVisitor): void {
-	walkBody(text, null, visit);
+	walkBody(text, null, { visit, skipAtRule: () => false });
+}
+
+/**
+ * {@link eachBlock}, minus everything inside a `@media` block that can never
+ * match a screen — `@media print`, above all; see {@link neverOnScreen}.
+ *
+ * A separate walk rather than the default, and it has to be. Most readers of a
+ * sheet ask what its rules *do*, wherever they apply, and this plugin's own
+ * stylesheet is printed too: the studio weight, read off `scanCalloutClaims`,
+ * must still outweigh an `!important` a theme declares only for PDF export.
+ * This is for the reader that asks what a callout *looks like* on screen —
+ * `scanCalloutSurface`, which read Ukiyo's print-only white callout as the
+ * screen's and turned every callout that had a background of its own white.
+ */
+export function eachScreenBlock(text: string, visit: BlockVisitor): void {
+	walkBody(text, null, { visit, skipAtRule: neverOnScreen });
+}
+
+/**
+ * A media type and the condition after it: `print`, `only print`,
+ * `not screen`, `print and (min-width: 0)`. A bare condition —
+ * `(max-width: 600px)`, `not (hover)` — has no type and does not match.
+ */
+const TYPED_MEDIA_QUERY = /^(?:(not|only)\s+)?([a-z][\w-]*)(\s+and\b[\s\S]*)?$/i;
+
+/**
+ * Whether `atRule` — a block's prelude, `@` included — is a `@media` whose
+ * every query rules out a screen, so nothing inside it can apply on one.
+ *
+ * Read per query, because a list matches when any query does:
+ * `@media screen, print` reaches the screen. A query rules it out when its
+ * media type is neither `screen` nor `all` (`print`, `only print`,
+ * `print and (…)`), or when it is `not screen` / `not all` with no condition
+ * after it. A condition is never evaluated: `not screen and (max-width: 600px)`
+ * still matches a wide screen, and `(max-width: 600px)` a narrow one.
+ *
+ * Errs toward "it may apply". A bare condition reads as the `all` it means,
+ * and anything this cannot parse — an empty query in the list included — is
+ * walked as it always was.
+ */
+export function neverOnScreen(atRule: string): boolean {
+	const media = /^@media\b([\s\S]*)$/i.exec(atRule.trim());
+	if (media === null) return false;
+	const queries = splitSelectorList(media[1] ?? "").map((query) => query.trim());
+	if (queries.some((query) => query.length === 0)) return false;
+	return queries.every((query) => {
+		const typed = TYPED_MEDIA_QUERY.exec(query);
+		if (typed === null) return false;
+		const reachesScreen = /^(?:screen|all)$/i.test(typed[2] ?? "");
+		if (typed[1]?.toLowerCase() !== "not") return !reachesScreen;
+		return reachesScreen && typed[3] === undefined;
+	});
+}
+
+/** What one walk carries into every block it opens. */
+interface Walk {
+	visit: BlockVisitor;
+	/** True for an at-rule whose whole block the walk leaves out. */
+	skipAtRule: (atRule: string) => boolean;
 }
 
 /**
@@ -104,7 +166,7 @@ export function eachBlock(text: string, visit: BlockVisitor): void {
  * to do with that: a style rule announces it, the sheet's top level throws it
  * away, and a conditional at-rule hands it further up (see {@link visitRule}).
  */
-function walkBody(text: string, parent: string | null, visit: BlockVisitor): string {
+function walkBody(text: string, parent: string | null, walk: Walk): string {
 	let cursor = 0;
 	let own = "";
 	while (cursor < text.length) {
@@ -119,7 +181,7 @@ function walkBody(text: string, parent: string | null, visit: BlockVisitor): str
 		const between = text.slice(cursor, open);
 		const cut = declarationsEnd(between);
 		own += between.slice(0, cut);
-		own += visitRule(between.slice(cut), text.slice(open + 1, close), parent, visit);
+		own += visitRule(between.slice(cut), text.slice(open + 1, close), parent, walk);
 		cursor = close + 1;
 	}
 	return own + text.slice(cursor);
@@ -135,11 +197,15 @@ function walkBody(text: string, parent: string | null, visit: BlockVisitor): str
  * what a nested `@media` inside a style rule means. At the top level that
  * return value is discarded, which is what keeps `@font-face`'s declarations
  * from being mistaken for anybody's.
+ *
+ * An at-rule the walk skips is dropped whole: no rule inside it is announced,
+ * and declarations nested straight inside it never reach `parent`.
  */
-function visitRule(prelude: string, body: string, parent: string | null, visit: BlockVisitor): string {
-	if (prelude.trim().startsWith("@")) return walkBody(body, parent, visit);
+function visitRule(prelude: string, body: string, parent: string | null, walk: Walk): string {
+	const head = prelude.trim();
+	if (head.startsWith("@")) return walk.skipAtRule(head) ? "" : walkBody(body, parent, walk);
 	const selector = parent === null ? prelude : resolveNested(parent, prelude);
-	visit(selector, walkBody(body, selector, visit));
+	walk.visit(selector, walkBody(body, selector, walk));
 	return "";
 }
 

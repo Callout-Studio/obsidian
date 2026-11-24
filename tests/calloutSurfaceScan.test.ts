@@ -12,7 +12,7 @@
 import assert from "node:assert";
 import { describe, it } from "node:test";
 import { scanCalloutSurface } from "../src/manager/theme/calloutSurfaceScan";
-import { resolveCalloutSurface, guardPrefix } from "../src/manager/theme/calloutSurface";
+import { resolveCalloutSurface, guardPrefix, NO_SURFACE_CLAIM } from "../src/manager/theme/calloutSurface";
 
 const guards = (css: string): string[] => [...scanCalloutSurface(css).neutralBackground.map((bg) => bg.guard)];
 const frames = (css: string): string[] => [...scanCalloutSurface(css).colorlessFrame];
@@ -506,5 +506,59 @@ describe("folding — where an authored background goes instead", () => {
 			["root::after [.callout-style-liquid]"],
 		);
 		assert.deepStrictEqual(surface.relocations, []);
+	});
+});
+
+describe("the surface scan — only what reaches a screen", () => {
+	// Ukiyo 2.3.2's three callout rules from its `@media print` block, verbatim
+	// but for line breaks: how the theme *prints* a callout. A white root under
+	// an accent-tinted title is Sleek's shape exactly, so read as a screen rule
+	// it turned every callout with a background of its own white on screen, in
+	// both modes, and moved the background up onto the title. It is the only
+	// theme of the 257 whose surface changes when print rules are left out.
+	const UKIYO_PRINT_RULES = `
+		.theme-dark .callout,.theme-light .callout{font-family:"CMU Typewriter Text"!important;background-color:#fff!important;color:#000!important;box-shadow:rgba(0,0,0,.15) 1.95px 1.95px 2.6px!important}
+		.theme-dark .callout .callout-title,.theme-light .callout .callout-title{border:0;background-color:rgba(var(--callout-color),.1)!important}
+		.theme-dark .callout .callout-content,.theme-light .callout .callout-content{background-color:#fff!important}`;
+
+	it("reads nothing out of Ukiyo's print block", () => {
+		const evidence = scanCalloutSurface(`@media print{${UKIYO_PRINT_RULES}}`);
+		assert.deepStrictEqual(evidence.neutralBackground, []);
+		assert.deepStrictEqual(evidence.fills, []);
+		assert.deepStrictEqual(resolveCalloutSurface([evidence]), NO_SURFACE_CLAIM);
+	});
+
+	it("would read the same rules on screen as a neutral root with the colour on the title", () => {
+		// The control: what the scan made of the print block before, and why
+		// leaving it out is what fixes the white callouts.
+		const surface = resolveCalloutSurface([scanCalloutSurface(UKIYO_PRINT_RULES)]);
+		assert.deepStrictEqual(
+			surface.neutralBackground.map((bg) => `${bg.guard} ${bg.color}`),
+			[".theme-dark #fff", ".theme-light #fff"],
+		);
+		assert.deepStrictEqual(
+			surface.relocations.map((f) => `${f.box} [${f.guard}]`),
+			["title [.theme-dark]", "title [.theme-light]"],
+		);
+	});
+
+	it("still reads a surface that some screen can show", () => {
+		for (const media of [
+			"screen, print",
+			"(max-width: 600px)",
+			"not print",
+			"screen and (prefers-color-scheme: dark)",
+		]) {
+			assert.deepStrictEqual(
+				guards(`@media ${media} { .callout { background-color: transparent; } }`),
+				[""],
+				media,
+			);
+		}
+	});
+
+	it("leaves out a print block nested inside a callout rule, and only that", () => {
+		assert.deepStrictEqual(guards(`.callout { @media print { background-color: transparent; } }`), []);
+		assert.deepStrictEqual(guards(`.callout { @media screen { background-color: transparent; } }`), [""]);
 	});
 });

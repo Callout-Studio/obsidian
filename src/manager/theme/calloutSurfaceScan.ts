@@ -29,7 +29,7 @@
  * through `.callout-content { color }`, drawing the theme's own frame in the
  * plugin's default text grey. Both facts are read here.
  */
-import { eachBlock, stripComments } from "./cssBlocks";
+import { eachScreenBlock, stripComments } from "./cssBlocks";
 import { splitSelectorList } from "../../utils/selectorText";
 import { boxFillTargetOf, surfaceTargetOf, type BoxFillHit } from "./calloutSurfaceTarget";
 
@@ -311,14 +311,23 @@ function readChild(name: string, value: string, guard: string, ev: SurfaceEviden
 	else ev.colorlessFrame.add(guard);
 }
 
-/** Scan one stylesheet for what it says about the generic callout surface. */
+/**
+ * Scan one stylesheet for what it says about the generic callout surface.
+ *
+ * Only what can reach a screen is read (`eachScreenBlock`): a rule inside
+ * `@media print` says how a theme prints a callout, not how it draws one.
+ * Ukiyo prints every callout on a white root under an accent-tinted title —
+ * the very shape of AnuPpuccin Sleek's neutral root — and read as a screen
+ * rule, that turned the root of every callout with a background of its own
+ * white, in both modes, with the background moved up onto the title.
+ */
 export function scanCalloutSurface(css: string): SurfaceEvidence {
 	const ev = emptySurfaceEvidence();
 	if (!css.includes(".callout")) return ev;
 	const backgrounds: RootBackgroundCandidate[] = [];
 	const accentTitles = new Set<string>();
 
-	eachBlock(stripComments(css), (prelude, body) => {
+	eachScreenBlock(stripComments(css), (prelude, body) => {
 		// The pre-filter the other scanners use: `.callout` in the prelude keeps
 		// `splitSelectorList` off every other rule of an 850 KB sheet.
 		if (!prelude.includes(".callout")) return;

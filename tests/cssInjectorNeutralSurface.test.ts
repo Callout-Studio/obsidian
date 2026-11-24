@@ -61,6 +61,22 @@ const SOFT_PAPER = `
 	}
 `;
 
+/**
+ * Ukiyo 2.3.2's callout layout on screen, and the three callout rules of its
+ * `@media print` block, verbatim but for line breaks. On screen it paints the
+ * content box and leaves the root to the callout; only its print rules give the
+ * root a white of its own, under an accent-tinted title.
+ */
+const UKIYO = `
+	.callout{padding:0;border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:var(--default-border-radius);border-bottom-right-radius:var(--default-border-radius);border-left:3px solid rgb(var(--callout-color));mix-blend-mode:normal;box-shadow:rgba(0,0,0,.16)0 3px 6px,rgba(0,0,0,.23)0 3px 6px}
+	.callout .callout-content,.markdown-rendered blockquote,table thead{background-color:var(--background-secondary)}
+	@media print{
+		.theme-dark .callout,.theme-light .callout{font-family:"CMU Typewriter Text"!important;background-color:#fff!important;color:#000!important;box-shadow:rgba(0,0,0,.15) 1.95px 1.95px 2.6px!important}
+		.theme-dark .callout .callout-title,.theme-light .callout .callout-title{border:0;background-color:rgba(var(--callout-color),.1)!important}
+		.theme-dark .callout .callout-content,.theme-light .callout .callout-content{background-color:#fff!important}
+	}
+`;
+
 const palette = (over: Record<string, unknown> = {}) =>
 	definition({
 		id: "apple",
@@ -149,5 +165,36 @@ describe("Soft Paper light and dark surfaces", () => {
 		);
 		assert.ok(light.selector.includes("data-callout=multi-column"));
 		assert.ok(dark.selector.includes("data-callout-metadata*=revert"));
+	});
+});
+
+describe("Ukiyo's print-only white callout", () => {
+	it("leaves a callout's own background on its root, on screen, in both modes", () => {
+		// Read as a screen rule, Ukiyo's print block painted the root of every
+		// callout with a background of its own white and moved that background
+		// up onto the title: a white box with a pale title, in dark mode too.
+		const rules = parseRules(themedHarness(UKIYO).css.generateCalloutCSS(palette()));
+		const onScreen = rules.filter((r) => !r.at.some((at) => at.includes("print")));
+		assert.ok(
+			!onScreen.some((r) => r.decls.some((decl) => /^background-color: #fff\b/i.test(decl))),
+			"no screen rule paints the callout white",
+		);
+		assert.ok(
+			!rules.some((r) => r.selector.includes("> .callout-title") && r.props.includes("background-color")),
+			"the background is not moved onto the title",
+		);
+		// The block callout's own root — not the heading and inline tokens
+		// (`.cs-inline-callout[data-callout=…]`), which carry the gradient too.
+		const roots = onScreen.filter(
+			(r) =>
+				r.selector.includes('.callout[data-callout="apple"]') &&
+				!/>|::/.test(r.selector) &&
+				(valueOf(r, "background-image") ?? "").includes("linear-gradient"),
+		);
+		assert.deepStrictEqual(
+			roots.map((r) => r.selector.startsWith(".theme-dark ")),
+			[false, true],
+			"the palette's gradient stays on the root, light and dark",
+		);
 	});
 });

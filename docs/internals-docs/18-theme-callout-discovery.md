@@ -127,7 +127,10 @@ Cutting the sheet into rules is its own module,
 first, so a nested sheet is read exactly as its flat equivalent would be - same
 ids, same property names, same specificity. That is not a nicety: nesting is a
 choice about source formatting, and the browser resolves it away before anything
-this plugin cares about happens.
+this plugin cares about happens. `eachBlock` walks into every at-rule;
+`eachScreenBlock` is the same walk minus the `@media` blocks no screen can
+match, and only the surface scan uses it (see
+[The generic callout surface](#the-generic-callout-surface)).
 
 ### What a claim records
 
@@ -291,6 +294,25 @@ callout-related Style Settings option alone and in pairs: a title stripe
 WindowPanel; Iridium's default; Shiba Inu's first style), both boxes (Cyber
 Glow), or a whole-callout `::after` (Ultra Lobster's line style, Glass Robo's
 glow style). The rest of the neutral-root themes fill nothing else.
+
+**Only what can reach a screen is read.** The surface walk is
+`eachScreenBlock`, not `eachBlock`: it leaves out every `@media` block no screen
+can match - a media type other than `screen` or `all`, or `not screen` /
+`not all` with no condition (`neverOnScreen` in
+[`cssBlocks.ts`](../../src/manager/theme/cssBlocks.ts)) - so a rule that says
+how a theme *prints* a callout is not a fact about how it draws one. Ukiyo's
+`@media print` block puts every callout on a `#fff` root under a
+`rgba(var(--callout-color), .1)` title, which is Sleek's shape exactly. Read as a
+screen rule, it turned the root of every callout with a background of its own
+white, in both modes, and moved that background up onto the title (2.16.0
+through 3.1.0). Of the 257 installed themes, Ukiyo is the only one whose surface
+changes; Glass Robo's print-only `.homs-callouts` fills leave the evidence
+without changing the answer.
+
+The other readers of the same text keep walking into print blocks, and must:
+ownership and the studio weight come from `scanCalloutClaims`, and this
+plugin's stylesheet is printed too, so its `!important` still has to outweigh
+one a theme declares only for PDF export.
 
 ### The accent dialect
 
