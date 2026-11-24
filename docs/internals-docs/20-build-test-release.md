@@ -25,7 +25,7 @@ then `npm test`.
 ## Manual installation from a release
 
 To install a release manually, download `manifest.json`, `main.js`, and
-`styles.css` from the [latest GitHub release](https://github.com/Niv20/obsidian-plugin-callout-studio/releases/latest).
+`styles.css` from the [latest GitHub release](https://github.com/Callout-Studio/obsidian/releases/latest).
 Copy the files into `<Vault>/.obsidian/plugins/callout-studio/`, restart
 Obsidian, then enable **Callout Studio** in **Settings → Community plugins**.
 The plugin needs Obsidian 1.13.4 or later (`minAppVersion`; see
@@ -1010,7 +1010,7 @@ mixing them up is a real trap:
 
 ## CI
 
-Two workflows, `.github/workflows/`:
+Four workflows, `.github/workflows/`:
 
 ### `lint.yml` - pushes to `master` and all pull requests, Node 20.x and 22.x
 
@@ -1144,6 +1144,53 @@ and opens a PR on each new release, which `lint.yml` then runs against.
 > notes and flips it public - a workflow failure partway through therefore
 > leaves a harmless draft rather than a half-published, half-broken public
 > release.
+
+### `docs-site.yml` and `internal-docs-site.yml` - the two docs sites
+
+The user guide and these internal docs are also published as websites, built
+with [Quartz](https://quartz.jzhao.xyz) 5 in two repositories of their own:
+
+| Site | Repository | Built from |
+| --- | --- | --- |
+| [Callout Studio Docs](https://callout-studio.github.io/docs/) | [`Callout-Studio/docs`](https://github.com/Callout-Studio/docs) | `docs/user-guide/` and `assets/user-guide/` |
+| [Callout Studio Internal Docs](https://callout-studio.github.io/internal-docs/) | [`Callout-Studio/internal-docs`](https://github.com/Callout-Studio/internal-docs) | `docs/internals-docs/` |
+
+The pages stay here, written for GitHub, so a doc change still lands in the
+same commit as the code it describes. The site repositories hold only Quartz's
+settings, a script that prepares the pages, and the workflow that builds and
+publishes them.
+
+A push to `master` that touches one of those folders runs the matching workflow
+here. It writes the pushed commit into the site repository's
+`source-commit.txt`, and pushes that with an SSH deploy key of the site
+repository: the private halves are this repository's `DOCS_SITE_DEPLOY_KEY`
+and `INTERNAL_DOCS_SITE_DEPLOY_KEY` secrets, the public halves are under each
+site repository's **Settings → Deploy keys**. That push runs the site's own
+workflow, which checks out these docs at that commit, prepares them, and
+publishes the site on GitHub Pages. Deploy keys do not expire, so nothing needs
+renewing. Deleting either half stops the updates.
+
+What the preparing script (`prepare-content.mjs` in each site repository) does
+to the pages:
+
+- The first `# ` heading becomes the page's title, and `README.md` the home
+  page.
+- Links between pages of the same folder stay relative. Links into the other
+  folder go to the other site: `../user-guide/03-custom-color-palettes.md`
+  becomes `https://callout-studio.github.io/docs/03-custom-color-palettes`.
+- Links to any other file of the repository (`../../src/…`, `../API.md`) go to
+  that file on GitHub, **at the commit the site was built from**, so they keep
+  working after the file moves.
+- GitHub's alerts (`> [!NOTE]` and the rest) become the Quartz callouts that
+  look the same.
+- A link to a file that is not in that commit shows as a warning on the site's
+  workflow run. The site is still published.
+
+Quartz is set to read the Markdown the way GitHub does: a single line break is
+a space, quotes stay straight, and Obsidian-only syntax (`#tags`,
+`==highlights==`, `%%comments%%`, wikilinks, `$math$`) stays as written. File
+names are the sites' addresses, so renaming a page changes its URL, as it
+already does on GitHub.
 
 ## Versioning
 

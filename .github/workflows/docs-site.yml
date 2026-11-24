@@ -1,0 +1,57 @@
+name: Docs site
+
+# Rebuilds Callout Studio Docs (https://callout-studio.github.io/docs/) when the
+# user guide or its pictures change. The site lives in Callout-Studio/docs and
+# builds from the commit written in its source-commit.txt, so all this does is
+# write this commit there. It pushes with a deploy key of that repository, kept
+# here as the DOCS_SITE_DEPLOY_KEY secret; a deploy key never expires.
+
+on:
+    push:
+        branches: [master]
+        paths:
+            - "docs/user-guide/**"
+            - "assets/user-guide/**"
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: docs-site
+    cancel-in-progress: false
+
+jobs:
+    rebuild:
+        if: github.repository == 'Callout-Studio/obsidian'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the site
+              uses: actions/checkout@v7
+              with:
+                  repository: Callout-Studio/docs
+                  ssh-key: ${{ secrets.DOCS_SITE_DEPLOY_KEY }}
+
+            - name: Point the site at this commit
+              env:
+                  MESSAGE: ${{ github.event.head_commit.message }}
+              run: |
+                  echo "$GITHUB_SHA" > source-commit.txt
+                  git add source-commit.txt
+                  if git diff --cached --quiet; then
+                      echo "The site already builds from $GITHUB_SHA."
+                      exit 0
+                  fi
+                  git config user.name "github-actions[bot]"
+                  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                  subject="Build from Callout-Studio/obsidian@${GITHUB_SHA::7}"
+                  if [ -n "$MESSAGE" ]; then
+                      git commit --quiet -m "$subject" -m "${MESSAGE%%$'\n'*}"
+                  else
+                      git commit --quiet -m "$subject"
+                  fi
+                  for attempt in 1 2 3; do
+                      git push --quiet && exit 0
+                      git pull --quiet --rebase
+                  done
+                  exit 1
