@@ -803,6 +803,17 @@ so change it there. The result boxes are `#232323` because the Find component's
 capture sets them so (see the `store-bento-artwork` skill, `.agents/skills/store-bento-artwork/`); re-render that capture before
 the grid, or the grid keeps the old fill.
 
+### Organization profile banner
+
+`assets/github-org/banner.svg` is the picture at the top of the GitHub organization's page. The
+page itself is `profile/README.md` in
+[`Callout-Studio/.github`](https://github.com/Callout-Studio/.github), which holds a copy of the
+banner. Unlike the README banner, this one is not edited by hand:
+`node assets/github-org/generator/build.mjs` writes it, with nothing but Node and the same bytes
+every time. No build, test, hook or CI step runs it, and publishing a new banner is a separate
+step. [`assets/github-org/README.md`](../../assets/github-org/README.md) lists the settings and
+that step.
+
 ### Store screenshots
 
 `node scripts/render-store-screenshots.mjs` generates four 1200 × 800 desktop

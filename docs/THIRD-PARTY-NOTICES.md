@@ -57,6 +57,9 @@ split shapes are tailored and recomposed for small UI sizes. Editable SVGs are i
 The [README banner](../assets/readme/00-banner.svg) and its dynamic badges also
 use Lucide icons. The banner includes the ISC notice alongside its SVG geometry.
 
+So does the [organization profile banner](../assets/github-org/banner.svg), which carries the same
+notice.
+
 ```
 ISC License
 

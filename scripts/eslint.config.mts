@@ -117,6 +117,8 @@ export default tseslint.config(
 		"assets/website/generator",
 		// Node-only generator of the Digital Garden gallery picture, same status as scripts/.
 		"assets/digital-garden/generator",
+		// Node-only generator of the GitHub organization's banner, same status as scripts/.
+		"assets/github-org/generator",
 		// The Quartz plugin's hand-written files, published as they are in their
 		// own repository: its index.d.ts is for a Quartz site's type check.
 		"web-plugins/quartz",
