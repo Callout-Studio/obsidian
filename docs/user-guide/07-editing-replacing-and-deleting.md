@@ -124,7 +124,7 @@ Callout Studio says how many times the callout appears and in how many files, an
 - **Heading callout:** `## [!type] Title` becomes `## Title`. A heading with no title of its own keeps the type as the note writes it: `## type`.
 - **Inline callout:** `[!type]{text}` keeps only its text. Without `{text}`, the type stays as the note writes it: `[!type]` becomes `type`.
 
-Heading and inline callouts follow the same rules as **Convert to standard Markdown** in the [Danger zone](14-danger-zone.md). An inline callout that can't be read safely, such as one with another inline callout inside its `{…}`, is left unchanged.
+Heading and inline callouts follow the same rules as **Convert to standard Markdown** in the [Danger zone](18-danger-zone.md). An inline callout that can't be read safely, such as one with another inline callout inside its `{…}`, is left unchanged.
 
 The callout type itself stays in your list. To remove it as well, choose **Delete** afterwards: with no uses left, it's deleted right away.
 
@@ -133,4 +133,4 @@ If some notes cannot be updated, Callout Studio reports the incomplete work; the
 When it finishes, the notice offers **Undo**. It puts back every note the conversion changed, unless you've edited that note since.
 
 ---
-**Next:** [Global styling](07-global-styling.md)
+**Next:** [The right-click menu](08-the-right-click-menu.md)

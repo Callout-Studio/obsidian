@@ -1,7 +1,7 @@
 /**
  * Render user-guide scenes from source as portable vector SVGs, entirely offline.
  * Requires an existing Playwright installation and locally installed Obsidian.
- * See docs/internals-docs/20-build-test-release.md, User-guide SVG renders.
+ * See docs/internals-docs/22-build-test-release.md, User-guide SVG renders.
  */
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";

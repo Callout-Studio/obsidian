@@ -13,7 +13,7 @@
  *
  * What these cannot see is a browser: whether the mask paints, and whether
  * Share Note's Lucide fills a name. That was checked against a real Share Note
- * and its server; `docs/internals-docs/20-build-test-release.md` says how.
+ * and its server; `docs/internals-docs/22-build-test-release.md` says how.
  */
 import assert from "node:assert";
 import { afterEach, beforeEach, describe, it } from "node:test";

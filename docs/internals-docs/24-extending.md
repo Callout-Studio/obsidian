@@ -1,4 +1,4 @@
-# Adding or modifying features
+# Adding features
 
 "I want to add a feature - where do I start?" This document walks through
 the extension paths that actually apply to this codebase, and for each one,
@@ -24,7 +24,7 @@ migration/runtime-refresh."
    `userImages`, `customCommands`), it must also be added to `mergeById`
    handling in the JSON importer
    (`backupImport.processImportedJSON`) - see
-   [Import and export § the three exceptions](15-import-export.md#settings-import-restore-the-groups-the-file-carries-three-lists-merge-by-id).
+   [Import and export § the three exceptions](15-import-export.md#importing-settings).
    A brand-new such list needs a fourth stop: register it in `mergeById`'s
    call site the same way the existing three are handled, and add it to
    `LIST_GROUPS` there, so the group restore never assigns it wholesale.
@@ -65,20 +65,20 @@ If you're modifying an *existing* fixed command's behaviour: never change its
 [`CalloutBlockTools.ts`](../../src/editor/CalloutBlockTools.ts) so the fixed
 command and any custom command sharing the same operation can't drift apart.
 
-## Adding a callout-related behaviour (new field on `CalloutDefinition`)
+## Adding a callout field
 
 1. **`src/types.ts`** - add the field.
 2. **`src/manager/CalloutRegistry.ts`** - add it to `COMPARED_FIELDS` (the
    `isModified` comparison - a field missing here silently never triggers a
    built-in save, see
-   [Callout registry § isModified](05-callout-registry.md#ismodified-and-the-built-in-deference-mechanism)),
+   [Callout registry § isModified](05-callout-registry.md#ismodified-and-built-in-deference)),
    and decide whether it belongs in `COLOUR_NEUTRAL_FIELDS` too.
 3. If the field must always hold a *concrete* value in the editor form but
    is meaningfully *optional* on the definition (like backgrounds, text
    colours, icon adjustment), add a predicate to
    `src/settings/editor/authoredStyle.ts` and use it from **both**
    `CalloutEditorSave.ts` and the live-preview build path - see
-   [Callout editor § the core tension](14-callout-editor.md#the-core-tension-concrete-form-state-vs-optional-definition-fields).
+   [Callout editor § the core tension](14-callout-editor.md#form-state-vs-definition-fields).
    Skipping this reintroduces the exact "opening the editor restyles the
    vault behind the modal" bug class documented there.
 4. If it's `true`-or-absent (not a real boolean), follow the
@@ -129,13 +129,13 @@ command and any custom command sharing the same operation can't drift apart.
    it and commit the regenerated `locales/*.json` +
    `src/i18n/localeManifest.ts`, or CI's `git diff --exit-code` check fails
    the build. See [Localization](17-i18n.md) and
-   [Build, test, and release](20-build-test-release.md).
+   [Build, test, and release](22-build-test-release.md).
 4. **Never hardcode UI-facing text.** `tests/repoSourceRules.test.ts`
    ("no hardcoded UI copy") enforces this mechanically - a bare English
    literal handed to a text setter, `Notice`, or `aria-label` fails the
    build.
 
-## Adding a new style option (global style, per-role frame style)
+## Adding a style option
 
 Follows the same shape as [adding a setting](#adding-a-new-setting) above,
 but specifically through `GlobalStyleSettings` /
@@ -206,7 +206,7 @@ step with real consequences if done wrong:
    button that can only fail - for all eight files, not just a new one. Packs
    already on a user's disk are unaffected either way.
 
-See [Icons § PackDataStore](13-icons.md#packdatastore---bundled-file-download-and-verification)
+See [Icons § PackDataStore](13-icons.md#packdatastore)
 for why the checksum has to match exactly (a mismatch on disk is treated as
 `"corrupt"` and rejected, not accepted-as-stale the way a locale file is).
 
@@ -223,7 +223,7 @@ the other packs' refreshes do not:
   has read that licence and added it to `SI_SHIPPED_LICENSES` or
   `SI_WITHHELD_LICENSES` - and to the matching lists in
   `tests/simpleIconsPack.test.ts`, which restate the policy on purpose. See
-  [Icons § Simple Icons](13-icons.md#simple-icons---a-pack-decided-logo-by-logo).
+  [Icons § Simple Icons](13-icons.md#simple-icons-logo-by-logo).
 - **It rewrites `docs/SIMPLE-ICONS-LICENSES.md`.** Commit it with the pack; it
   is the credit the per-logo licences ask for. Update the version in the
   `## Simple Icons …` heading of `docs/THIRD-PARTY-NOTICES.md` by hand - the
@@ -266,9 +266,9 @@ its slug to `SI_WITHDRAWN` in the generator and refresh as above.
    index, so check it against the bundle budget in `release.yml`.
 9. Name the library where users read about them: the source list in
    [`user-guide/04`](../user-guide/04-custom-icons-and-emojis.md) and the
-   download sizes in [Privacy & permissions](25-privacy-and-permissions.md).
+   download sizes in [Privacy & permissions](27-privacy-and-permissions.md).
 
-## Common gotcha checklist for any feature touching the registry
+## Registry gotcha checklist
 
 Before considering a registry-touching change done, verify:
 
@@ -284,4 +284,4 @@ Before considering a registry-touching change done, verify:
       doesn't itself call `notifyChange()`?
 
 ---
-Next chapter: [23-common-pitfalls.md](23-common-pitfalls.md)
+Next chapter: [25-common-pitfalls.md](25-common-pitfalls.md)

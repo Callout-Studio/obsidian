@@ -1,4 +1,4 @@
-# Render roles and rendering surfaces
+# Render roles and surfaces
 
 Heading callouts and inline callouts are the plugin's own invented syntax -
 Obsidian has no idea what `## [!note]` or `text [!note] text` mean. This
@@ -6,7 +6,7 @@ document covers how the plugin recognizes, parses, and renders them across
 Live Preview, Reading view and the Outline pane, and how it stays in sync with
 the registry.
 
-## The token grammar - one parser, every consumer
+## The token grammar
 
 [`src/editor/calloutTokens.ts`](../../src/editor/calloutTokens.ts) (~840 lines)
 is the **single source of truth** for what counts as a callout token. Every
@@ -43,7 +43,7 @@ by role after resolving source masks and container prefixes:
  - an inline markdown link whose text happens to start with `!` - is
   explicitly skipped.
 
-### Metadata is split off at the tokenizer, not downstream
+### Metadata is split at the tokenizer
 
 Every token carries `rawId` (the type alone) **and** `metadata`/`hasMetadata`
 separately - `splitCalloutMetadata` runs inside the tokenizer itself. `from`/`to`
@@ -67,7 +67,7 @@ without a title sweep over a callout whose own definition has one: the
 stylesheet clears the sweep, and the painter, given a definition without one,
 leaves the title unwrapped.
 
-### The `{…}` content payload (inline pills only)
+### The `{…}` pill text
 
 `[!warning]{be careful}` renders the braces' content as the pill's label,
 dropping the token's own one (the display name, or an alias's title). A `{` only opens a payload when it
@@ -86,7 +86,7 @@ which matches rendered DOM candidates to source `[!` occurrences by *ordinal
 position*. Renderers filter nested tokens out via `nestedInlineTokens()`
 instead of the scanner refusing to find them.
 
-### Whole-document exclusions and source positions
+### Exclusions and source positions
 
 `documentCallouts.ts` exposes `iterateDocumentCallouts` (full token, line index,
 line offset) and `iterateDocumentCalloutLines` (every line, including excluded
@@ -112,7 +112,7 @@ identity. Autocomplete asks the document lexer before offering a trigger.
 Native Reading view suppresses code/comments; source pairing for escaped pills
 uses shared exclusions as well.
 
-### References inside links and the Outline pane
+### Tokens in links and the Outline
 
 Three more parsers in the same file cover callout tokens that appear
 **referenced** rather than written: `findWikilinkCalloutRefs` (a heading
@@ -167,7 +167,7 @@ that was typed:
   name from this attribute alone, so a token stamped with the id there would
   be repainted with the NAME the next time the sweep ran.
 
-### `shouldRenderToken` - the theme-ownership cutoff
+### `shouldRenderToken`
 
 ```ts
 export function shouldRenderToken(resolved: ResolvedCalloutDef): boolean {
@@ -187,8 +187,8 @@ offering theme callouts in those positions, the command builder drops the two
 options, and an existing heading/inline command is *suspended* rather than
 deleted.
 
-See [CSS generation § standing down](06-css-generation.md#standing-down---why-emit-nothing-needs-three-separate-mechanisms) and
-[Theme callout discovery § Block only](18-theme-callout-discovery.md#where-theme-callouts-appear---and-why-block-only).
+See [CSS generation § standing down](06-css-generation.md#standing-down-three-mechanisms) and
+[Theme callout discovery § Block only](18-theme-callout-discovery.md#where-theme-callouts-appear).
 
 ### `hideIcon` and flex-gap collapse
 
@@ -228,7 +228,7 @@ recomputes decorations for **visible ranges only**, triggered by doc changes,
 viewport changes, selection/focus changes, fold changes, and an explicit
 no-payload refresh effect.
 
-### Why the heading-line "gap above the bar" is a separate `StateField`
+### The gap above a heading bar
 
 In CodeMirror 6, **block decorations may not come from a `ViewPlugin`** - the
 content-drawing code consumes block decorations before layout, while a
@@ -246,7 +246,7 @@ inside a code fence. The field rebuilds automatically when the parse worker
 advances the tree (detected by tree-object identity change) as well as on
 document changes and the refresh effect.
 
-### `visibleRanges` is not the viewport - the "line split across two spans" trap
+### `visibleRanges` is not the viewport
 
 ```ts
 // CodeMirror subtracts every state-level point decoration ≥20 chars from
@@ -260,7 +260,7 @@ for (const range of view.visibleRanges) { ... if (line.from <= lastLineFrom) { s
 A single high-water-mark check (`lastLineFrom`) is the entire fix, because the
 ranges are strictly ordered.
 
-### The raw-syntax reveal and the mousedown freeze
+### The reveal and the mousedown freeze
 
 A heading token or inline pill collapses to its widget **except** while the
 selection touches it - that's the token's only editing affordance. But the
@@ -342,7 +342,7 @@ them are skipped. Marks stay at default precedence because precedence also
 decides how mark decorations nest. Raising the heading title mark, for
 example, would wrap it outside core's header spans.
 
-### `refreshAllCalloutEditors()` - why registry edits need an explicit nudge
+### `refreshAllCalloutEditors()`
 
 Registry mutations (colour edits, renames, new definitions, settings toggles)
 never touch document text, so CodeMirror has no organic reason to rebuild
@@ -439,7 +439,7 @@ Two things it does not reach: a `![[transclusion]]` inside another note's
 reading view (the host's text does not mention the embedded note's tokens),
 and a hover preview, which renders fresh each time anyway.
 
-## A published site: one renderer, three hosts
+## Published sites: one renderer
 
 Obsidian Publish, Quartz and Digital Garden render a vault without running its
 plugins, so there a heading or inline token is literal text. The third render
@@ -461,7 +461,7 @@ the core as an argument, so each is compiled without it and the exporter joins
 the pieces as text (for Quartz and Digital Garden, the release does: each
 plugin is built once, not per vault, and reads the vault's snapshot while the
 site is built) - see
-[Build § The web renderer](20-build-test-release.md#the-web-renderer-four-bundles)
+[Build § The web renderer](22-build-test-release.md#the-web-renderer-four-bundles)
 for the bundles and
 [Import and export § Three export formats](15-import-export.md#three-export-formats)
 for what each service is given.
@@ -472,7 +472,7 @@ the stylesheets of the window - so heading and inline callouts arrive drawn,
 and nothing here runs on the page. What it rebuilds is a block callout's icon,
 by name; see [CSS generation § A page shared with Share Note](06-css-generation.md#a-page-shared-with-share-note).
 
-### What the renderer shares, and what it cannot
+### What the renderer shares
 
 It is a port of the reading-view post-processor, not a second copy of the
 rules:
@@ -513,7 +513,7 @@ Four things differ, each because of where the code runs:
   so every callout is drawn - with its own definition's icon and colours, not
   the theme's. The export also leaves out the rows only the theme adds, which
   the site then draws as unknown ids. Theme state is a runtime reading of one
-  device; see [Import and export § The website export](15-import-export.md#one-snapshot-four-targets)
+  device; see [Import and export § The website export](15-import-export.md#one-snapshot-three-targets)
   for why the files must not depend on it.
 - **The page belongs to someone else.** Quartz appends an anchor link to every
   heading and styles it as `h2[id] > a`, and Publish appends a copy-link button.
@@ -529,7 +529,7 @@ Four things differ, each because of where the code runs:
 - **The block callout is styled, never built.** The renderer leaves the
   site's element exactly as the site made it. The user's colours and icons
   reach it through the stylesheet alone, written per site - see
-  [Import and export § Block callouts](15-import-export.md#block-callouts-a-stylesheet-in-each-sites-own-terms).
+  [Import and export § Block callouts](15-import-export.md#a-block-stylesheet-per-site).
 
 ### Running without a DOM: `web/static/`
 
@@ -677,9 +677,10 @@ and Publish puts `.theme-dark` on the page itself. Until 2026-11-16 the host
 also served a script for any other site, which carried the stylesheet; it
 injected it as a `<style>`, and mirrored Quartz's `saved-theme` onto
 `.theme-dark` for a Quartz site that loaded that script by hand. Both went
-with that target - see [The Another site target](web-target-another-site.md).
+with that target - the `web-target-another-site` skill
+(`.agents/skills/web-target-another-site/`) keeps how it worked.
 
-## The Outline pane, PDF export, and gradient text
+## Outline, PDF export and gradients
 
 - **`OutlineDecorator`** - see
   [Editor integrations § Outline pane](10-editor-integrations.md#outline-pane-and-link-suggestions).

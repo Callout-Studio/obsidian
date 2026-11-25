@@ -70,7 +70,7 @@ A gradient's two stops **share one alpha** (`resolveTintAlpha` takes the max
 of both stops' minima) - ramping alpha across a gradient sweep would visibly
 tilt it.
 
-### Which alpha, and why it isn't simply the smallest
+### Which alpha
 
 [`src/utils/bgTintAlpha.ts`](../../src/utils/bgTintAlpha.ts) picks the alpha a
 callout's background is actually painted at. It is a separate file, and a
@@ -140,7 +140,7 @@ converges *on* leaves core's compositing untouched.
 > `data.json` data on load; `importValidator`'s `RETIRED_FIELDS` silently
 > drops it from old export files.
 
-## Built-ins: no `--callout-color` at all, until edited
+## Built-ins have no `--callout-color`
 
 `CSSInjector.accentProps` + `CalloutRegistry.isUnmodifiedBuiltIn` conspire to
 leave `--callout-color` **entirely unset** for a built-in the user hasn't
@@ -169,7 +169,7 @@ the draft on the real built-in's identity - so the preview pane shows the
 theme's colour for it, as the notes do (see
 [CSS generation § A reserved demo](06-css-generation.md#a-reserved-demo)).
 
-## Two migrations that clean up old colour data
+## Two colour-data migrations
 
 Both are described in more depth in
 [Callout registry § load-time migrations](05-callout-registry.md#load-time-migrations),
@@ -193,7 +193,7 @@ summarized here for the colour angle:
   colours) - the migration only retires what was already written before the
   fix landed.
 
-## Custom palettes: simple vs. advanced, and the baking contract
+## Custom palettes and baking
 
 A `CustomPalette` (see [Data model](04-data-model.md#custompalette)) always
 carries six concrete hexes, even when `transparentBg` is set - that's
@@ -201,7 +201,7 @@ deliberate, so switching a palette back from "None" to "Solid" in the editor
 has real values to restore rather than having to re-derive them from
 scratch.
 
-### Deriving from one base colour ("Simple" mode)
+### Simple mode: one base colour
 
 `derivePaletteFromColor` / `derivePaletteFromColors`
 (`colorUtils.ts`) derive light+dark accent, background, and text colours from
@@ -269,7 +269,7 @@ ever revisited, the shape to use is an added sentence that fades in beside the
 hint, never a swapped one - and the swatch showing `#ffff00` while titles paint
 `#8c8c00` is the fact any such sentence would have to state.
 
-### `bakePaletteColors` - the one place a palette becomes callout fields
+### `bakePaletteColors`
 
 ```ts
 bakePaletteColors(palette: ColorPalette): CalloutManagerBakedColors
@@ -305,7 +305,7 @@ colour the palette never had.
   (`mergePalettes`): a palette whose name a vault palette already carries
   replaces it under the vault's id and repaints the callouts linked to it, so a
   name never ends up on two palettes. See
-  [Import and export](15-import-export.md#settings-import-restore-the-groups-the-file-carries-three-lists-merge-by-id).
+  [Import and export](15-import-export.md#importing-settings).
 - **Renaming** changes the palette's metadata word (see
   [Metadata colour words](#metadata-colour-words)). The question about the
   notes comes before anything is saved, as the callout editor's does: the
@@ -335,7 +335,7 @@ colour the palette never had.
   `main.ts`) - losing a duplicate palette's *name* is worth mentioning even
   though no callout's appearance changes.
 
-### `bgIntensity` - palette-editor-only, not read at render time
+### `bgIntensity` is editor-only
 
 `CustomPalette.bgIntensity` only steers **derivation inside the palette
 editor** (the slider that controls how much accent is mixed into the derived
@@ -343,7 +343,7 @@ background). The resulting strength is baked into concrete
 `bgColorLight`/`bgColorDark` (and gradient stops) the moment the palette is
 applied - `CSSInjector` never reads `bgIntensity` itself.
 
-## Preset palettes - hue-named, not role-named
+## Preset palettes, named by hue
 
 Presets are named by **hue** ("Blue", "Cyan") rather than by the built-in
 callout role they happen to match ("Info", "Abstract"), so the same dropdown
@@ -384,7 +384,7 @@ purpose is Cyan and Teal at 7.8 in light mode. A new preset's hexes are chosen
 against that floor - Sky's nearest neighbour is Blue at 17.2, Indigo's is
 Purple at 13.8.
 
-### Renaming a preset - `legacyIds`, never a data rewrite
+### Renaming a preset
 
 A preset's id is persisted: `CalloutDefinition.paletteId` holds it in
 `data.json`, in exports and in every version-history entry. So a preset is never
@@ -418,7 +418,7 @@ shipped twelve more presets for four days (`ocean`, `cobalt`, `emerald`,
 `storm`); 2.1.0 dropped them, their callouts have read "Deleted color" with
 **Restore** ever since, and a test pins that too.
 
-### Retiring a preset - out of the menu, never out of anybody's notes
+### Retiring a preset
 
 Amber and Lime left the menu as too close to Yellow (Lime and Yellow are 3.4
 CIEDE2000 apart in dark mode), and Crimson as too close to Red (3.5 / 4.3). But
@@ -514,7 +514,7 @@ decides which words name which palette.
 Any other word is left alone: it may be a theme's (`wide`, `c-red`), another
 plugin's (`50`, `shadow`) or a typo.
 
-## Accent dialect: version drift **and** theme drift
+## Accent dialect and drift
 
 Obsidian 1.13 changed `--callout-color` from a bare RGB triplet (`"255, 0, 0"`,
 which core itself wraps in `rgb(...)`) to a full CSS colour string. For a long
@@ -551,7 +551,7 @@ is registered `<color>`, an unseen triplet falls back to its grey initial value
 and quietly greys every heading bar, inline pill and icon tint on an unmodified
 built-in.
 
-### `declared` is per mode, and three ways a value can hide
+### `declared` is per mode
 
 Grey is the entire failure mode here, and it is silent, so the `declared` half
 is shaped by the three ways a theme can put an accent value somewhere a naive

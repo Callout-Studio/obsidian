@@ -137,7 +137,7 @@ checkout of each, whenever a host or `targets.ts` changes:
 
 - **Quartz 4** (`v4` branch) and **Quartz 5** (`v5`): run `npm run
   quartz:build`, make `dist/quartz-plugin/` a Git repository with one commit,
-  and install it the way [the user guide](../user-guide/19-publish-to-the-web.md#quartz)
+  and install it the way [the user guide](../user-guide/16-publish-to-the-web.md#quartz)
   says, with its address in place of GitHub's: `npx quartz plugin add
   git+file://<that folder>` on Quartz 5, `npm install git+file://<that folder>`
   and the two lines on Quartz 4 (a local folder works too: `npx quartz
@@ -169,7 +169,7 @@ checkout of each, whenever a host or `targets.ts` changes:
   Quartz 4, `package.json` and `package-lock.json` without `quartz.config.ts`
   are the same; `quartz.config.ts` without them stops the build, and
   `package.json` without `package-lock.json` stops `npm ci`. What
-  [the guide's *When the callouts don't show*](../user-guide/19-publish-to-the-web.md#when-the-callouts-dont-show)
+  [the guide's *When the callouts don't show*](../user-guide/16-publish-to-the-web.md#when-the-callouts-dont-show)
   says has to match.
 - **Quartz Syncer**: in an isolated Obsidian with Quartz Syncer set to
   publish to a local folder (`publishTarget: "local"`, `quartzRepoPath` a
@@ -200,7 +200,7 @@ Four things a real build shows that the sources do not: a Quartz 5 site from
 the `obsidian` template wears a converted Obsidian theme in cascade layers,
 which reads `--callout-color` and gives a callout it has no rule for a
 quotation's background (see [Import & export § Block
-callouts](15-import-export.md#block-callouts-a-stylesheet-in-each-sites-own-terms));
+callouts](15-import-export.md#a-block-stylesheet-per-site));
 Quartz escapes an inline `css` resource (so the sheet travels as a head
 element - see `web/static/quartz.ts`); a garden plugin is on unless its registry entry
 says otherwise, so it needs no registration; and Quartz 5 builds its typed
@@ -501,7 +501,7 @@ The declarative settings tree has a test renderer of its own,
 [`tests/support/declarativeRenderer.ts`](../../tests/support/declarativeRenderer.ts):
 Obsidian 1.14.4's renderer rebuilt step for step, so a test can draw the tree,
 redraw it, open its pages and run the settings search
-([26 § Testing the tree](26-declarative-settings.md#testing-the-tree)).
+([26 § Testing the tree](20-declarative-settings.md#testing-the-tree)).
 
 ### Waiting for asynchronous work
 
@@ -582,7 +582,7 @@ not a substitute for checking the window in Obsidian and on an iPhone.
 ### User-guide SVG renders
 
 `node scripts/render-user-guide.mjs` generates the local illustrations for
-user-guide chapters 01 and 03–17. Pass scene names to regenerate selected assets;
+the user guide, apart from the hand-made pictures below. Pass scene names to regenerate selected assets;
 `--all` also regenerates the approved chapter 02 examples. It bundles the production
 settings, editors, pickers, context actions, sidebar components, decorators,
 registry, CSS injector, and Reading view postprocessor into isolated Chromium
@@ -736,7 +736,7 @@ transparent backgrounds. These framing overrides are confined to the
 documentation fixtures.
 
 Three pictures in the folder are not scenes: `metadata-color-scope.svg`,
-`metadata-menu.svg` and `metadata-separators.svg` (user guide chapter 18) were
+`metadata-menu.svg` and `metadata-separators.svg` (user guide chapter 13, Callout metadata) were
 made by hand and are not regenerated.
 
 ### README illustrations
@@ -800,7 +800,7 @@ Find callouts ends between the two lines of its second result, and Version
 history shows a third version cut by the tile's bottom edge. The Version history
 crop is the same code as the store image's, in `scripts/store-bento/history-tile.mjs`,
 so change it there. The result boxes are `#232323` because the Find component's
-capture sets them so (see `store-bento-artwork.md`); re-render that capture before
+capture sets them so (see the `store-bento-artwork` skill, `.agents/skills/store-bento-artwork/`); re-render that capture before
 the grid, or the grid keeps the old fill.
 
 ### Store screenshots
@@ -903,8 +903,8 @@ Desktop image 05 is an independent feature overview. Run
 SVGs and five dedicated Find callouts, ribbon, autocomplete, right-click menu,
 and saved-palettes captures without
 regenerating the other desktop or mobile images. See
-[Store artwork: image 05](store-bento-artwork.md) for capture commands, source
-components, layout, and visual review instructions.
+the `store-bento-artwork` skill (`.agents/skills/store-bento-artwork/`) for
+capture commands, source components, layout, and visual review instructions.
 
 `node scripts/render-store-bento-mobile.mjs` adapts that saved desktop SVG into
 the separate 900 × 1600 `mobile/svg/05-more.svg`.
@@ -914,10 +914,10 @@ leaves room for taller tiles with centered headings and larger, centered UI
 fragments. The UI fragments keep
 uniform proportions and their desktop appearance; this is portrait artwork,
 not a new phone UI capture. The renderer leaves images 01–04 unchanged.
-See the [portrait adaptation](store-bento-artwork.md#portrait-adaptation)
-for the layout, source dependencies, and validation.
+Its "Portrait adaptation" section has the layout, source
+dependencies, and validation.
 
-## Repo-convention tests - the automated rules that hold the codebase together
+## Repo-convention tests
 
 Several test files check the **repository itself**, not runtime behaviour -
 these are the project's coding conventions turned into assertions rather
@@ -1006,13 +1006,13 @@ mixing them up is a real trap:
   `src/icons/data/packManifest.ts` - jsDelivr caches a tag's contents
   permanently, so re-pushing to the *same* tag would not actually refresh
   anything a user's cached copy sees. See
-  [Adding or modifying features](22-extending.md#refreshing-icon-pack-artwork).
+  [Adding features](24-extending.md#refreshing-icon-pack-artwork).
 
 ## CI
 
 Four workflows, `.github/workflows/`:
 
-### `lint.yml` - pushes to `master` and all pull requests, Node 20.x and 22.x
+### `lint.yml`
 
 ```text
 npm ci → npm run build → verify locales/ has no diff → npm run lint → npm run format:check → npm test
@@ -1027,7 +1027,7 @@ only in users' vaults instead of here.
 `.github/dependabot.yml` also watches `eslint-plugin-obsidianmd` (weekly)
 and opens a PR on each new release, which `lint.yml` then runs against.
 
-### `release.yml` - triggered by pushing a bare-semver tag (`[0-9]+.[0-9]+.[0-9]+`, no `v`)
+### `release.yml`
 
 ```text
 1. Verify manifest.json / package.json / versions.json all agree with the pushed tag exactly
@@ -1145,7 +1145,7 @@ and opens a PR on each new release, which `lint.yml` then runs against.
 > leaves a harmless draft rather than a half-published, half-broken public
 > release.
 
-### `docs-site.yml` and `internal-docs-site.yml` - the two docs sites
+### The two docs sites
 
 The user guide and these internal docs are also published as websites, built
 with [Quartz](https://quartz.jzhao.xyz) 5 in two repositories of their own:
@@ -1156,22 +1156,34 @@ with [Quartz](https://quartz.jzhao.xyz) 5 in two repositories of their own:
 | [Callout Studio Internal Docs](https://callout-studio.github.io/internal-docs/) | [`Callout-Studio/internal-docs`](https://github.com/Callout-Studio/internal-docs) | `docs/internals-docs/` |
 
 The pages stay here, written for GitHub, so a doc change still lands in the
-same commit as the code it describes. The site repositories hold only Quartz's
-settings, a script that prepares the pages, and the workflow that builds and
-publishes them.
+same commit as the code it describes. Each site repository holds only what is
+its own: its texts and links (`quartz.ts`), its name, address and folder
+(`site.json`), and the pictures only it shows. What the two share is in a third
+repository, [`Callout-Studio/docs-theme`](https://github.com/Callout-Studio/docs-theme):
+the look and components (`theme/`), Quartz's settings, the scripts that prepare
+the pages, the Quartz version, and the workflow that builds and publishes a
+site, which each site's own workflow calls.
 
-A push to `master` that touches one of those folders runs the matching workflow
-here. It writes the pushed commit into the site repository's
-`source-commit.txt`, and pushes that with an SSH deploy key of the site
-repository: the private halves are this repository's `DOCS_SITE_DEPLOY_KEY`
-and `INTERNAL_DOCS_SITE_DEPLOY_KEY` secrets, the public halves are under each
-site repository's **Settings → Deploy keys**. That push runs the site's own
-workflow, which checks out these docs at that commit, prepares them, and
-publishes the site on GitHub Pages. Deploy keys do not expire, so nothing needs
-renewing. Deleting either half stops the updates.
+A site is built from two commits, each written in a file of the site
+repository:
 
-What the preparing script (`prepare-content.mjs` in each site repository) does
-to the pages:
+- **`source-commit.txt`**, the commit of this repository whose pages are
+  published. A push to `master` that touches one of the folders above runs the
+  matching workflow here, which writes the pushed commit there.
+- **`theme-commit.txt`**, the docs-theme commit that builds them. A push to
+  docs-theme's `main` writes its commit into both sites the same way.
+
+Both push with SSH deploy keys of the site repository. The private halves of
+this repository's keys are its `DOCS_SITE_DEPLOY_KEY` and
+`INTERNAL_DOCS_SITE_DEPLOY_KEY` secrets; docs-theme has two keys of its own
+under the same secret names. The public halves are under each site
+repository's **Settings → Deploy keys**. That push runs the site's workflow,
+which checks out these docs and the theme at their commits, prepares the pages,
+and publishes the site on GitHub Pages. Deploy keys do not expire, so nothing
+needs renewing. Deleting either half of a key stops those updates.
+
+What the preparing script (`prepare-content.mjs` in docs-theme) does to the
+pages:
 
 - The first `# ` heading becomes the page's title, and `README.md` the home
   page.
@@ -1181,10 +1193,31 @@ to the pages:
 - Links to any other file of the repository (`../../src/…`, `../API.md`) go to
   that file on GitHub, **at the commit the site was built from**, so they keep
   working after the file moves.
-- GitHub's alerts (`> [!NOTE]` and the rest) become the Quartz callouts that
-  look the same.
+- GitHub's alerts (`> [!NOTE]` and the rest) become callouts, drawn in
+  Obsidian's look. An alert whose first paragraph is only bold text, such as
+  `> **In short**` followed by an empty `>` line, takes that text as its
+  title; GitHub shows it as the alert's first line.
+- A code fence marked `preview` (` ```md preview `) is followed on the site by
+  what its callouts look like in a note: block callouts as callouts, heading and
+  inline callouts as the plugin draws them. On GitHub it is an ordinary fence.
+- The closing `---` and `**Next:** …` (or `Next chapter: …`) lines go, since
+  the chapter list beside every page of the site already gives that link.
+- A page listed in the site repository's `site.json` under `redirects` (old
+  file name → new one) keeps its old address as a redirect, so renaming a page
+  does not break links to the site. Add the old name there when renaming.
 - A link to a file that is not in that commit shows as a warning on the site's
   workflow run. The site is still published.
+
+The folder's `README.md` also sets the sites' chapter list. Each heading
+followed by a table whose columns are **Chapter** (or **File**) and **What it
+covers** is one group, named by the heading up to a ` - `; the pages the table
+links are its chapters, in the table's order. A page no table links is listed
+under **More**. On the user guide's home page those tables are drawn as cards.
+A new chapter therefore goes into one of the README's tables, and its number
+keeps the chapters numbered in the order the groups list them, so the folder
+on GitHub lists them in the same order as the sites' chapter list.
+`<details>` blocks (with a blank line after `<summary>` and before
+`</details>`) fold on both GitHub and the sites.
 
 Quartz is set to read the Markdown the way GitHub does: a single line break is
 a space, quotes stay straight, and Obsidian-only syntax (`#tags`,
@@ -1357,4 +1390,4 @@ consumers. `styles.css` remains the maintained root stylesheet and the release
 artifact.
 
 ---
-Next chapter: [21-public-api.md](21-public-api.md)
+Next chapter: [23-public-api.md](23-public-api.md)

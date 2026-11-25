@@ -1,27 +1,21 @@
 # The three callout types
 
-Callout Studio includes Obsidian's thirteen built-in callouts. Open the plugin settings and look under **Built-in callouts** to browse them. Each row shows the callout's icon and name, and its IDs and aliases on one line under the name. The name stays on one line and ends in "…" when it is too long, so a very long name is cut rather than making its row taller. When a callout has more IDs than fit on the line, the line shows the IDs that fit, whole, and ends with a count such as **+3** for the rest; hover over the **+3** to see which IDs they are. The line follows the window as you resize it: an ID goes into the count the moment it no longer fits, and comes out again the moment there is room. An ID is never cut in half: one that does not fit goes into the count, and in a very narrow window the count can be all there is. The one exception is a callout with a single ID, which is shown with "…" at its end when it is longer than the row, and all of it appears when you hover over it. A tag after the name marks the fallback callout (**Default**) and a callout that follows the default fallback style (**Auto**).
-
-On a computer the color is shown as two small circles before the buttons, the accent and the background. On a phone or an iPad there are no circles: the icon is drawn in the accent on a tile of the background, and the name is in the accent too, as a callout's title is in a note. A very light accent makes a light-colored name hard to read on a light page; its icon tile still shows it. The rows are ordinary Obsidian setting rows: the up and down arrow keys move between them, and Enter goes to the row's first button.
-
 Every built-in or custom callout can appear in three forms: Block, Heading, and Inline. One definition supplies the name, icon, and color for all three.
 
 ## Block callout
 
 Use a block callout for a standalone box of information. Start the line with `>`, then place an exclamation mark and the callout ID inside square brackets:
 
-```md
-> [!note]
+```md preview
+> [!example]
 > Your content goes here.
 ```
 
 Write a custom title immediately after the closing bracket. Start every additional content line with another `>`:
 
-```md
-> [!note] My custom title
-> First paragraph.
->
-> Second paragraph.
+```md preview
+> [!example] My custom title
+> Your content goes here.
 ```
 
 ![Note and Tip block callouts, including a custom title and separate paragraphs](../../assets/user-guide/formats-block.svg)
@@ -30,8 +24,8 @@ Write a custom title immediately after the closing bracket. Start every addition
 
 Use a heading callout to make a section stand out while keeping it as a real heading. Type the usual heading marks, followed by the callout token and an optional custom title:
 
-```md
-## [!tip] My heading title
+```md preview
+## [!example] My heading title
 ```
 
 The heading becomes a colored bar but remains part of the document Outline and can still be linked like any other heading.
@@ -40,14 +34,14 @@ The heading becomes a colored bar but remains part of the document Outline and c
 
 Use an inline callout to highlight something without breaking the paragraph:
 
-```md
-Remember to check the settings [!warning] before you continue.
+```md preview
+Remember to check the settings [!example] before you continue.
 ```
 
 The token becomes a small colored pill. To put custom text inside the pill, add it in curly braces immediately after the token:
 
-```md
-Want an [!note]{inline callout}? Add [!type]{text} inside a sentence.
+```md preview
+Want an [!example]{inline callout}? Add `[!type]{text}` inside a sentence.
 ```
 
 The `{` must touch the closing `]`.
@@ -74,9 +68,27 @@ To add metadata after the ID, press **Tab** instead of **Enter**. The ID is writ
 
 Obsidian can attach metadata after a pipe, such as `[!note|purple]`. The metadata never changes the callout type, so `[!note]`, `[!note|purple]`, and `[!note|green]` all use the same **Note** definition. Heading, Inline, and Block callouts can all carry metadata.
 
-A color in the metadata paints that one callout: `[!note|purple]` is a purple Note, and every other Note keeps its color. See [Callout metadata](18-callout-metadata.md).
+A color in the metadata paints that one callout: `[!note|purple]` is a purple Note, and every other Note keeps its color. See [Callout metadata](13-callout-metadata.md).
 
-All three formats render in Live Preview, Reading view, and PDF exports. On a website made from your vault, none of the three looks right until you set the site up: see [Publish to the web](19-publish-to-the-web.md).
+All three formats render in Live Preview, Reading view, and PDF exports. On a website made from your vault, none of the three looks right until you set the site up: see [Publish to the web](16-publish-to-the-web.md).
+
+## Browsing the built-in callouts
+
+Callout Studio includes Obsidian's thirteen built-in callouts. Open the plugin settings and look under **Built-in callouts** to browse them. Each row shows the callout's icon and name, and its IDs and aliases on one line under the name. A tag after the name marks the fallback callout (**Default**) and a callout that follows the default fallback style (**Auto**).
+
+<details>
+<summary>How a long name and many IDs fit on one row</summary>
+
+The name stays on one line and ends in "…" when it is too long, so a very long name is cut rather than making its row taller. When a callout has more IDs than fit on the line, the line shows the IDs that fit, whole, and ends with a count such as **+3** for the rest; hover over the **+3** to see which IDs they are. The line follows the window as you resize it: an ID goes into the count the moment it no longer fits, and comes out again the moment there is room. An ID is never cut in half: one that does not fit goes into the count, and in a very narrow window the count can be all there is. The one exception is a callout with a single ID, which is shown with "…" at its end when it is longer than the row, and all of it appears when you hover over it.
+
+</details>
+
+<details>
+<summary>How a row shows the callout's color</summary>
+
+On a computer the color is shown as two small circles before the buttons, the accent and the background. On a phone or an iPad there are no circles: the icon is drawn in the accent on a tile of the background, and the name is in the accent too, as a callout's title is in a note. A very light accent makes a light-colored name hard to read on a light page; its icon tile still shows it. The rows are ordinary Obsidian setting rows: the up and down arrow keys move between them, and Enter goes to the row's first button.
+
+</details>
 
 ---
 **Next:** [Create your first callout](02-create-your-first-callout.md)

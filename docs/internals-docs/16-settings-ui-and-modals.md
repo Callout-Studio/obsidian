@@ -4,7 +4,7 @@ Covers the settings tab ([`src/settings/SettingsTab.ts`](../../src/settings/Sett
 the flows its rows call (`src/settings/sections/`), the two vault sidebars, the
 shared modal chrome, and the individual modals not already covered by
 [Callout editor](14-callout-editor.md) or [Icons](13-icons.md). How the tab's
-tree is built, kept current and drawn is [Declarative settings](26-declarative-settings.md);
+tree is built, kept current and drawn is [Declarative settings](20-declarative-settings.md);
 this chapter covers what its rows are made of and everything outside the tab.
 
 ## The settings tab
@@ -20,7 +20,7 @@ Obsidian draws the whole tab from a tree: this hook's answer. A **non-empty**
 answer turns `display()` off for the whole tab (Obsidian 1.13+), so everything
 on the tab, every page and every row, comes from the tree, and Obsidian indexes
 it for **Search settings…**. How the tree is built, kept current and drawn is
-all in [26-declarative-settings.md](26-declarative-settings.md).
+all in [20-declarative-settings.md](20-declarative-settings.md).
 
 The tab has no `display()` of its own. The page it used to draw section by
 section, and the three windows that became pages (the per-role style windows,
@@ -92,7 +92,7 @@ The callout editor does not send this signal: its draft is a demo the lists
 never see, which is what keeps every row on the saved callout until Save (see
 [Callout editor § Who sees the draft before Save](14-callout-editor.md#who-sees-the-draft-before-save)).
 
-#### `force`, and why only one of the four carries it
+#### `force`
 
 A request compares a signature of everything the pages show and skips the
 redraw when nothing moved. Three of the four signals describe changes that
@@ -117,7 +117,7 @@ signature that changes when nothing did costs one redraw, while one that fails
 to change leaves a stale row with nothing to catch it, so it errs toward
 including more.
 
-### Changes from outside redraw the open page
+### Outside changes redraw the page
 
 `manager/settingsBoot.ts`'s `adoptExternalSettings` runs whenever another
 device's `data.json` lands - on every sync round trip - and `applyLocaleChange`
@@ -128,7 +128,7 @@ that is open in it, keeping its scroll. The check they used to make,
 `containerEl.isConnected`, was false while a sub-page was open, so a sync
 landing then was never drawn (review B2).
 
-### Opening settings does not discover callouts
+### Opening settings doesn't scan
 
 Opening the tab builds the tree and starts a visit (26 § The tab and its tree).
 It neither scans open editors for unknown types nor schedules pruning. The
@@ -272,7 +272,7 @@ fetched under **notices**, not in the page (a row that appeared above the footer
 mid-switch moved the page under the pointer): a "Downloading translation…"
 work notice with the painting brush, then "Translation downloaded." or, if it
 failed, "Could not download עברית…" with **Retry**. See
-[Localization § what happens when a translation download fails](17-i18n.md#what-happens-when-a-translation-download-fails).
+[Localization § what happens when a translation download fails](17-i18n.md#when-a-translation-download-fails).
 
 **License** opens `LicenseModal`: a sentence that the plugin is open source and
 will stay that way, ending in a link to the license on GitHub (`LICENSE_URL` in
@@ -290,7 +290,7 @@ modifications and any notice, as the row's description. The rows keep
 `role="list"`/`listitem`. They were seven bordered cards in small grey text
 until 2026-10-23.
 
-## The two vault sidebars: Find callouts and Review conversion
+## The two vault sidebars
 
 **Find callouts** is a right-sidebar tab, added once on first install; a
 built-in command opens it, and a callout row's ⋮ menu opens it on that
@@ -481,7 +481,7 @@ changed documents may relocate only a unique unchanged line. Navigation never
 modifies text or conversion choices, and stale asynchronous selections cancel.
 Both sidebars open a note at its beginning when its file heading is clicked;
 its count appears as a faint number at the end of the file's line, drawn like
-every other count (see [Faint counts](#faint-counts---how-many-as-obsidians-search-shows-it)). The
+every other count (see [Faint counts](#faint-counts)). The
 shared file-heading button uses its visible name and count as its accessible
 label, without a redundant hover tooltip. Navigation scrolls a source into view
 and flashes it without selecting it or focusing the editor (see the occurrence
@@ -635,7 +635,7 @@ sets `content-visibility: visible`): WebKit saved nothing (~80 ms of layout
 either way) and lays a row out one frame after it comes on screen, so the ids
 would be fitted a frame late. The rule does nothing for the cost of each key
 press in the editor, which is what the sidebars' lists needed ([Common
-pitfalls](23-common-pitfalls.md#everything-drawn-in-the-window-slows-the-editor)).
+pitfalls](25-common-pitfalls.md#drawing-slows-the-editor)).
 
 ### One line each, and where the colour goes
 
@@ -670,7 +670,7 @@ makes the same callout look different from one window to the next, so the
 colour now follows the device. The row was a size
 container for it and is not any more, which also retires the pitfall of [a row
 that meets Obsidian's unnamed container
-queries](23-common-pitfalls.md). The name in the accent was Niv's choice after
+queries](25-common-pitfalls.md). The name in the accent was Niv's choice after
 both were drawn. A pale accent (`#ffe066` on white, a light grey on white) is
 hard to read as text, and the tile alone already carries both colours, so the
 name is the first thing to drop if that bothers someone.
@@ -949,13 +949,13 @@ The action validates and commits an isolated settings snapshot through
 `SettingsWriter.commit`, publishing the registry definition only from its
 after-write callback. A completed commit triggers the success `Notice` and
 `revealCallout`, which opens My callout types, scrolls to the new row and
-flashes it ([26 § Jumping to a row](26-declarative-settings.md#jumping-to-a-row)).
+flashes it ([26 § Jumping to a row](20-declarative-settings.md#jumping-to-a-row)).
 Validation and pre-write failures leave the registry unchanged and show an
 error `Notice`. If a final recovery-checkpoint failure occurs after the valid
 copy has reached disk and the registry, the action keeps that durable copy,
 refreshes the list and shows the error `Notice`. No vault tokens are rewritten.
 
-## Faint counts - how many, as Obsidian's Search shows it
+## Faint counts
 
 Every heading or line that counts what it holds ends the same way, the way
 Obsidian's Search pane ends a file's line with its match count
@@ -1006,7 +1006,7 @@ in an icon source's description are part of a button's or a line's own words,
 and stay plain text in that label's colour. `tests/faintCount.test.ts` pins the
 helper and the rule; each surface's own suite checks that it goes through them.
 
-## Modal chrome - the one shell every window wears
+## Modal chrome
 
 [`src/settings/modalChrome.ts`](../../src/settings/modalChrome.ts) dresses
 every Callout Studio window in **Obsidian's own shell for long dialogs**, the
@@ -1116,7 +1116,7 @@ adjustment column ends flush with the 16px inset under the control column.
 The editor's four form rows are one Obsidian `SettingGroup` box above it, and
 the preview's title and the adjustments beside it are Obsidian group headings
 and groups too (see
-[Callout editor](14-callout-editor.md#the-form-box-and-the-groups-beside-the-preview)).
+[Callout editor](14-callout-editor.md#the-form-box-and-its-groups)).
 
 > [!IMPORTANT]
 > **Every window wearing this chrome must set a title, with no opt-out.**
@@ -1186,7 +1186,7 @@ check runs.
   face still fits. After a UI font or theme change, drag "0.75em", "×1.25" and
   "-4px" and watch the track.
 
-### A link inside a sentence takes the sentence's colour
+### Links take the sentence's colour
 
 A hint's link (`renderInlineLinkHint`: **Restore**, "move it here",
 "use it instead") is a `<button>` that is part of a sentence, so it takes the
@@ -1260,7 +1260,7 @@ the same elements by hand. The button also gets `role="button"`, a Tab stop and
 Enter/Space, which Obsidian's bare div lacks.
 The notice itself comes from `showNotice` (`ui/mascot/mascotNotices.ts`), as
 every notice does, so the mascot sits beside the words and the button under
-them (a grid in styles.css; [chapter 27](27-brush-mascot.md#notices)). The
+them (a grid in styles.css; [chapter 21](21-brush-mascot.md#notices)). The
 first argument is the kind of notice, which decides the mascot: `"success"`
 for Undo, `"paused"` for the two paused-saving notices.
 
@@ -1273,7 +1273,7 @@ Until 2026-10-24 each was a `<p>` and an underlined, semibold white
 `a.cs-notice-action` in a fragment: a line of empty space taller than
 Obsidian's notices. `cs-notice-action` stays on the button as a hook for tests.
 
-## Where the cursor lands when a window opens
+## Where the cursor lands
 
 [`src/settings/modalAutofocus.ts`](../../src/settings/modalAutofocus.ts)
 centralizes the rule for text fields when a window opens:
@@ -1283,7 +1283,7 @@ a caller can reach through an optional field. Focus uses
 `{ preventScroll: true }` to refuse the DOM's own scroll-into-view. There is
 nothing to dispose of.
 
-### Rule 1: only a *new* name field takes the cursor in a create/edit window
+### Rule 1: only a new name field
 
 A **new** callout or palette opens on an empty name that must be filled in
 before anything can be saved, so on desktop the cursor belongs there. An **edit** opens on
@@ -1315,7 +1315,7 @@ is the case that most wants the cursor.
 wired up: its first control is a dropdown, not a text field, so there is no
 keyboard to raise and nothing to focus.
 
-### Rule 2: no window automatically focuses a text field on mobile
+### Rule 2: no autofocus on mobile
 
 `autofocusOnDesktop` returns without doing anything when `Platform.isMobile`,
 which is true for phones **and** tablets. Create windows, Quick Insert, the
@@ -1478,7 +1478,7 @@ is doing.
 > `background-color: inherit` is the third sanctioned paint beside the two
 > surface tokens - it is the only one available to a band sitting *on* a pane
 > whose colour the plugin does not choose. The band went with the old settings
-> page in the *Clean Sweep*; [23](23-common-pitfalls.md) keeps the lesson.
+> page in the *Clean Sweep*; [23](25-common-pitfalls.md) keeps the lesson.
 >
 > Quick Insert applies the same padding rule inside the modal chrome: its
 > `.modal-content` top padding is zero, the introductory paragraph owns the
@@ -1647,11 +1647,11 @@ so `buildComboboxSkeleton` uses a unique hidden text node referenced through
 `tests/inputPointerStability.test.ts` pins both contracts. Check them against
 the actual cascade too, in light and dark, with invalid and disabled fields and
 the IDs field with its **+** visible: the harness in [Checking a theme against
-the real cascade](18-theme-callout-discovery.md#checking-a-theme-against-the-real-cascade)
+the real cascade](18-theme-callout-discovery.md#checking-the-real-cascade)
 explains how to compare `styles.css` with Obsidian's `app.css`; reading either
 stylesheet alone does not prove the computed result.
 
-### Field corners follow Obsidian's input tokens
+### Field corners follow Obsidian
 
 The dropdown chrome takes its corners from `var(--input-radius, var(--radius-s))`
 and `var(--input-corner-shape, round)`, never from a fixed `--radius-s` and
@@ -1708,7 +1708,7 @@ beside the plugin's fields under the harness linked above, with body classes
 `mod-macos`, `mod-windows` and `is-mobile is-phone`, and compare
 `border-top-left-radius` and `corner-shape`.
 
-### The one control that is not a field but focuses like one
+### The field-like control
 
 The **icon tile** in the callout editor (`.cs-icon-tile` - the 44px box that
 *is* the icon picker's button, with the ⓧ badge straddling its corner) stays
@@ -1736,7 +1736,7 @@ Three things about it are easy to get wrong a second time:
   at rest the tile wears `--input-shadow` while the fields above it wear
   nothing. That is left as it was.
 
-#### Hover is desktop-only, and the press is the touch half
+#### Hover on desktop, press on touch
 
 Every hover-driven change the tile makes - the edge, fading the
 artwork out, revealing the swap arrows, the ⓧ badge appearing - lives in one
@@ -1808,7 +1808,7 @@ physical direction in a right-to-left Obsidian (a `.mod-rtl` rule undoes
 app.css's icon mirroring, since a gradient's angle does not flip). If a control
 ever needs a button again, build it as Obsidian's button.
 
-### Never `--background-modifier-hover` on a button face
+### No hover modifier on a button face
 
 That token is not a colour. It is a translucent mono overlay,
 `rgba(var(--mono-rgb-100), 0.067)`: black at 6.7% under `.theme-light`, white at
@@ -2100,7 +2100,7 @@ the mascot cannot go without one, and it is already translated: the name of the
 item in quotes (`confirm.subtitleName`, `“{{name}}”`, the quotes in the string so
 each language can use its own) or a short sentence of what it costs. The message
 under the heading says what the heading does not. See
-[The brush mascot](27-brush-mascot.md#where-it-appears).
+[The brush mascot](21-brush-mascot.md#where-it-appears).
 
 An optional last argument, `acknowledgement`, is for a confirmation that
 cannot be taken back. It is `ConfirmationModal.addCheckbox`, the box Obsidian
@@ -2149,7 +2149,7 @@ inventory means there is nothing to reset, and the button answers with a notice
 (`settings.resetNothing`) instead of opening the window. The inventory mirrors
 `CalloutRegistry.resetAll()`: a group added to one belongs in the other.
 
-### Delete and Convert uses to plain text - two items, two plain dialogs
+### Delete and Convert to plain text
 
 Covered in depth in [Vault discovery § delete flow](11-vault-discovery.md#delete-flow)
 and [§ convert flow](11-vault-discovery.md#convert-flow).
@@ -2223,7 +2223,7 @@ the window.
   editor's: the count, Leave first and preselected, Change to one of the
   built-in's own ids.
 
-### `PaletteNotesModal` - the palette editor's "Update your notes?"
+### `PaletteNotesModal`
 
 Asked by the palette editor's Save, through its `beforeSave` hook, when a new
 name changes the palette's word in callout metadata and notes still use the old
@@ -2236,7 +2236,7 @@ Escape or the close button, which keep the palette editor open with nothing
 saved. The title, count, question and answer titles reuse the `noteChanges.*`
 strings; only the change line and the two descriptions are the palette's own.
 
-### `PaletteEditorModal` - simple vs. advanced, two background styles
+### `PaletteEditorModal`
 
 Two-column layout: a sticky live preview on the left (an Obsidian group
 heading above its box), and on the right two Obsidian setting groups,
@@ -2334,7 +2334,7 @@ swatch. It is said twice, because each half is bad at the other's job
 
 Background style is a further 3-way choice: Solid, Gradient (two-stop linear,
 preset direction, an off-by-default "Gradient title text" toggle), or None
-(transparent - see [Colour system](12-color-system.md#preset-palettes---hue-named-not-role-named)
+(transparent - see [Colour system](12-color-system.md#preset-palettes-named-by-hue)
 for why this is the *only* route to a transparent palette).
 
 The Palette group keeps **Name** and **Style** at the same control-column
@@ -2451,7 +2451,7 @@ Colored option headers reserve space at their trailing edge for the compact
 reset control without increasing the header's original height. (The callout
 editor's icon-adjustment groups no longer have such headers: they are Obsidian
 `SettingGroup`s whose ↺ is the heading's extra button; see
-[Callout editor](14-callout-editor.md#the-form-box-and-the-groups-beside-the-preview).) Menu-category and
+[Callout editor](14-callout-editor.md#the-form-box-and-its-groups).) Menu-category and
 built-in-command resets sit at the trailing edge of their headings, above the
 toggle rows.
 
@@ -2493,7 +2493,7 @@ comparison. The saved `edit` item is labelled **Create or edit callout**
 because it is one item for both runtime outcomes, not two mutually visible
 actions.
 
-### `DragSortList` - reorder without replacing a grabbed row
+### `DragSortList`
 
 [`ui/DragSortList.ts`](../../src/ui/DragSortList.ts) is the plugin's own drag
 engine, used by Manage icon libraries (its Available libraries list). It moves
@@ -2569,7 +2569,7 @@ Obsidian's key, because no modifier is checked.
 - **Reduced motion draws none.** The row never leaves its slot then, so it
   marks the slot itself.
 
-#### Why the libraries window does not use Obsidian's list
+#### Why not Obsidian's list
 
 Obsidian's own reorderable list (a declarative `type: "list"`, as on Settings →
 Appearance → Ribbon menu configuration, and on this plugin's Customize
@@ -2592,7 +2592,7 @@ re-tracks the row too. It keeps scrolling under reduced motion, which only
 removes the slides. The list of icon libraries passes its frame's scroller:
 the window's body, or the settings pane under the Icon libraries page.
 
-### `IconLibrariesModal` - libraries in three Obsidian groups
+### `IconLibrariesModal`
 
 One list of libraries in two frames.
 [`iconpicker/IconLibrariesView.ts`](../../src/settings/iconpicker/IconLibrariesView.ts)
@@ -2766,9 +2766,9 @@ Behaviour to keep in mind before changing it:
 - **Deleting asks only when something uses the library.** The `ConfirmModal`
   names the callouts - up to ten, then "and N more" - and says they keep their
   icons, which `IconService.deleteLibrary` makes true
-  ([Icons](13-icons.md#deleting-a-library-keeps-its-callouts-icons)). "Something"
+  ([Icons](13-icons.md#deleting-a-library-keeps-icons)). "Something"
   includes the callout being edited whose picked-but-unsaved icon is from the
-  library (`host.editing`, [Icons](13-icons.md#the-callout-being-edited-counts-as-a-user)):
+  library (`host.editing`, [Icons](13-icons.md#the-edited-callout-is-a-user)):
   the registry cannot see it, and it is exactly what someone has just
   downloaded and applied. The users are worked out when the button is pressed,
   not when the page opens. An unused library is deleted at once; one in use
@@ -2831,13 +2831,13 @@ its undocumented hotkey store.
 
 Deleting a callout from another surface (a row's ⋮ menu) prunes any command
 depending on it (via `CustomCommandManager.syncAll()`, see
-[Editor integrations](10-editor-integrations.md#customcommandmanager---one-idempotent-sweep)),
+[Editor integrations](10-editor-integrations.md#customcommandmanager)),
 and the registry's change signal redraws the page in the same moment, so it
 never offers a dead row. Everything here **saves itself immediately** on every
 change - there's no separate OK/Cancel, matching the plugin's general
 save-on-change convention.
 
-#### `CommandEditorModal` - the rows, and where each one's rule lives
+#### `CommandEditorModal` rows
 
 The form is *Callout type*, *Callout format*, *Heading level*, *Action*, *Fold
 state*, then **Command name**. The five choices are the rows of one Obsidian
@@ -3309,7 +3309,7 @@ resolve to, the "Deleted color" state when they resolve to none, and the
 save-state baseline that feeds all stayed, because they read and write editor
 state.
 
-### `hotkeyLink.ts` - reading a binding Obsidian doesn't expose a public API for
+### `hotkeyLink.ts`
 
 `printHotkeyForCommand` goes through the undocumented `app.hotkeyManager`,
 guarded structurally (an unreadable binding reads as `""`/unassigned rather
@@ -3342,7 +3342,7 @@ The sample's **Learn more** link uses `USER_GUIDE_URL` in `WelcomeModal.ts`,
 passed through the existing `repoUrl` translation placeholder. It opens
 `https://callout-studio.github.io/docs/`, the home page of the user guide's
 website (see
-[the two docs sites](20-build-test-release.md#docs-siteyml-and-internal-docs-siteyml---the-two-docs-sites)).
+[the two docs sites](22-build-test-release.md#the-two-docs-sites)).
 Releases up to 3.1.0 open `docs/user-guide` on GitHub at revision
 `fa1c8e29aa1f9a40b7a90226d12197c6fe96f1f4` instead: the guide as it was on
 2026-10-04.
@@ -3350,10 +3350,10 @@ Releases up to 3.1.0 open `docs/user-guide` on GitHub at revision
 Only the automatic first-launch welcome (`new WelcomeModal(plugin, true)`) adds
 `welcome.syncNote` below the tagline: a user joining from another device should
 let sync finish, and their setup appears once it arrives. It is informational;
-the [genesis rule](08-settings-sync-and-recovery.md#a-devices-first-file-and-the-shipped-defaults)
+the [genesis rule](08-settings-sync-and-recovery.md#a-devices-first-file)
 is what keeps this device's defaults from overwriting that setup.
 
-#### It demonstrates itself with a demo callout of its own
+#### Its own demo callout
 
 The right column is a real `LiveCalloutPreview` rendering `welcome.sample`,
 which shows all three render roles at once. It used to show them with the real
@@ -3566,7 +3566,7 @@ confirmation; `stillMissing`, which only colours the message after a check, is
 separate. **Create settings file** is never the main button: what is shown may
 be only the built-ins. Every other state, and the editor, keep one order.
 
-### Go to version history, and scrolling to a row
+### Go to version history
 
 **Go to version history** (`showBackup`) opens the Version history **page**
 (`ctx.jumpTo("earlier-versions", fromKeyboard, ["earlier-versions"])`), the way
@@ -3830,7 +3830,7 @@ flash, as a settings search result's is, and does what Obsidian does.
 The brush mascot reads the same media feature itself, once per mascot and
 guarded for a host without `matchMedia` (the test DOM): under reduced motion
 its faces still change but the brush never moves, throws paint or paints a
-stroke ([27 - The brush mascot](27-brush-mascot.md)).
+stroke ([27 - The brush mascot](21-brush-mascot.md)).
 
 **From CSS** - `@media (prefers-reduced-motion: …)` blocks in
 [`styles.css`](../../styles.css). They take two shapes:

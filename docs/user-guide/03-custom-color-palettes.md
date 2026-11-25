@@ -37,7 +37,7 @@ The built-in colors count too, with one exception. A palette you saved before a 
 
 Saved palettes appear at the top of every callout color menu under **Custom**.
 
-A palette's name also gives it a word for callout metadata: **Comic Red** is `comic-red`. Write `[!note|comic-red]` to give one callout this palette. **Save** stays dimmed when you give a palette a word another saved palette already has. Two palettes saved before metadata words existed can share one, such as **Note dark** and **Note (dark)**. They still save, and a line under the name says that only one of them answers to the word. See [Callout metadata](18-callout-metadata.md).
+A palette's name also gives it a word for callout metadata: **Comic Red** is `comic-red`. Write `[!note|comic-red]` to give one callout this palette. **Save** stays dimmed when you give a palette a word another saved palette already has. Two palettes saved before metadata words existed can share one, such as **Note dark** and **Note (dark)**. They still save, and a line under the name says that only one of them answers to the word. See [Callout metadata](13-callout-metadata.md).
 
 ![New Ocean palette with a base color, background intensity, and live previews in dark mode](../../assets/user-guide/palette-editor.svg)
 

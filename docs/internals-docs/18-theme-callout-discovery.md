@@ -40,7 +40,7 @@ callouts moves to the theme only while that rule visibly changes it. See
 One setting stands beside the rule rather than inside it: **Use your theme's
 callout styles**, on by default. Off, the theme's callout styling is taken out
 of the page altogether, so the theme names nothing and owns nothing - see
-[Switching the theme's callout styling off](#switching-the-themes-callout-styling-off).
+[Switching theme styling off](#switching-theme-styling-off).
 
 ## The pipeline, end to end
 
@@ -103,11 +103,11 @@ Two traps this module exists to absorb:
 > Only the text inside that one `<style>` element is ever scanned. Anything a
 > theme brings in some other way - an `@import`, a stylesheet a companion
 > plugin injects - is invisible to enumeration, though the
-> [appearance probe](#stage-5---reading-the-colours-and-the-icon-back) still
+> [appearance probe](#stage-5---colours-and-icon) still
 > measures its effect, because that reads the rendered page rather than the
 > text.
 
-## Stage 2 - Scanning the stylesheet for callout claims
+## Stage 2 - Scanning for claims
 
 [`themeCalloutScan.ts`](../../src/manager/theme/themeCalloutScan.ts) is pure text
 in, plain data out. The obvious implementation is to `replaceSync()` the theme
@@ -146,7 +146,7 @@ interface ThemeClaim {
 `props` holds **names only**. The scan can say a theme declares
 `--callout-color` for `[!note]`; it can never say what colour that is. That
 limitation is not a gap to be closed by better parsing - it is why
-[stage 5](#stage-5---reading-the-colours-and-the-icon-back) exists.
+[stage 5](#stage-5---colours-and-icon) exists.
 
 ### Which operators name a callout
 
@@ -199,7 +199,7 @@ written, that entry matches nothing any caller can ask for, so
 manual discovery and rendering ownership would disagree about which id
 the theme claims.
 
-### The bare `.callout` rule the claim scanner never sees
+### The bare `.callout` rule
 
 `scanCalloutClaims` opens with `if (!prelude.includes("data-callout")) return;`,
 so a theme rule that styles *every* callout without naming one is invisible to
@@ -362,7 +362,7 @@ colour, **0** tie. The remaining 196 never touch these variables and fall back
 to core's own spelling, which makes their generated CSS byte-identical to what
 it was before any of this existed.
 
-See [Colour system § accent dialect](12-color-system.md#accent-dialect-version-drift-and-theme-drift)
+See [Colour system § accent dialect](12-color-system.md#accent-dialect-and-drift)
 for what is done with the answer, and
 [CSS generation § the core accent shim](06-css-generation.md#the-core-accent-shim)
 for the rule that pays for it.
@@ -736,7 +736,7 @@ pseudo-element with no content either way; anything on a box hidden both ways.
 `tests/themeClaimSelectors.test.ts` pins that judgement and the selector
 rewriting, `tests/themeClaimCheck.test.ts` the switching.
 
-## Stage 4 - The overlay, and adding theme types permanently
+## Stage 4 - The overlay
 
 A theme-declared id with **no row at all** is also treated as unknown by
 `generateFallbackCSS`, whose exclusion list is built from `getAll()`. The
@@ -792,7 +792,7 @@ checks all id/alias conflicts before removing any overlay and publishes one
 batched change. A planned create never overwrites a saved row added in the meantime.
 These explicit actions sync like other settings; theme ownership remains local.
 
-### Why a theme overlay cannot be the default fallback
+### Overlays can't be the fallback
 
 The **Default fallback callout** is not an alias or a request for Obsidian to
 pretend that every unknown id has another `data-callout` value. It is a
@@ -886,7 +886,7 @@ disclose that it is only a partial snapshot; it cannot be implemented as a live
 reference from `fallbackCalloutId` to the overlay.
 
 
-## Stage 5 - Reading the colours and the icon back
+## Stage 5 - Colours and icon
 
 The scan knows property names; the user needs to see a swatch and an icon. The
 gap cannot be closed by parsing, because the answer is whatever the cascade
@@ -1123,7 +1123,7 @@ the time went:
 - **It announces only a move.** `setThemeAppearances` returns whether the
   readings differed, and the regeneration that follows runs only when they did.
   Readings and ownership announce `persists: false`
-  ([Callout registry § RegistryChange](05-callout-registry.md#registrychange---does-this-round-need-a-save)),
+  ([Callout registry § RegistryChange](05-callout-registry.md#registrychange-does-it-need-a-save)),
   so not even a move costs a settings save.
 - **It does not discard a read already in flight for a step that is folded
   away.** The invalidation a nudge owes is applied when the read runs
@@ -1180,12 +1180,12 @@ has since arrived") and the baked colour are unchanged for the slot - with the
 care that other painters (`restoreCoreIcon`, the token painters, a rebuilt
 widget) must invalidate whatever remembers a slot.
 
-## Switching the theme's callout styling off
+## Switching theme styling off
 
 **Use your theme's callout styles** (`settings.themeCalloutStyles.enabled`), the
 top row of the *Callouts from your theme* page, which the row of that name on the main
 settings page opens (see
-[26 § The callout pages](26-declarative-settings.md#the-callout-pages)), is on
+[26 § The callout pages](20-declarative-settings.md#the-callout-pages)), is on
 by default, and on, nothing in this section runs: the generated sheet is
 byte-identical to the one before the setting existed, and no stylesheet is
 touched. Off, [`themeCalloutsOff.ts`](../../src/manager/theme/themeCalloutsOff.ts)
@@ -1341,7 +1341,7 @@ in saved data are preserved as durable fallback definitions.
 
 
 
-## Where theme callouts appear - and why Block only
+## Where theme callouts appear
 
 | Surface | Theme callouts appear? |
 | --- | --- |
@@ -1636,7 +1636,7 @@ Ranked by how well they reproduce on the plugin's own small surfaces:
 > yours. Hide the child (`.callout-icon > svg { display: none }`) or mask the
 > slot itself - which is what the themes that get this right already do.
 
-### Testing your theme against Callout Studio
+### Testing your theme
 
 `npm run themes:report` reads every theme installed in a vault, runs each one
 through **the plugin's own scanner**, and writes a Markdown worksheet next to
@@ -1697,7 +1697,7 @@ The columns worth checking for your own theme:
   re-stamps `source: "user"`; only the live sweep can make a row a theme row.
 - **A `"` or `\` can reach a callout id** without the user typing it, so every
   emitted selector escapes through `utils/calloutSelector.ts` - see
-  [06-css-generation.md](06-css-generation.md#calloutsel-vs-tokenattrsel---the-selector-escaping-rule).
+  [06-css-generation.md](06-css-generation.md#calloutsel-vs-tokenattrsel).
 - **Style Settings' own `<style id="css-settings-manager">` is invisible** to
   `themeCss()` and `enabledSnippetCss()`, so the accent dialect is not re-derived
   when an option changes. That is correct rather than a gap: Style Settings
@@ -1743,7 +1743,7 @@ The columns worth checking for your own theme:
   still need the text scan - but it is the documented upgrade path if the scan
   ever proves too coarse.
 
-## Checking a theme against the real cascade
+## Checking the real cascade
 
 `npm test` cannot see this. Its DOM is a stand-in and its `obsidian` module is a
 stub, so it can assert **what CSS is emitted** but never **which declaration
@@ -1784,7 +1784,7 @@ That last one is the sharpest instrument in this chapter: it turns "does this
 theme still look right?" into a list of named properties, and it is how the
 `PAINTERS` and per-mode bugs above were both found and proved fixed.
 
-### Sweeping every theme and Style Settings state for backgrounds
+### Sweeping themes for backgrounds
 
 The relocation and transparent work above was verified by a sweep rather than
 by sampling, because the bug it fixed lived in one Style Settings option of one

@@ -69,12 +69,12 @@ one of the ~40 sites below is `debug`, `warn`, or `error`.)
 > `console.warn`/`console.error` carrying the raw error for diagnosis - never
 > replace one with the other, and never raise a Notice a user has no way to
 > act on (that's noise, not help). See
-> [Common pitfalls § UI strings that must go through i18n](23-common-pitfalls.md#ui-strings-that-must-go-through-i18n)
+> [Common pitfalls § UI strings that must go through i18n](25-common-pitfalls.md#ui-strings-that-must-go-through-i18n)
 > - every `Notice` string goes through `t()`, mechanically enforced.
 
 ## Full catalog
 
-### Background discovery and load-time migrations - `console.debug`
+### Discovery and migrations
 
 Self-healing background passes (an incremental vault scan, a debounced
 prune) and gated one-time migrations at load. Every catch here is already a
@@ -113,7 +113,7 @@ There are no automatic scan or prune logs.
 the completed settings commit. If only its final recovery checkpoint fails,
 the valid saved copy remains available and the failure notice still appears.
 
-### Icon pack and webfont pipeline - `console.warn`
+### Icon packs and webfonts
 
 Network fetch, disk cache, and integrity verification for icon packs and
 Material Symbols webfonts (`IconFetchManager`, `PackDataStore`,
@@ -148,7 +148,7 @@ UI-translation fetch - the one network call in this codebase that runs
 without an explicit per-use user action, disclosed for exactly that reason.
 See [Localization § LocaleStore](17-i18n.md#localestore---download-verify-cache)
 and
-[§ what happens when a translation download fails](17-i18n.md#what-happens-when-a-translation-download-fails).
+[§ what happens when a translation download fails](17-i18n.md#when-a-translation-download-fails).
 
 | File | Function | Fires when |
 | --- | --- | --- |
@@ -161,7 +161,7 @@ and
 | [LocaleStore.ts](../../src/i18n/LocaleStore.ts) | `accept()` | `JSON.parse` fails on a locale file |
 | [LocaleStore.ts](../../src/i18n/LocaleStore.ts) | `accept()` | a locale file fails shape validation |
 
-### Settings, preview and export - `console.warn`
+### Settings, preview and export
 
 | File | Function | Fires when |
 | --- | --- | --- |
@@ -178,7 +178,7 @@ and
 | [writeTarget.ts](../../src/manager/web/writeTarget.ts) | `runExport()` | writing a target's files to disk throws |
 | [legacyStartupSnippet.ts](../../src/manager/legacyStartupSnippet.ts) | `removeLegacyStartupSnippet()` | removing the legacy startup CSS snippet throws on launch |
 
-### The declarative settings tree - `console.error` / `console.warn`
+### The declarative settings tree
 
 | File | Function | Fires when |
 | --- | --- | --- |
@@ -192,7 +192,7 @@ something the user did or can fix, and the page goes on working around it.
 
 `LiveCalloutPreview.ts`'s `build()` guards an undocumented internal Obsidian
 API with a working fallback - see
-[Common pitfalls § Obsidian APIs with special lifecycle requirements](23-common-pitfalls.md#obsidian-apis-with-special-lifecycle-requirements).
+[Common pitfalls § Obsidian APIs with special lifecycle requirements](25-common-pitfalls.md#apis-with-lifecycle-rules).
 `legacyStartupSnippet.ts` is marked for deletion once vaults finish migrating
 past the file it cleans up - not a candidate for further logging investment.
 
@@ -215,4 +215,4 @@ real bug reports as confusing, or if more than two modules start hand-rolling
 their own ad hoc "should I log this" logic.
 
 ---
-Next chapter: [25-privacy-and-permissions.md](25-privacy-and-permissions.md)
+Next chapter: [27-privacy-and-permissions.md](27-privacy-and-permissions.md)

@@ -5,7 +5,7 @@
  * the whole content of its own repository: `garden-plugin.json` at the top,
  * as the Digital Garden plugin's installer requires. See
  * `scripts/lib/gardenPlugin.mjs` for what is in it, and
- * docs/internals-docs/20-build-test-release.md for how it is released.
+ * docs/internals-docs/22-build-test-release.md for how it is released.
  */
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";

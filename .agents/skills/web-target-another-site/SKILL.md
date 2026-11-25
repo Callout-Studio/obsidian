@@ -1,3 +1,17 @@
+---
+name: web-target-another-site
+description: >-
+    Describes the removed "Another site" publish target - one
+    callout-studio-web.js script, loaded with a <script> element, for any site
+    that is not Obsidian Publish, Quartz or Digital Garden - taken out on
+    2026-11-16 and never released: what it wrote, what code still serves it, and
+    every place the removed pieces would go back. Use when asked to bring that
+    target (or a script-tag export for another site) back, or when touching
+    WebTargetId / browserScript in manager/web/targets.ts, the browser host's
+    no-content-root mode in web/browser.ts, or the `generic` block-callout site
+    in manager/css/webBlockCSS.ts.
+---
+
 # The Another site target
 
 Until 2026-11-16, **Publish to the web** had a fourth tab, **Another site**.
@@ -8,7 +22,7 @@ because hardly anyone publishes a vault that way. Its tab made every visitor
 to the page read one more choice, and its block-callout stylesheet was a guess
 about sites nobody had looked at.
 
-This page is for whoever brings it back. The code was never released, so it
+This is for whoever brings it back. The code was never released, so it
 is described here in full rather than pointed at.
 
 ## What is still there
@@ -127,7 +141,7 @@ new MutationObserver(() => syncQuartzTheme(doc)).observe(doc.documentElement, {
 
 A site that marks dark mode some other way got the light colours.
 
-### Block callouts on an unknown site (`src/manager/css/webBlockCSS.ts`)
+### Block callouts on an unknown site
 
 A fourth `WebBlockSite`, `generic`. Nothing is known about such a site's
 variables, so instead of pointing one at `--cs-accent` it set what Obsidian
@@ -179,7 +193,7 @@ const metadataTitle =
 return [blocks, metadata, metadataTitle].filter((part) => part.trim()).join("\n\n");
 ```
 
-### The page (`src/settings/declarative/webPage.ts`)
+### The page
 
 Last of the tabs, with the `globe` icon. Its first step said where the file
 is; its second had two rows, one with a line to copy:
@@ -195,7 +209,7 @@ case "script":
 It drew its callouts in the browser, so its first note in **Good to know** was
 `web.howBrowser`, and it had a sentence that the file list does not show its files, as Publish does. **Good to
 know** and `web.howBrowser` were removed later the same day (see
-[Declarative settings](26-declarative-settings.md)). A restored target gets
+[Declarative settings](../../../docs/internals-docs/20-declarative-settings.md)). A restored target gets
 that sentence under its first step's sentence by itself, as Publish does: `drawWrite` leaves it out only for the garden. The offer at
 the top of the settings never named it: nothing in a vault points at another
 site.
@@ -213,7 +227,7 @@ The strings, in `src/i18n/en.ts` (they were never translated):
 `export.formatWebDesc` (now `web.desc`, the line under the page's row) ended
 "…on Obsidian Publish, Quartz, Digital Garden or another site."
 
-### The user guide (`docs/user-guide/19-publish-to-the-web.md`)
+### The user guide
 
 A row in the opening table (*In the reader's browser* / *See the text you
 typed* / *Copy one file to your site again.*), the tab in **Open the page**, a

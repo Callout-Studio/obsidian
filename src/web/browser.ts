@@ -10,7 +10,7 @@
  * which also carried the stylesheet and injected it, and mirrored Quartz's
  * dark mode for a Quartz site that loaded it by hand. Publish needs neither:
  * `publish.css` holds the rules, and Publish sets `.theme-dark` itself.
- * `docs/internals-docs/web-target-another-site.md` keeps both.
+ * `.agents/skills/web-target-another-site/SKILL.md` keeps both.
  *
  * A host carries no renderer of its own. `web/core.ts` is compiled once and
  * each host is compiled without it, so the exported file is the core, then a

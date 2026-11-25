@@ -10,7 +10,7 @@ formats include manual results. Settings data format **5** prevents compatible
 older builds from silently applying their old ephemeral-row persistence policy.
 
 The write protocol is documented in
-[Settings saving, synchronization, and recovery](08-settings-sync-and-recovery.md).
+[Settings sync and recovery](08-settings-sync-and-recovery.md).
 That chapter owns the startup decisions, verified writes, missing-file recovery,
 external adoption, merge history, checkpoints, backups, and failure boundaries.
 This chapter keeps the storage inventory and cache-specific behavior.
@@ -27,7 +27,7 @@ This chapter keeps the storage inventory and cache-specific behavior.
 | Theme claim verdicts | Vault-scoped `localStorage` (`callout-studio-theme-claims-v1`); which callout ids the last eight themes were measured to draw, so a launch starts from the last answer - see [Theme callout discovery](18-theme-callout-discovery.md#naming-is-not-drawing---the-claim-check). Derived, never authoritative, safe to delete. |
 
 See the canonical chapter's
-[state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-the-different-kinds-of-state)
+[state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-kinds-of-state)
 and [checkpoint/backup contracts](08-settings-sync-and-recovery.md#device-checkpoints-and-vault-backups)
 for their authority, lifetime, verification and retention. Manual discovery uses
 [isolated commits](08-settings-sync-and-recovery.md#isolated-commits-and-manual-discovery);
@@ -105,7 +105,7 @@ Derived render/cache state can be rebuilt. Writer baselines and sync-session sta
 must instead be re-established from accepted settings/recovery history; do not
 clear them as a way to force a save. Unsaved editor drafts are not durable just
 because their previews appear here. See
-[the state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-the-different-kinds-of-state).
+[the state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-kinds-of-state).
 
 ## Generated/derived state
 
@@ -162,7 +162,7 @@ is only displayed once the settings writer proves the cleaned registry snapshot
 is durable; it can survive a restart before the UI is ready, and `seen`
 suppresses a repeat if an older synced file later reintroduces the migrated
 field. See
-[Callout registry § Retiring personal-CSS ownership](05-callout-registry.md#retiring-personal-css-ownership-without-losing-the-saved-design)
+[Callout registry § Retiring personal-CSS ownership](05-callout-registry.md#retiring-personal-css-ownership)
 and [Editor integrations § Autocomplete](10-editor-integrations.md#autocomplete).
 
 The store never holds scan results or theme ownership. A failed local-storage

@@ -1,7 +1,7 @@
 # Callout registry
 
 [`src/manager/CalloutRegistry.ts`](../../src/manager/CalloutRegistry.ts), an
-explicit exception to the [source file size limit](20-build-test-release.md#source-file-size),
+explicit exception to the [source file size limit](22-build-test-release.md#source-file-size),
 is the single source of truth for every
 callout definition and every setting. `CSSInjector`, `AutoComplete`,
 `SettingsTab`, the public API, discovery - everything reads through it, and
@@ -80,7 +80,7 @@ Order matters here - every step depends on the ones before it:
 > **merged onto the default and re-stamped `builtIn: true`**, whatever its own
 > flag says, because there is only ever one callout per id (see below).
 
-### `reconcileSavedRow` - the "only one callout per id" repair
+### `reconcileSavedRow`: one row per id
 
 [`src/manager/savedCalloutRows.ts`](../../src/manager/savedCalloutRows.ts) answers
 one narrow question in isolation from registry state: given a saved row and
@@ -138,7 +138,7 @@ and every JSON import.
 Several are worth understanding in more depth because the reasoning is
 genuinely non-obvious:
 
-### Retiring personal-CSS ownership without losing the saved design
+### Retiring personal-CSS ownership
 
 `externalStyle: true` used to suppress every Callout Studio rendering path for
 one row. [`externalCssRetirement.ts`](../../src/manager/externalCssRetirement.ts)
@@ -174,7 +174,7 @@ retired field. With writable device-local storage, `pending` also survives a
 crash before UI readiness; the best-effort storage failure boundary is recorded
 in [Settings saving and recovery](08-settings-sync-and-recovery.md#startup-and-file-classification).
 
-### `dropDerivedBackgrounds` - the nesting invariant, retroactively
+### `dropDerivedBackgrounds`
 
 Obsidian gives nested callouts their stacked look purely by compositing
 translucent layers - every `.callout` paints a ~10% tint of its own accent, so
@@ -201,7 +201,7 @@ accent-match check even runs: a gradient is authored, never derived, and its
 start colour is the stop the sweep would otherwise mistake for a derived
 tint - removing it would delete the gradient.
 
-### `stripMetadataFromIds` - retiring pre-understanding rows
+### `stripMetadataFromIds`
 
 Before `splitCalloutMetadata` was understood, discovery read a callout's whole
 bracket body as its ID and auto-created a separate `fallback` row per metadata
@@ -239,7 +239,7 @@ vault would silently lose its styling.
 > the vault. `notegreen`-style ids are left alone; an uncustomized one is
 > retained until the user explicitly deletes it, whether customized or not.
 
-### `reconcileIdCollisions` - two rows that are one callout
+### `reconcileIdCollisions`
 
 Obsidian reduces a callout header to
 `type.trim().toLowerCase().replace(/\s+/g, "-")` before a plugin sees it, so
@@ -279,10 +279,10 @@ rebuilds collision groups until no merge remains: an alias inherited from a
 deleted bridge row can connect another group, and must resolve in the same load.
 Each successful pass removes at least one row; fallback/command references follow
 every merge. See
-[Logging and diagnostics](24-logging-and-diagnostics.md#background-discovery-and-load-time-migrations---consoledebug)
+[Logging and diagnostics](26-logging-and-diagnostics.md#discovery-and-migrations)
 for the full catalog of these traces and why they stay at `console.debug`.
 
-## `isModified` and the built-in-deference mechanism
+## `isModified` and built-in deference
 
 ```ts
 private isModified(current, original, ignore?): boolean
@@ -310,7 +310,7 @@ Two related but distinct questions:
   would swap a theme's blue for a hard-coded hex the moment someone hides
   `[!note]`'s icon.
 
-## Which rows are persisted (the built-in rule)
+## Which rows are saved
 
 ```ts
 toSaveData(): PluginData
@@ -371,7 +371,7 @@ contract external plugins get too: "Treat it as a hint, not a precise event."
 A callback that takes no argument at all is still the usual shape; the
 argument below is for the one listener that needs it.
 
-### `RegistryChange` - does this round need a save?
+### `RegistryChange`: does it need a save?
 
 ```ts
 interface RegistryChange {
@@ -407,7 +407,7 @@ never leaks into the next). Preview rounds (`onPreviewChange`) always say
 `persists: false`.
 
 The public API's `onChange` does **not** pass this on: it subscribes one
-argument-less wrapper per call (see [Public API § `onChange`](21-public-api.md)).
+argument-less wrapper per call (see [Public API § `onChange`](23-public-api.md)).
 
 ### `batch(fn)` - coalescing
 
@@ -429,7 +429,7 @@ it would without batching. Used for: the rename pair, `applyCalloutManagerImport
 injector reads it to tell a registry change made mid-pass from its own echo -
 see [CSS generation § the re-entrancy latch](06-css-generation.md#inject---the-re-entrancy-latch).
 
-### Settings the stylesheet reads - `settingsChanged()` and the palette writers
+### Settings the stylesheet reads
 
 ```ts
 addPalette(palette: CustomPalette): void          // + adopts the orphans its colours match
@@ -499,7 +499,7 @@ so it reaches its own pane and no note. Bookkeeping:
   `onPreviewChange` signal instead (see below). The callout editor and the palette editor, which repaint on every
   slider or colour step, call `cssInjector.repaintPreview()`, which writes only
   the preview's own rules to a small sheet of their own (see
-  [CSS generation § The preview layer](06-css-generation.md#the-preview-layer---a-previews-rules-in-a-sheet-of-their-own)).
+  [CSS generation § The preview layer](06-css-generation.md#the-preview-layer)).
   It asks the registry for `getDemoPreview()`: the preview, when it is a demo
   standing on an id of its own (on a `RESERVED_DEMO_IDS` id it never enters the
   main sheet at all). A demo raised over a real callout takes the ordinary pass.
@@ -515,7 +515,7 @@ so it reaches its own pane and no note. Bookkeeping:
   preview borrows. `getPreviewDraft()` lets a nested modal (the palette
   editor) capture and restore it with the preview.
 
-### `onPreviewChange` - a second, deliberately separate listener list
+### `onPreviewChange` listeners
 
 ```ts
 onPreviewChange(callback): void
@@ -567,7 +567,7 @@ one. That is what keeps `previewShadowedDef` null, which is what
 `isUnshadowedPreview` is built on. `tests/previewPlaceholderId.test.ts` pins
 every claim on this page.
 
-### The third demo id, and why it is not in the set
+### The third demo id
 
 The [welcome splash](16-settings-ui-and-modals.md#why-this-one-id-is-not-reserved)
 has a demo callout too, `WELCOME_DEMO_ID = "demo"`, and it is deliberately

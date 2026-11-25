@@ -2,7 +2,7 @@
 
 The edit/create modal consists of
 [`src/settings/CalloutEditor.ts`](../../src/settings/CalloutEditor.ts), an explicit
-exception to the [source file size limit](20-build-test-release.md#source-file-size),
+exception to the [source file size limit](22-build-test-release.md#source-file-size),
 plus its focused helper modules under `src/settings/editor/`. This is the most
 state-heavy UI in the plugin, and understanding *why* is the point of this
 document: a `CalloutDefinition` distinguishes "the user picked white" from
@@ -10,7 +10,7 @@ document: a `CalloutDefinition` distinguishes "the user picked white" from
 *presence* - but a form field always has to show *something* concrete. Nearly
 every subtlety here traces back to reconciling those two facts.
 
-## The core tension: concrete form state vs. optional definition fields
+## Form state vs. definition fields
 
 A colour swatch has to display a colour. So the moment the modal opens, its
 constructor fills in concrete values for fields that might be **absent** on
@@ -59,7 +59,7 @@ against one fixed tint strength - it calls `derivedBgAmount()` (see
 palette editor's intensity slider produces tints at any strength between
 `MIN_BG_COLOR_AMOUNT` and `MAX_BG_COLOR_AMOUNT`.
 
-## The form box and the groups beside the preview
+## The form box and its groups
 
 The four rows that describe the callout (**Display name**, **Callout IDs**,
 **Color**, **Icon**) are built into one Obsidian `SettingGroup` without a
@@ -99,7 +99,7 @@ The panel is built from the same parts (findings S5-07 and S5-14):
 through the declared `listEl`, for hiding a whole group (no icon, or a
 picture that cannot follow the callout's colour).
 
-## A built-in's name, and Save while it saves
+## A built-in's name, and Save
 
 A built-in's display name cannot change: Obsidian declares it. Its row shows
 the name inside a disabled text field (`addText` + `setDisabled(true)`), so it
@@ -192,7 +192,7 @@ differs, normal `buildIconAdjust()` output is retained; that preserves explicit
 neutral overrides needed to stop a reset Heading or Inline role from inheriting
 a still-nudged Regular role.
 
-## The live preview: a real embedded Obsidian editor
+## The live preview
 
 [`src/settings/LiveCalloutPreview.ts`](../../src/settings/LiveCalloutPreview.ts)
 hosts a genuine **embedded Obsidian markdown editor**
@@ -259,7 +259,7 @@ Two layers now, and only the first is a guarantee:
    [`editor/contextmenu/readOnlyPreview.ts`](../../src/editor/contextmenu/readOnlyPreview.ts)
    removes the editing-only sections so the menu stops *offering* commands
    whose only remaining effect is a notice. See
-   [Editor integrations](10-editor-integrations.md#the-context-menu-inside-a-read-only-preview).
+   [Editor integrations](10-editor-integrations.md#the-menu-in-a-read-only-preview).
 
 `EditorView.editable.of(false)` is deliberately **not** used: with no caret
 there is no cursor position, and Live Preview reveals a line's raw markdown by
@@ -274,7 +274,7 @@ alongside its extensions; `setValue` wraps its `instance.set()` in
 else that needs to write the preview must go through the same gate - do not
 loosen the filter instead.
 
-## Registering the in-progress draft: the preview slot, from the editor's side
+## Registering the draft
 
 ```ts
 this.preview = new LiveCalloutPreview(this.app, previewCol, {
@@ -353,7 +353,7 @@ own sheet.
 
 - **`repaintPreview`, not `inject(false)`** - a step rewrites only the draft's
   own small sheet, not the stylesheet of every callout in the vault. See
-  [CSS generation § The preview layer](06-css-generation.md#the-preview-layer---a-previews-rules-in-a-sheet-of-their-own).
+  [CSS generation § The preview layer](06-css-generation.md#the-preview-layer).
   `previewCol` is where the draft's painted icons are swept.
 - **A typed name is followed at once.** Each letter typed into **Display name**
   (and, while a new callout has no primary ID, each letter of the ID field
@@ -425,7 +425,7 @@ it will be. The Save button, the field's messages and the save's own
 `canUseCalloutId` gate therefore agree; the move itself is checked again inside
 the save's batch.
 
-### The dirty-check snapshot includes fields that "don't visibly change anything else"
+### What the dirty check compares
 
 `SnapshotInput` explicitly documents why `hideIcon` and `transparentBg` are
 included in the JSON snapshot compared for "has anything changed": both are
@@ -435,7 +435,7 @@ switching to "None" background doesn't clear the colour fields either). Without
 including these two flags explicitly, toggling either one would leave the
 Save button disabled on the one and only change the user came to make.
 
-### `isOverwritingAutoFallbackRow` - the token-based create special case
+### `isOverwritingAutoFallbackRow`
 
 When a callout is created for a token already present in a note - through
 autocomplete's **Create new** result or the right-click menu's adaptive
@@ -488,7 +488,7 @@ wholesale. This is what "adopt this row and let it follow the fallback
 style" means concretely: the row's *identity* (id, aliases) is the user's,
 but its *look* is entirely borrowed and stays borrowed until customized.
 
-### Rename: `remove` + `add`, batched, with command migration inside the batch
+### Rename: `remove` + `add`
 
 ```ts
 const saved = registry.batch(() => {
@@ -758,7 +758,7 @@ line under the label that faded in and out, a passing error left after 2.5s,
 and two of its refusals were English-only (now `editor.idAlreadyHere` and
 `editor.idTooLong`).
 
-### Material icons fetch on save, not on pick
+### Material icons fetch on save
 
 ```ts
 if (def.hideIcon !== true && packFor(def.icon)?.kind === "perIconRemote") {
@@ -781,7 +781,7 @@ grid, driven entirely by its `IconPack`), `IconGrid` (paging + keyboard
 navigation), `ImagePanel` ("Your images" upload/manage), `allSources.ts` (the
 pooled cross-source search), `IconLibrariesModal` (the **Manage icon libraries**
 window) and `IconLibrariesView` (the list it shows, which the settings' Icon
-libraries page shows too) - see [Settings UI and modals](16-settings-ui-and-modals.md#iconlibrariesmodal---libraries-in-three-obsidian-groups).
+libraries page shows too) - see [Settings UI and modals](16-settings-ui-and-modals.md#iconlibrariesmodal).
 
 `IconGrid` is one Tab stop, as Obsidian's own pick lists are (finding S8-V1):
 a "roving tabindex". One cell has `tabindex="0"` - the chosen icon, or else
@@ -866,7 +866,7 @@ picker as `new IconPicker(plugin, this.icon, { id: this.existingId, name })`:
 `this.icon` is a draft until **Save**, so the registry does not know it, and the
 picker hands the window the callout being edited (`EditedCallout`: that id and
 name plus the icon it was opened on) so deleting a library the draft uses
-asks first - see [Icons](13-icons.md#the-callout-being-edited-counts-as-a-user).
+asks first - see [Icons](13-icons.md#the-edited-callout-is-a-user).
 `openLibraries()` opens the window through `openIconLibraries`
 ([`iconpicker/openIconLibraries.ts`](../../src/settings/iconpicker/openIconLibraries.ts);
 the settings' Icon libraries page draws the same list and does the same read
@@ -959,7 +959,7 @@ equal visible space on both sides. The grid reserves its scrollbar gutter while
 results are filtered, preventing the controls from resizing when the grid is
 empty. The extra inset is zero when scrollbars overlay the content.
 
-### Downloads happen on confirm, not on browse
+### Downloads happen on confirm
 
 Consistent with the network-disclosure policy stated throughout the codebase:
 opening the picker, browsing, and searching are always offline (the search

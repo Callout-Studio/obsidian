@@ -76,7 +76,7 @@ out of the picker.
 
 Results are grouped by note, as Obsidian's **Search** pane groups them: the note's name with a small count at the end, then one rounded box with a row for each occurrence, separated by thin lines. The count covers matches the
 list has not loaded yet. The small triangle before a note's name folds that note's results away, and unfolds them again, as the triangles in Obsidian's file list do; the count stays, so a folded note still says how many results it has. A note you fold stays folded while the list updates, and until you choose another type or format; folding changes nothing in your notes. In a right-to-left interface the triangle sits at the right and a folded note points left, instead of right. Each row shows its format, line number, and at most
-two lines of raw Markdown, including syntax such as `> [!info]`. Block previews
+two lines of raw Markdown, including syntax such as `> [!example]`. Block previews
 include a line of body text when available. From the filter icon, choose **All formats**, **Block**,
 **Heading**, or **Inline** to filter the selected type or all types. With a mouse or
 trackpad, hovering a result tints it, as a search match does; keyboard focus
@@ -214,4 +214,4 @@ changes or reopening the sidebar trigger another attempt; failures do not start
 an endless retry loop.
 
 ---
-**Next:** [Syncing & backups](13-syncing-and-backups.md)
+**Next:** [Quick insert](11-quick-insert.md)

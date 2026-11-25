@@ -40,7 +40,7 @@ node assets/digital-garden/generator/build.mjs
 ```
 
 `PLAYWRIGHT_MODULE`, `BROWSER_EXECUTABLE` and `OBSIDIAN_ASAR` work as for the
-[user-guide renderer](../../docs/internals-docs/20-build-test-release.md#user-guide-svg-renders).
+[user-guide renderer](../../docs/internals-docs/22-build-test-release.md#user-guide-svg-renders).
 `OUT` writes the picture elsewhere instead of over `screenshot.png`; `KEEP_WORK=1` keeps the
 temporary folder with both built sites. The template is only read: each build is a copy of it
 in a temporary folder, with its `node_modules` linked.

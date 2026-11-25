@@ -27,8 +27,8 @@ Run **Callout Studio: Insert empty callout** to start a new callout at the curso
 | Cursor | You get |
 | --- | --- |
 | On an empty line | A block callout in that line's place |
-| At the start of a heading, before or on its `#` marks | A heading callout: `## [!tip] My heading` |
-| Anywhere in a line of text | An inline callout at the cursor: `Some [!tip] text` |
+| At the start of a heading, before or on its `#` marks | A heading callout: `## [!example] My heading` |
+| Anywhere in a line of text | An inline callout at the cursor: `Some [!example] text` |
 
 Where an inline callout cannot go - in code, at the very start of a quoted line, on a block callout's first line, or right before `{` - you get a block callout on a new line below, as before. You also get a block callout while inline callouts are turned off. On a heading that is already a heading callout, a message says so and nothing changes.
 
@@ -40,8 +40,8 @@ Select text and run **Callout Studio: Wrap in callout**. Choose a callout type f
 
 | Selection | You get |
 | --- | --- |
-| A heading, or the cursor on one | A heading callout: `## My heading` becomes `## [!tip] My heading`. Selecting the whole line, with its `#` marks, counts too. |
-| Part of a line | An inline callout around the words: `Some [!tip]{selected words} here` |
+| A heading, or the cursor on one | A heading callout: `## My heading` becomes `## [!example] My heading`. Selecting the whole line, with its `#` marks, counts too. |
+| Part of a line | An inline callout around the words: `Some [!example]{selected words} here` |
 | A whole line, several lines, or the cursor in a paragraph | A block callout, as described below |
 
 Spaces at either end of the selection are left outside the inline callout. Part of a heading's title becomes an inline callout inside the heading.
@@ -52,8 +52,8 @@ If you close the list without choosing, the unfinished `[!]` stays in the note. 
 
 ### Block callouts
 
-```md
-> [!note]
+```md preview
+> [!example]
 > This is the idea I want to highlight.
 > It can be one paragraph, a table, a code block, or a longer selection.
 ```
@@ -77,15 +77,15 @@ When the new callout would touch the text right above or below it, Callout Studi
 
 Wrapping text that is already inside a callout puts the new callout inside it:
 
-```md
-> [!tip]
+```md preview
+> [!example]
 > Here is the main explanation.
 >
-> > [!warning]
-> > This smaller note is nested inside the first callout.
+> > [!example]
+> > This smaller callout is nested inside the first callout.
 ```
 
-To wrap the whole callout instead, place the cursor on its first line (the one with `[!tip]`), or include that line in the selection. The whole callout is then wrapped from the outside, however much of it is selected.
+To wrap the whole callout instead, place the cursor on its first line (the one with `[!example]`), or include that line in the selection. The whole callout is then wrapped from the outside, however much of it is selected.
 
 That gives two ways to build nested callouts: wrap the outer text first and then the part that belongs inside it, or wrap the inner part first and then select everything and wrap it again.
 
@@ -93,14 +93,14 @@ You can also select several callouts at once and wrap them together. Each one st
 
 A plain blockquote has no such first line, so wrapping text in a quote always puts the callout inside the quote.
 
-A heading callout (`## [!tip] Title`) only works outside block callouts. If you wrap one, it becomes an ordinary heading that starts with an inline callout.
+A heading callout (`## [!example] Title`) only works outside block callouts. If you wrap one, it becomes an ordinary heading that starts with an inline callout.
 
 ## Unwrap a callout
 
 Place the cursor inside a callout, or select part of it, and run **Callout Studio: Unwrap from callout**. It removes one callout while keeping the content, and it works on all three kinds. It always takes the innermost one at the cursor:
 
-1. An inline callout the cursor is on: `[!tip]{some words}` becomes `some words`, and `[!tip]` becomes `tip`.
-2. Otherwise, the heading callout on the cursor's line: `## [!tip] My heading` becomes `## My heading`. A heading with no title of its own keeps the callout's ID as its title: `## [!tip]` becomes `## tip`.
+1. An inline callout the cursor is on: `[!example]{some words}` becomes `some words`, and `[!example]` becomes `example`.
+2. Otherwise, the heading callout on the cursor's line: `## [!example] My heading` becomes `## My heading`. A heading with no title of its own keeps the callout's ID as its title: `## [!example]` becomes `## example`.
 3. Otherwise, the block callout around the cursor.
 
 Nested callouts can therefore be unwrapped one level at a time, an inline callout before the block or heading it sits in. This is the same text **Convert uses to plain text** leaves in notes for a callout type.
@@ -172,9 +172,9 @@ Every command has an **Action**, **Wrap selection** or **Insert new**. A new com
 
 | Fold state | Markdown |
 | --- | --- |
-| **Non-foldable** | `> [!note]` |
-| **Foldable, expanded (+)** | `> [!note]+` |
-| **Foldable, collapsed (-)** | `> [!note]-` |
+| **Non-foldable** | `> [!example]` |
+| **Foldable, expanded (+)** | `> [!example]+` |
+| **Foldable, collapsed (-)** | `> [!example]-` |
 
 For example, you can create a command that always wraps text in your favorite block callout, inserts a collapsed warning, or adds a summary as an H2 heading callout.
 
@@ -183,4 +183,4 @@ Heading and inline commands you made before they had an **Action** keep doing ex
 Each custom command appears in the Command Palette and can receive its own hotkey. Because its callout type is already selected, it runs without opening the suggestion list.
 
 ---
-**Next:** [Import, export & sharing](10-import-export-and-sharing.md)
+**Next:** [Find callouts](10-find-callouts.md)

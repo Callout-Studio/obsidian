@@ -19,7 +19,7 @@ Two chapters also serve readers outside the core contributor audience.
 [18-theme-callout-discovery.md](18-theme-callout-discovery.md) ends with a
 compatibility section for **Obsidian theme authors**: which CSS patterns Callout
 Studio reads correctly, which ones hide a theme's callouts from it, and how to
-check a theme against it. [25-privacy-and-permissions.md](25-privacy-and-permissions.md)
+check a theme against it. [27-privacy-and-permissions.md](27-privacy-and-permissions.md)
 is the complete privacy reference for anyone who needs to audit vault access,
 network requests, downloaded assets, and local storage.
 
@@ -27,7 +27,7 @@ It complements, rather than replaces, two other documents already in the
 repo:
 
 - **[`API.md`](../API.md)** - the public plugin API contract for other
-  Obsidian plugins. [21-public-api.md](21-public-api.md) explains how the
+  Obsidian plugins. [23-public-api.md](23-public-api.md) explains how the
   implementation enforces what that document promises.
 - **`AGENTS.md`** (repo root) - a short entry point for AI coding assistants:
   a one-paragraph project summary, essential project-level conventions, and
@@ -78,8 +78,8 @@ covering whatever you're touching.
 | [17-i18n.md](17-i18n.md) | How `t()` resolves strings, the locale download/verification pipeline, and the contribution workflow. |
 | [18-theme-callout-discovery.md](18-theme-callout-discovery.md) | How the active theme's callout types are found, read back and represented - and the compatibility guide for **theme authors**. |
 | [19-upgrading-manual-discovery.md](19-upgrading-manual-discovery.md) | Released 2.12.x compatibility, verified one-time recovery archives, and safe removal of legacy local discovery state. |
-| [26-declarative-settings.md](26-declarative-settings.md) | The settings tab as a tree Obsidian 1.13+ draws and indexes for search: the renderer's rules, the plugin's types, saving a control without `saveData`, keeping the tree current (signals, signature, the visit), every page part by part, never throwing, and the test renderer. |
-| [27-brush-mascot.md](27-brush-mascot.md) | The paintbrush icon with a face: a frame as numbers, animations as data, holds that stack and hand over, drawing frame by frame in the right window, the theme's grey and accent, reduced motion, every place it appears, and how the settings' empty lists get a live one. |
+| [20-declarative-settings.md](20-declarative-settings.md) | The settings tab as a tree Obsidian 1.13+ draws and indexes for search: the renderer's rules, the plugin's types, saving a control without `saveData`, keeping the tree current (signals, signature, the visit), every page part by part, never throwing, and the test renderer. |
+| [21-brush-mascot.md](21-brush-mascot.md) | The paintbrush icon with a face: a frame as numbers, animations as data, holds that stack and hand over, drawing frame by frame in the right window, the theme's grey and accent, reduced motion, every place it appears, and how the settings' empty lists get a live one. |
 
 ## Shipping a change
 
@@ -89,12 +89,12 @@ codebase has already been bitten by once.
 
 | File | What it covers |
 | --- | --- |
-| [20-build-test-release.md](20-build-test-release.md) | Build tooling, code formatting, the test harness and what it can't see, CI, and the release process. |
-| [21-public-api.md](21-public-api.md) | How the read-only public API is actually enforced - real privacy, frozen copies, the committed-state guarantee. |
-| [22-extending.md](22-extending.md) | Step-by-step checklists for adding a setting, a command, a callout field, a menu item, an icon source, and more. |
-| [23-common-pitfalls.md](23-common-pitfalls.md) | Concentrated warnings: state sync, id normalization, helpers that must always be used, mobile quirks, backward compatibility. |
-| [24-logging-and-diagnostics.md](24-logging-and-diagnostics.md) | Every `console.debug`/`warn`/`error` call site, the policy behind which one and when to use a `Notice` instead, and why there's no centralized logger. |
-| [25-privacy-and-permissions.md](25-privacy-and-permissions.md) | Vault access, network requests, downloaded assets, local storage, and the privacy boundaries around each one. |
+| [22-build-test-release.md](22-build-test-release.md) | Build tooling, code formatting, the test harness and what it can't see, CI, and the release process. |
+| [23-public-api.md](23-public-api.md) | How the read-only public API is actually enforced - real privacy, frozen copies, the committed-state guarantee. |
+| [24-extending.md](24-extending.md) | Step-by-step checklists for adding a setting, a command, a callout field, a menu item, an icon source, and more. |
+| [25-common-pitfalls.md](25-common-pitfalls.md) | Concentrated warnings: state sync, id normalization, helpers that must always be used, mobile quirks, backward compatibility. |
+| [26-logging-and-diagnostics.md](26-logging-and-diagnostics.md) | Every `console.debug`/`warn`/`error` call site, the policy behind which one and when to use a `Notice` instead, and why there's no centralized logger. |
+| [27-privacy-and-permissions.md](27-privacy-and-permissions.md) | Vault access, network requests, downloaded assets, local storage, and the privacy boundaries around each one. |
 
 Opening a PR? [`CONTRIBUTING.md`](../CONTRIBUTING.md) has the
 process - fork, branch, lint, test, commit style. This guide is what to read

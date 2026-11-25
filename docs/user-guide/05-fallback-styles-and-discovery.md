@@ -36,7 +36,7 @@ After choosing a different fallback, click **Reset to default** beside the picke
 
 Deleting the callout you chose as the fallback also selects **Note** again. Callout Studio asks before that delete, and its **Undo** makes the callout the fallback once more.
 
-A callout you delete while notes still use it becomes an unknown callout like any other: it takes the fallback appearance, and **Scan for callouts** can find it again. See [Delete a custom callout](06-editing-replacing-and-deleting.md#delete-a-custom-callout). The same goes for an ID you remove from a callout and choose to leave in your notes. See [Remove, rename or move an ID](06-editing-replacing-and-deleting.md#remove-rename-or-move-an-id).
+A callout you delete while notes still use it becomes an unknown callout like any other: it takes the fallback appearance, and **Scan for callouts** can find it again. See [Delete a custom callout](07-editing-replacing-and-deleting.md#delete-a-custom-callout). The same goes for an ID you remove from a callout and choose to leave in your notes. See [Remove, rename or move an ID](07-editing-replacing-and-deleting.md#remove-rename-or-move-an-id).
 
 ![The default fallback picker open with the custom Project note type selected and its reset arrow visible](../../assets/user-guide/fallback-picker.svg)
 
@@ -46,7 +46,7 @@ To make an existing saved callout follow the fallback, open its three-dot menu a
 
 To make it independent again, edit any part of its design. The **Auto** label disappears, and later fallback changes no longer change that callout.
 
-Theme-provided callouts are handled separately because the active theme controls their appearance. See [Theme integration](17-theme-integration.md).
+Theme-provided callouts are handled separately because the active theme controls their appearance. See [Theme integration](19-theme-integration.md).
 
 ---
-**Next:** [Editing, replacing & deleting](06-editing-replacing-and-deleting.md)
+**Next:** [Global styling](06-global-styling.md)

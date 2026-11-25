@@ -5,7 +5,7 @@
  * be the whole content of its own repository: `package.json` at the top and
  * the built entry point in `dist/`, as Quartz 5's installer and npm both
  * expect. See `scripts/lib/quartzPlugin.mjs` for what is in it, and
- * docs/internals-docs/20-build-test-release.md for how it is released.
+ * docs/internals-docs/22-build-test-release.md for how it is released.
  */
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";

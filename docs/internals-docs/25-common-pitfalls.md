@@ -41,7 +41,7 @@ that feels like it "should just work."
 > on the standard `onChange → inject() → refreshAllCalloutEditors()` chain,
 > or - if you bypassed the normal inject path (a preview, for instance) -
 > call `refreshAllCalloutEditors()` explicitly. See
-> [Render roles § refreshAllCalloutEditors](09-render-roles.md#refreshallcallouteditors---why-registry-edits-need-an-explicit-nudge).
+> [Render roles § refreshAllCalloutEditors](09-render-roles.md#refreshallcallouteditors).
 
 > [!WARNING]
 > **`cleanupUnusedIconSvgs()` does not call `notifyChange()`.** It mutates
@@ -57,7 +57,7 @@ Do not clear the accepted file baseline to force a write, treat a fulfilled
 `save()` promise as proof of persistence, or interpret a missing file as a fresh
 installation without checking prior-use evidence. The exact rules and failure
 matrix live in
-[Settings saving, synchronization, and recovery](08-settings-sync-and-recovery.md).
+[Settings sync and recovery](08-settings-sync-and-recovery.md).
 The state-synchronization warnings above concern repainting, not cloud transport.
 
 ## IDs that require normalization
@@ -81,9 +81,9 @@ The state-synchronization warnings above concern repainting, not cloud transport
 > `calloutSel`/`tokenAttrSel` (`utils/calloutSelector.ts`), which escape via
 > `cssAttrValue`. A raw interpolation can corrupt the entire generated
 > stylesheet from that rule onward. See
-> [CSS generation § selector escaping](06-css-generation.md#calloutsel-vs-tokenattrsel---the-selector-escaping-rule).
+> [CSS generation § selector escaping](06-css-generation.md#calloutsel-vs-tokenattrsel).
 
-## Data that should never be mutated directly
+## Data never to mutate directly
 
 > [!WARNING]
 > **Never write to a `CalloutDefinition` object read from the registry in
@@ -101,7 +101,7 @@ The state-synchronization warnings above concern repainting, not cloud transport
 > (`plugin.api`).** Everything it returns is frozen at every depth
 > specifically to prevent this - but if you're the one *implementing* a new
 > API mapper, remember to freeze it too. See
-> [Public API § nothing live escapes](21-public-api.md#nothing-live-escapes).
+> [Public API § nothing live escapes](23-public-api.md#nothing-live-escapes).
 
 ## Helpers that must always be used
 
@@ -122,7 +122,7 @@ The state-synchronization warnings above concern repainting, not cloud transport
   sweep, which targets these exact classes.
 - **`renderIconInto`** (`renderIcon.ts`) - the only "icon → DOM" painter.
   Never reach into `iconSvgCache` directly from a new renderer; go through
-  an `IconResolver`. See [Icons § renderIcon.ts](13-icons.md#rendericonts---the-only-icon--dom-painter).
+  an `IconResolver`. See [Icons § renderIcon.ts](13-icons.md#rendericonts).
 
 ## Registration/unregistration pairs
 
@@ -155,7 +155,7 @@ concatenation - see [Localization § t()](17-i18n.md#t---the-translation-functio
 for why a plain string `.replace()` on user-typed content is a real bug, not
 just a style nit.
 
-## A main button that can be blocked is dimmed, not disabled
+## Blocked buttons are dimmed
 
 `button.disabled = true` swallows the click, so a main button that is blocked
 for a reason the screen does not show goes quiet and the user cannot find out
@@ -167,7 +167,7 @@ Keep `disabled` only for a button that is merely *busy* and says so, in its
 label ("Scanning…") or with Obsidian's own spinner (`setButtonBusy` in
 `ui/busyButton.ts`, as the callout editor's Save does).
 
-## A ↺ is hidden when there is nothing to reset
+## Hidden ↺ with nothing to reset
 
 A "back to the default" arrow shows only while something differs from the
 default. Do not dim it (`aria-disabled` alone), do not leave it live, and do not
@@ -178,7 +178,7 @@ place. See [Scoped reset controls](16-settings-ui-and-modals.md#scoped-reset-con
 `declarativeSettingsTree.test.ts` fails on a settings ↺ that shows with nothing
 to reset.
 
-## Settings that require a runtime refresh, not just a save
+## Settings that need a refresh
 
 Saving `settings.<field>` to disk is necessary but frequently **not
 sufficient**. Common cases that also need an explicit follow-up call:
@@ -187,7 +187,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
 | --- | --- |
 | Anything affecting generated CSS | `cssInjector.inject()` (usually automatic via `onChange`, but a **preview-only** or **out-of-band** mutation must call it explicitly with `inject(false)`) |
 | `headingCallouts.enabled` / `inlineCallouts.enabled` toggled | `plugin.refreshRenderModes()` - re-runs reading-view post-processors so already-baked DOM is added/stripped immediately, not just on next file open |
-| Language changed, or a locale download lands mid-session | `plugin.applyLocaleChange()` - re-renders the three surfaces that snapshot translated text (see [Localization § three surfaces](17-i18n.md#surfaces-that-snapshot-translated-text-and-need-a-manual-refresh)) |
+| Language changed, or a locale download lands mid-session | `plugin.applyLocaleChange()` - re-renders the three surfaces that snapshot translated text (see [Localization § three surfaces](17-i18n.md#surfaces-that-need-a-refresh)) |
 | Fallback callout id changed | `restyleUncustomizedFallbackRows()` before saving, or every uncustomized fallback row keeps its stale look until some unrelated edit happens to trigger a re-mirror; then `refreshCallouts()`, also before the save |
 | A saved palette added, edited, renamed or deleted | the registry's palette writers - they announce the round even when no callout links to the palette, which is the only thing that puts its metadata colour word in the sheet |
 
@@ -197,7 +197,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
   allow-list.** Do not replace it with a generic `.callout` selector plus theme
   exclusions: that would put Studio border/radius/scale/alignment onto every
   unrecognized native Block and defeat the deliberately weak fallback. See
-  [CSS generation § standing down](06-css-generation.md#standing-down---why-emit-nothing-needs-three-separate-mechanisms).
+  [CSS generation § standing down](06-css-generation.md#standing-down-three-mechanisms).
 - **The unknown Block fallback also wraps its complete exclusion list in
   `:where()`**, leaving the selector at exactly `(0,1,0)` regardless of how
   many known ids and aliases exist. Do not replace it with a growing `:not()`
@@ -208,7 +208,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
   it to `var(--callout-info)` explicitly instead of omitting it would work
   visually but would defeat the actual mechanism a theme relies on to
   override core's own rule at its own specificity. See
-  [Colour system § built-ins](12-color-system.md#built-ins-no---callout-color-at-all-until-edited).
+  [Colour system § built-ins](12-color-system.md#built-ins-have-no---callout-color).
 - **`this.sel(id)` inside `CSSInjector` is not weight 1 - it is the *studio*
   weight**, set from the active theme's heaviest `!important` callout selector
   at the top of `generateCalloutCSS`. It is 5 under AnuPpuccin, where a single
@@ -239,7 +239,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
   total: `--cs-accent-theme` is registered `<color>`, so the wrong wrapper falls
   back to grey and takes every heading bar, inline pill, ref token and icon tint
   on that built-in with it. See
-  [Colour system § declared is per mode](12-color-system.md#declared-is-per-mode-and-three-ways-a-value-can-hide).
+  [Colour system § declared is per mode](12-color-system.md#declared-is-per-mode).
 - **A theme declaration behind a body class you cannot see is not evidence.**
   `accentDialectScan` ignores a `--callout-<type>` declared only under a theme
   option (Aura's `.aura-origin-layout`, TerraFlow's `.academia-theme`) for the
@@ -265,7 +265,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
   `rgba(var(--callout-color), …)` and a hex makes every such declaration invalid
   at computed-value time - it unsets silently, so the symptom is a missing
   background or a vanished side accent, never an error. See
-  [Colour system § accent dialect](12-color-system.md#accent-dialect-version-drift-and-theme-drift).
+  [Colour system § accent dialect](12-color-system.md#accent-dialect-and-drift).
 - **A `Setting` row that is a size container meets Obsidian's unnamed
   container queries.** Core's `@container (max-width: 400px)` rules (written
   for `.vertical-tab-content`) give `.setting-item:not(…) .setting-item-control`
@@ -299,7 +299,7 @@ sufficient**. Common cases that also need an explicit follow-up call:
   brings back fields far wider than their words; "Callout format" was one,
   stretched to `width: 100%` of a column that grew into the row's free room.
 
-## A Style Settings class moves nothing you *key a cache on*
+## Style Settings and cache keys
 
 `obsidian-style-settings` (1.0.9, read from its `main.js`) applies a
 `class-toggle` by calling `removeClasses()` + `initClasses()` on
@@ -330,7 +330,7 @@ emitted selector, so the browser evaluates it live. Prefer that wherever it can
 work; the observer exists for the one question the browser cannot answer for us,
 which callouts the theme owns.
 
-## A guard on `<body>` cannot be prefixed onto a selector that already says `body`
+## Guards on `<body>` selectors
 
 Style Settings puts its classes on `<body>` itself, so a scanned guard is a
 compound *on* that element - `body.callout-on`, `.callouts-outlined`,
@@ -340,7 +340,7 @@ already starts with `body` (which `generateFallbackCSS` does) produces
 with no error and no warning. The guard has to **replace** that `body`, and the
 no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
 
-## Obsidian APIs with special lifecycle requirements
+## APIs with lifecycle rules
 
 - **`app.hotkeyManager`, `app.customCss`, `app.setting`** are all
   undocumented internals. Every access to them in this codebase is guarded
@@ -392,7 +392,7 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
   tab overrides `getControlValue`/`setControlValue` to go through the paused
   guard and `registry.settingsChanged()`, whose change round repaints and
   saves with `saveSettings()`
-  ([26 § Saving a control](26-declarative-settings.md#saving-a-control-never-savedata));
+  ([26 § Saving a control](20-declarative-settings.md#saving-a-control-never-savedata));
   keep it that way, and never call `saveData` from a settings row.
 - **`EmbeddableMarkdownEditor` is an undocumented internal API and may
   change or disappear.** Every construction of it is wrapped in a
@@ -400,7 +400,7 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
   (`LiveCalloutPreview`'s `buildFallback`). Don't add a second call site
   that assumes it will always succeed.
 
-## Everything drawn in the window slows the editor
+## Drawing slows the editor
 
 > [!WARNING]
 > **Every element drawn anywhere in the window slows every key press in the
@@ -427,7 +427,7 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
 - **The Live Preview mousedown-freeze window is much wider on mobile** -
   core arms the same flag on every caret move with a 700ms debounce, not
   just on an actual mouse hold. See
-  [Render roles § the raw-syntax reveal](09-render-roles.md#the-raw-syntax-reveal-and-the-mousedown-freeze).
+  [Render roles § the raw-syntax reveal](09-render-roles.md#the-reveal-and-the-mousedown-freeze).
 - **`.is-mobile.theme-dark` repoints `--modal-background` onto
   `--background-secondary`** - this is precisely what broke the modal
   surface tokens once. A raised surface inside a window is
@@ -445,7 +445,7 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
   the applicable name or search field receives focus. The 400ms `scrollTop`
   hold once used to accommodate the mobile keyboard read as a clunky lurch
   and was removed, not tuned. Don't reinstate it - see
-  [Settings UI § where the cursor lands](16-settings-ui-and-modals.md#where-the-cursor-lands-when-a-window-opens).
+  [Settings UI § where the cursor lands](16-settings-ui-and-modals.md#where-the-cursor-lands).
   The Hotkeys-settings DOM fallback may fill its query on mobile, but it must
   not focus or select the field there.
 
@@ -472,11 +472,11 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
   API surface (`registry.exportToJSON()`), not just an internal format.
 - **A settings-level list that merges by id must actually merge, never
   `Object.assign`** - see
-  [Import and export § the three exceptions](15-import-export.md#settings-import-restore-the-groups-the-file-carries-three-lists-merge-by-id).
+  [Import and export § the three exceptions](15-import-export.md#importing-settings).
   It's easy to add a new list field and forget this step, and the failure
   mode (silent data loss on import) is severe and easy to miss in testing.
 
-## Behaviours that look redundant but are intentionally defensive
+## Deliberately defensive code
 
 - **Every internal-API read (`app.hotkeyManager`, `app.customCss`) is
   guarded even though the current Obsidian build always has it.** This is
@@ -494,4 +494,4 @@ no-guard case keeps it. `tests/cssInjectorThemeSurface.test.ts` pins both.
   cycle even with no real change.
 
 ---
-Next chapter: [24-logging-and-diagnostics.md](24-logging-and-diagnostics.md)
+Next chapter: [26-logging-and-diagnostics.md](26-logging-and-diagnostics.md)

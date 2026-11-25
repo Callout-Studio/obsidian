@@ -8,7 +8,7 @@ plugins - everything else in this codebase is free to change at will.
 document; this page explains how the implementation actually enforces what
 that document promises.
 
-## Read-only, five members, and it stays that way
+## Read-only, five members
 
 ```ts
 interface CalloutStudioApi {
@@ -54,7 +54,7 @@ references - mutating an array returned from one call cannot affect a
 later call's result, and `getCallouts()` and `getCalloutsDetailed()` never
 hand back anything the registry itself is still holding onto.
 
-## Real ECMAScript privacy - not TypeScript's
+## Real ECMAScript privacy
 
 ```ts
 export class CalloutStudioAPI implements CalloutStudioApi {
@@ -82,7 +82,7 @@ function, not a class method** - an ordinary method is a perfectly reachable
 prototype member at runtime (`Object.getPrototypeOf(api).usableDefinitions`),
 so keeping it off the class entirely is part of the same guarantee.
 
-## `usableDefinitions()` - the one list, and it's *committed* state
+## `usableDefinitions()`
 
 ```ts
 const usableDefinitions = (plugin): CalloutDefinition[] => {
@@ -131,9 +131,9 @@ Three deliberate steps, each closing a real gap:
   tells consumers to render a real callout when they need the Block look.
   While the user has switched the theme's callout styles off, it is `false`
   for every callout, and the theme's own types are not listed at all
-  ([18-theme-callout-discovery.md](18-theme-callout-discovery.md#switching-the-themes-callout-styling-off)).
+  ([18-theme-callout-discovery.md](18-theme-callout-discovery.md#switching-theme-styling-off)).
 
-## `getCallout(id)` - the lookup ladder, deliberately shallower than the renderer's
+## `getCallout(id)`
 
 ```ts
 getCallout(id: string): Callout | undefined {
@@ -160,7 +160,7 @@ The final **re-find by id in the published list** (rather than returning
 matching by id against the *filtered, `getReal`-resolved* list is what
 routes around it to the committed row.
 
-## `onChange` - no payload, and explicitly documented as imprecise
+## `onChange`
 
 ```ts
 onChange(callback: () => void): () => void {
@@ -174,7 +174,7 @@ A thin subscription to the registry's own change list (see
 [Callout registry § onChange carries no diff](05-callout-registry.md#onchange-carries-no-diff)).
 It is **not** a bare pass-through: the registry hands its own listeners a
 `RegistryChange` (`{ persists }`, see
-[Callout registry § RegistryChange](05-callout-registry.md#registrychange---does-this-round-need-a-save)),
+[Callout registry § RegistryChange](05-callout-registry.md#registrychange-does-it-need-a-save)),
 and the contract for a consumer is a callback that takes nothing - a consumer's
 `(x = fallback) => ...` must never meet an object it did not ask for. So each
 call subscribes its own argument-less wrapper, which also keeps each returned
@@ -213,7 +213,7 @@ to clean them up. This is the concrete cautionary precedent behind the
 current read-only design; don't reintroduce a mutation surface without
 solving that problem first.
 
-## `src/api/types.ts` is intentionally a separate module
+## A separate `types.ts`
 
 `CalloutDefinition` (in `src/types.ts`) is free to grow and reshape as
 features land - `src/api/types.ts` (`Callout`, `CalloutDetails`,
@@ -222,4 +222,4 @@ must not move in lockstep with it. The mapper functions in `PluginAPI.ts`
 are the seam between the two.
 
 ---
-Next chapter: [22-extending.md](22-extending.md)
+Next chapter: [24-extending.md](24-extending.md)

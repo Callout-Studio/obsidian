@@ -10,7 +10,7 @@ The export captures the setup currently displayed, even when settings saving is 
 
 Exporting does not add an entry to **Restore an earlier version** or create an automatic backup in the vault. The exported file is a separate backup you keep yourself.
 
-When importing a Callout Studio backup, matching entries are updated and valid saved palettes are merged into the destination setup without overwriting unrelated palettes. A palette with the same name as one you already have updates it. [Import a Callout Studio backup](10-import-export-and-sharing.md#import-a-callout-studio-backup) explains what the confirmation shows.
+When importing a Callout Studio backup, matching entries are updated and valid saved palettes are merged into the destination setup without overwriting unrelated palettes. A palette with the same name as one you already have updates it. [Import a Callout Studio backup](14-import-export-and-sharing.md#import-a-callout-studio-backup) explains what the confirmation shows.
 
 **Import**, **Reset everything** and deleting a custom callout are unavailable while saving is paused; resolve the saving problem first.
 
@@ -179,4 +179,4 @@ Use one sync service for the vault, and check that it includes your configuratio
 These recovery safeguards work with the files visible to Obsidian; they cannot control a provider's exclusions, connectivity, delayed deletions or conflict policy. They are not a guarantee of compatibility with every service or mobile setup.
 
 ---
-**Next:** [Danger zone](14-danger-zone.md)
+**Next:** [Publish to the web](16-publish-to-the-web.md)

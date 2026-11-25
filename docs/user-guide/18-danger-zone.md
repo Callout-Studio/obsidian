@@ -31,7 +31,7 @@ and metadata are removed. Empty `{}` becomes empty text. Where needed, special
 characters are escaped so the replacement does not create new Markdown
 structure.
 
-Native block callout headers such as `> [!note]` stay as written. Inline
+Native block callout headers such as `> [!example]` stay as written. Inline
 callouts inside their bodies can still be converted. This operation does not
 reset settings, remove callout definitions, or uninstall Callout Studio. It
 removes the plugin's additional syntax; other Obsidian-specific features in
@@ -47,9 +47,9 @@ own. These stay exactly as written, and the review neither lists them nor
 mentions them:
 
 - An inline callout whose `{` is never closed on its line, such as
-  `[!note]{unfinished`.
+  `[!example]{unfinished`.
 - An inline callout with another inline callout inside its `{…}`, such as
-  `[!note]{outer [!tip]{inner}}`. Nesting is not supported, so both the outer
+  `[!example]{outer [!example]{inner}}`. Nesting is not supported, so both the outer
   and the inner one stay.
 - A `[!type]` broken by another bracket inside it, such as `[!broken[!inner]]`.
 - A line where removing the token would start a raw HTML block. The whole line
@@ -94,11 +94,11 @@ even when several are on one line. Long text wraps in full.
 
 Select a row's format label or **Before** text to open its note scrolled to
 that source, which briefly glows; the cursor stays where it was, as in
-[Find callouts](12-find-callouts.md#navigate-through-occurrences). The row stays
+[Find callouts](10-find-callouts.md#navigate-through-occurrences). The row stays
 highlighted until you click or type in the note.
 
 The highlight also follows your cursor, as in
-[Find callouts](12-find-callouts.md#follow-your-cursor): while you edit a note,
+[Find callouts](10-find-callouts.md#follow-your-cursor): while you edit a note,
 the row for what your cursor is in is highlighted, and the list scrolls just far
 enough to show it. That is an inline callout while the cursor touches it (its
 `{content}` included), a heading callout while the cursor is on its line, and
@@ -246,17 +246,17 @@ If everything is already at its defaults, for example right after a reset, no
 window opens and a message says there is nothing to reset.
 
 Callout Studio then saves a copy of your
-current setup to the plugin's [backups folder](13-syncing-and-backups.md#automatic-backups)
+current setup to the plugin's [backups folder](15-syncing-and-backups.md#automatic-backups)
 and checks that the copy can be read. If no copy can be saved, nothing is
 reset. While saving is paused, **Reset everything** is unavailable; resolve the
 saving problem first. If the reset is displayed but could not be saved, a
 message says so instead of reporting success.
 
 **There is no undo button.** To bring the previous setup back, open
-[Restore an earlier version](13-syncing-and-backups.md#version-history) and restore the
+[Restore an earlier version](15-syncing-and-backups.md#version-history) and restore the
 version named *Before Reset everything*, saved just before the reset. A synced vault can send the
 reset to your other devices, and the backups folder lives in the synced plugin
-folder. Export a [complete backup](13-syncing-and-backups.md) and keep it
+folder. Export a [complete backup](15-syncing-and-backups.md) and keep it
 somewhere else if you may want your setup later.
 
 To undo just one icon or color, use the return arrow in the callout editor. To
@@ -264,4 +264,4 @@ restore one customized built-in callout, choose **Reset to default** from its
 three-dot menu.
 
 ---
-**Next:** [Quick insert](15-quick-insert.md)
+**Next:** [Theme integration](19-theme-integration.md)

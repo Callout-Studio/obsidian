@@ -42,7 +42,7 @@ lines. `tests/repoSourceRules.test.ts` fails above that limit unless the exact
 repository-relative path appears in `scripts/source-size-exceptions.json`.
 Exceptions have no per-file cap or size to maintain. Data and generated trees
 are outside the check's scope. Split files by responsibility when that improves
-the code; see [Source file size](20-build-test-release.md#source-file-size) for
+the code; see [Source file size](22-build-test-release.md#source-file-size) for
 the full policy.
 
 ## Who owns state, who operates on it
@@ -52,7 +52,7 @@ Only a handful of classes actually **own** state:
 | Owner | State | Persisted? |
 | --- | --- | --- |
 | `CalloutRegistry` | `Map<id, CalloutDefinition>`, `PluginSettings`, `iconSvgCache` | Yes, via `toSaveData()` → `data.json` |
-| `SettingsWriter` / `SettingsSync` | Accepted file baseline, causal history and write/recovery status | Baseline/status are session state; sync history is carried in settings data. See [state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-the-different-kinds-of-state). |
+| `SettingsWriter` / `SettingsSync` | Accepted file baseline, causal history and write/recovery status | Baseline/status are session state; sync history is carried in settings data. See [state distinctions](08-settings-sync-and-recovery.md#safety-rules-and-kinds-of-state). |
 | `SettingsCheckpoint` / `DeviceLocalStore` | Independent recovery snapshot and device UI/prior-use markers | Device-local IndexedDB and vault-scoped localStorage, respectively; neither is the primary settings file. |
 | `CalloutOccurrenceIndex` | Per-file source occurrences, invalidation versions and read failures | No - session memory only, never saved definitions |
 | `ManualCalloutDiscovery` | one in-flight manual scan | No - only its successfully saved definitions persist |
@@ -66,7 +66,7 @@ settings sections and the modals - **read** the registry and **call its mutators
 An editor can own an unsaved draft; it is not another source of committed
 definitions. If you cache a committed `CalloutDefinition` outside the registry's map, you
 are one edit away from it going stale. The public API guards against exactly this
-(see [Public API](21-public-api.md)) by handing out frozen copies rather than
+(see [Public API](23-public-api.md)) by handing out frozen copies rather than
 live references.
 
 ## The data-flow loop
@@ -132,9 +132,9 @@ flight, and a failed one rejects, which skipped a repaint placed after it.
 > exactly the two derived theme facts (who owns which id, what the theme draws),
 > which the file never holds, so the listener that saves can stand down while
 > the ones that repaint run as ever. See
-> [Callout registry § `RegistryChange`](05-callout-registry.md#registrychange---does-this-round-need-a-save).
+> [Callout registry § `RegistryChange`](05-callout-registry.md#registrychange-does-it-need-a-save).
 
-### Coalescing: why a single edit is not four full passes
+### Coalescing edits into one pass
 
 A single `onChange` round is expensive - full stylesheet regeneration, every
 open document's icons repainted, every CodeMirror editor's widgets refreshed, a

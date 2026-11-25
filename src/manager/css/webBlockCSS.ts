@@ -32,7 +32,7 @@
  * A fourth site, `generic`, was here until 2026-11-16, for the script the
  * export wrote for any other site: with no variable to trust it set the fill,
  * the frame and the title's colour itself. It went with that target;
- * `docs/internals-docs/web-target-another-site.md` keeps its rules.
+ * `.agents/skills/web-target-another-site/SKILL.md` keeps its rules.
  *
  * ## What is carried, and what is the site's
  *

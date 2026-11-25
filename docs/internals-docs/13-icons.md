@@ -150,7 +150,7 @@ interface IconPack {
 | `bundledRemote` | Tabler, Font Awesome, Octicons, RPG Awesome, Simple Icons | One file per pack downloaded once, then fully offline. |
 | `local` | Your images | Held in `settings.userImages`. Never fetched, ever. |
 
-### `cacheVariant` - everything besides the name that changes the drawing
+### `cacheVariant`
 
 Must cover **every** axis that changes the *artwork itself*, or two visually
 different drawings collide on one cache entry:
@@ -217,7 +217,7 @@ but its late completion cannot begin another operation or revive the old service
 `packValidation.ts` holds the verification/parsing helpers separately from this
 lifecycle, and `iconArtworkCache.ts` holds the synchronous role-aware cache copy.
 
-### `ensureArtworkFor(icons)` - the only repair path
+### `ensureArtworkFor(icons)`
 
 This is the function called from **both** places an icon can arrive without
 having gone through the picker: **import** (a file names icons this vault may
@@ -236,7 +236,7 @@ or failed its checksum). It:
    failed has already announced itself individually (a per-icon Notice from
    `IconFetchManager`, or a permanent error state via `hasFailed`).
 
-### `isFullyCached(icon)` - checked per render role, not just the one on screen
+### `isFullyCached(icon)`
 
 A pack can draw the same icon differently per role (Octicons' two sizes), and
 `copyPackArtwork` stores **every** role's drawing when an icon is first
@@ -245,7 +245,7 @@ it checks all three `CALLOUT_RENDER_ROLES`, which is what lets a user enable
 the (previously disabled) inline-callout role later without needing the
 source pack to still be downloaded.
 
-## `PackDataStore` - bundled-file download and verification
+## `PackDataStore`
 
 [`src/icons/PackDataStore.ts`](../../src/icons/PackDataStore.ts) handles the
 `bundledRemote` packs (Tabler, Font Awesome, Octicons, RPG Awesome, Simple
@@ -293,14 +293,14 @@ redraws only when the count does.
 `PACK_MANIFEST` baked into the build.** Two URLs are tried in order
 (`packUrls(id)` - jsDelivr first, `raw.githubusercontent.com` fallback), each
 pinned to the **`packs-v3`** immutable tag (see
-[Adding or modifying features](22-extending.md#refreshing-icon-pack-artwork)
+[Adding features](24-extending.md#refreshing-icon-pack-artwork)
 for what "refreshing" a pack actually requires).
 
 > [!CAUTION]
 > **A checksum mismatch on disk is treated as `"corrupt"` - rejected
 > outright, unlike a locale file's staleness handling.** This is a
 > deliberate difference from `LocaleStore` (see
-> [Localization](17-i18n.md#locale-file-staleness-vs-a-corrupt-icon-pack)):
+> [Localization](17-i18n.md#stale-locales-vs-corrupt-packs)):
 > an icon pack's checksum only ever changes when the pack's *contents*
 > change (a refresh with a new tag), so a mismatch here means edited or
 > damaged data, not "an older but still-valid copy." A locale mismatch, in
@@ -387,7 +387,7 @@ The pooled pack records what it pools (`AllSourcesPack.memberIds`), and
 `PackPanel` loads Material's Google webfont for the pool only while Material is
 a member. Hiding Material therefore stops that request as well as the menu row.
 
-### Deleting a library keeps its callouts' icons
+### Deleting a library keeps icons
 
 `IconService.deleteLibrary(source, alsoKeep)` is the window's **Delete**:
 
@@ -408,7 +408,7 @@ the startup repair (`ensureArtworkFor`) to download the library straight back.
 The window therefore refuses to delete a library callouts use while saving is
 paused, because the copy has to reach the disk before the file goes.
 
-#### The callout being edited counts as a user
+#### The edited callout is a user
 
 Through *callout editor → Pick an icon → Manage libraries* a callout editor is
 always open behind the window, and the icon the person just picked
@@ -454,7 +454,7 @@ looks at the pack. Confirming a callout's own icon in the picker - on a device
 that never had its library, or after deleting it - used to download the whole
 library for artwork that was already saved.
 
-## Simple Icons - a pack decided logo by logo
+## Simple Icons, logo by logo
 
 Mechanically [`packs/simpleIcons.ts`](../../src/icons/packs/simpleIcons.ts) is
 the simplest `bundledRemote` pack there is: one path per logo on a 24-unit
@@ -519,7 +519,7 @@ added only when the slug does not already contain it.
 byte-identical to upstream's. "No outline is altered" is said in the credits
 and in both notices files, and for a logo it is the claim that matters most.
 
-## `IconFetchManager` - Material Symbols, one icon at a time
+## `IconFetchManager`
 
 [`src/icons/IconFetchManager.ts`](../../src/icons/IconFetchManager.ts) is the
 `perIconRemote` counterpart, needed because Material's 3,870 icons × 4 styles
@@ -560,7 +560,7 @@ store is still current and alive. Browser requests already in progress cannot
 be aborted through Obsidian's `requestUrl`, but their late results cannot add a
 font, start another request, or write through a stale loader after disable.
 
-## `IconResolver` - the read-only, synchronous view every renderer uses
+## `IconResolver`
 
 [`src/icons/resolver.ts`](../../src/icons/resolver.ts) is what stands between
 "an icon might need fetching" and "a render path that cannot wait":
@@ -592,7 +592,7 @@ the sanitized copy. Edited or synchronized cache entries therefore cannot
 bypass sanitization. Rejected markup follows the caller's existing missing-icon
 behavior; sanitization does not rewrite the stored cache during a paint.
 
-## `renderIcon.ts` - the only "icon → DOM" painter
+## `renderIcon.ts`
 
 [`src/icons/renderIcon.ts`](../../src/icons/renderIcon.ts) is explicitly the
 **one** place that turns an icon into DOM; every render surface calls
@@ -639,7 +639,7 @@ a faint dashed ring instead. Content surfaces (the actual rendered callout,
 heading/inline tokens, PDF export) draw **nothing at all** and let the flex
 gap collapse - see [Render roles § hideIcon](09-render-roles.md#hideicon-and-flex-gap-collapse).
 
-## SVG sanitization - two sanitizers, two threat models
+## SVG sanitization
 
 [`src/icons/svg.ts`](../../src/icons/svg.ts) makes the distinction explicit and
 deliberate:
@@ -653,7 +653,7 @@ Downloadable bundled packs (Tabler, FA, Octicons, RPG Awesome, Simple Icons)
 ship **bare path data**, not full SVG documents, and need no sanitization at
 all - there is no markup to sanitize. What they get instead is
 `parsePackFile`'s grammar check, described under
-[PackDataStore](#packdatastore---bundled-file-download-and-verification).
+[PackDataStore](#packdatastore).
 
 The user-image allow-list (`USER_SVG_ELEMENTS`) permits shapes, grouping,
 gradients, and clipping - enough to draw any icon - and explicitly excludes
@@ -709,7 +709,7 @@ and fail the test; no package or browser download is part of the runner.
 > trusting nothing at all. This is the same defensive posture
 > `PackDataStore` takes toward its own checksums.
 
-## "Your images" - the local, never-downloaded source
+## Your images: the local source
 
 [`src/icons/userImageImport.ts`](../../src/icons/userImageImport.ts) +
 [`src/icons/packs/userImages.ts`](../../src/icons/packs/userImages.ts).
@@ -804,8 +804,8 @@ The two plugin UI composites are the only bundled icon artwork. Regeneration
 of search indexes and downloadable packs is a deliberately
 separate, manual step - `npm run icons:generate` - **never** part of
 `npm run build`, and its output **is committed to the repo**. See
-[Build, test, and release](20-build-test-release.md#regenerating-icon-and-locale-data)
-and [Adding or modifying features](22-extending.md#refreshing-icon-pack-artwork).
+[Build, test, and release](22-build-test-release.md#regenerating-icon-and-locale-data)
+and [Adding features](24-extending.md#refreshing-icon-pack-artwork).
 
 ---
 Next chapter: [14-callout-editor.md](14-callout-editor.md)

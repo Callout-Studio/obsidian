@@ -41,7 +41,7 @@
  * Adding a service is a new entry in {@link targetFiles} and, if it runs
  * somewhere new, a host. The renderer does not change. A fourth target, one
  * script for any other site, was here until 2026-11-16;
- * `docs/internals-docs/web-target-another-site.md` keeps how it worked.
+ * `.agents/skills/web-target-another-site/SKILL.md` keeps how it worked.
  */
 import { WEB_BROWSER_GLOBAL, WEB_BROWSER_JS, WEB_CORE_GLOBAL, WEB_CORE_JS } from "virtual:callout-studio-web-assets";
 import { GARDEN_NOTE, GARDEN_NOTE_KEY, GARDEN_NOTE_PATH, newGardenNoteFrontmatter } from "../../web/static/gardenNote";

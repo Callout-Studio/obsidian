@@ -6,7 +6,7 @@ the right-click context menu, the two decorators that clean up callout
 syntax outside the editor (Outline pane, link suggestions), and the landing
 flash a sidebar result plays on the callout it opens.
 
-## `calloutWriter.ts` - the only place a definition becomes markdown
+## `calloutWriter.ts`
 
 [`src/editor/calloutWriter.ts`](../../src/editor/calloutWriter.ts) is deliberately
 narrow: it turns a `CalloutDefinition` into token text for one role, and
@@ -105,7 +105,7 @@ keeping it as if the user had chosen the word.
 > signature the compiler checks - a rule that lived nowhere and that
 > refactoring the returns could quietly undo.
 
-## `smartCallout.ts` - which format Wrap and Insert write
+## `smartCallout.ts`
 
 **Wrap in callout** and **Insert empty callout** never ask for a format; the
 cursor's place answers it.
@@ -171,7 +171,7 @@ pill.
 the block form leaves `> [!`. Nothing cleans up in `close()`, because another
 plugin's suggest can claim the line (see the Admonition note below).
 
-## `unwrapAnyCallout.ts` - one Unwrap for every format
+## `unwrapAnyCallout.ts`
 
 [`src/editor/unwrapAnyCallout.ts`](../../src/editor/unwrapAnyCallout.ts) takes
 off the innermost callout at the cursor, or at a selection's start:
@@ -191,7 +191,7 @@ HTML block) comes back with `count === 0`, and the command shows
 over the line. `mapCh` maps the cursor through the edits: inside a pill it keeps
 its place in the payload, and inside anything else it lands where the token was.
 
-## `CalloutBlockTools.ts` - wrap, unwrap, insert
+## `CalloutBlockTools.ts`
 
 [`src/editor/CalloutBlockTools.ts`](../../src/editor/CalloutBlockTools.ts) holds
 the pure editor-manipulation functions behind the fixed editor commands (which
@@ -353,7 +353,7 @@ selection is non-empty, single-line, and its braces balance - wraps the
 selection as the pill's `{…}` label instead. A multi-line or brace-unbalanced
 selection deliberately falls back to the plain-pill path rather than producing
 a broken pill, because braces cannot span lines or nest with no escape (see
-[Render roles § the `{…}` content payload](09-render-roles.md#the--content-payload-inline-pills-only)).
+[Render roles § the `{…}` content payload](09-render-roles.md#the--pill-text)).
 The cursor always lands **after** the pill on the same line - pressing Enter
 on an inline suggestion must never break the surrounding paragraph.
 
@@ -490,7 +490,7 @@ user, theme, fallback) and the characters in its id play no part:
 | Inline with a `{…}` right after the `]` (Wrap's pill, or a content pill retyped) | after the closing `}`, with nothing added |
 
 A space between `]` and `{` turns the payload into literal text (see
-[Render roles](09-render-roles.md#the--content-payload-inline-pills-only)), so
+[Render roles](09-render-roles.md#the--pill-text)), so
 `landAfterInlineToken` finds the payload with `scanLineForCalloutTokens` and
 steps past it. Before this, retyping the type of a content pill broke it.
 
@@ -645,7 +645,7 @@ through the same writers and `placeCursorAfterPick` landing as Enter on a type,
 keeping a title and fold mark the user wrote. Like the type dropdown, it closes
 itself before writing (the Admonition note above).
 
-### `triggerNow` - opening the popup for a programmatically-inserted `[!`
+### `triggerNow`
 
 The "Insert empty callout" and "Wrap in callout" commands leave an unfinished
 type - `> [!`, `## [!]` or `[!]{…}` - and want the suggestion popup to open
@@ -816,7 +816,7 @@ window now bounds both costs by what is on screen:
   jumped) was kept. The My callout types list never had the problem because its
   rows are not rendered callouts.
 
-## `CustomCommandManager` - one idempotent sweep
+## `CustomCommandManager`
 
 [`src/editor/CustomCommandManager.ts`](../../src/editor/CustomCommandManager.ts)
 is worth understanding in depth because its whole design follows from one
@@ -897,7 +897,7 @@ deliberate claim on it, exactly like `customized: true`. See
 concerns: **injection** (`index.ts`), **target resolution** (`resolve.ts`),
 and **item construction** (`items.ts` + `sectionOps.ts`).
 
-### Injection: three independent paths into Obsidian's `Menu`
+### Injection: three paths into `Menu`
 
 ```ts
 registerContextMenu(plugin): void
@@ -921,7 +921,7 @@ A capture-phase `contextmenu` listener on `activeDocument` keeps a
 for all three paths to consult. The monkey-around patch is uninstalled via
 `plugin.register(uninstallPatch)`, so it never survives unload.
 
-### Resolution: three roles, most-specific-first
+### Resolution: most specific first
 
 ```ts
 resolveContext(plugin, trigger) =
@@ -938,7 +938,7 @@ an `<a>` inside the pill's payload, so right-clicking a link *inside*
 `[!warning]{see [docs](url)}` opens Obsidian's own link menu, not the callout
 menu.
 
-### Item construction: config-driven, per role
+### Item construction, per role
 
 ```ts
 BUILDERS: Record<CalloutRenderRole, Partial<Record<ContextMenuItemId, ItemBuilder>>>
@@ -983,7 +983,7 @@ that only make sense for some roles.
   converting every use of a callout type to plain text, a vault-wide rewrite
   guarded elsewhere - see [Vault discovery](11-vault-discovery.md#convert-flow)).
 
-### The context menu inside a read-only preview
+### The menu in a read-only preview
 
 The settings previews host a *real* embedded Obsidian editor, so they get
 Obsidian's real editor context menu - and none of its editing commands was ever
@@ -1199,7 +1199,7 @@ The note's header title may also blink grey for an instant when a card is
 clicked. That is not part of the flash: core dims the title while the sidebar's
 leaf is active, and navigation hands the leaf back to the note a moment later.
 It is expected; see
-[Vault discovery](11-vault-discovery.md#read-only-occurrence-index-and-navigation)
+[Vault discovery](11-vault-discovery.md#the-occurrence-index)
 for why it has no fix.
 
 ---

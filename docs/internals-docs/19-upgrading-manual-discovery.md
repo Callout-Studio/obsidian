@@ -1,4 +1,4 @@
-# Upgrading from automatic discovery
+# Manual discovery upgrade
 
 Historical fixtures in `tests/fixtures/upgrade-2.12.{0,1,2}.json` were generated
 by running the registry and device store from those exact local release tags.
@@ -42,4 +42,4 @@ ids still present in notes or a theme. Archived CSS is a limited recovery aid,
 not a replacement for lost metadata or a complete settings backup.
 
 ---
-Next chapter: [20-build-test-release.md](20-build-test-release.md)
+Next chapter: [20-declarative-settings.md](20-declarative-settings.md)

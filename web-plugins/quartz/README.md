@@ -81,6 +81,6 @@ The plugin makes no network requests. It reads the notes in your content folder 
 
 ## Source
 
-This repository holds the built plugin. Its source is in the Callout Studio repository, under [`src/web/`](https://github.com/Callout-Studio/obsidian/tree/master/src/web), and the full guide is [Publish to the web](https://callout-studio.github.io/docs/19-publish-to-the-web).
+This repository holds the built plugin. Its source is in the Callout Studio repository, under [`src/web/`](https://github.com/Callout-Studio/obsidian/tree/master/src/web), and the full guide is [Publish to the web](https://callout-studio.github.io/docs/16-publish-to-the-web).
 
 Released under the license in [LICENSE](LICENSE).

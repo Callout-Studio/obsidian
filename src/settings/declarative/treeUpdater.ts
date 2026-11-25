@@ -7,7 +7,7 @@
  *
  * The main idea. Obsidian redraws the open settings page only when the tab
  * calls `update()`, and every `update()` rebuilds every row of that page
- * (docs/internals-docs/26-declarative-settings.md). So updates are kept rare,
+ * (docs/internals-docs/20-declarative-settings.md). So updates are kept rare,
  * and harmless:
  *
  * - **Coalesced.** Any number of requests before the next frame make one

@@ -7,7 +7,7 @@
  * live preview (which someone may be typing in), and the like.
  *
  * The main idea. Obsidian redraws a settings row by running its cleanup,
- * emptying its controls and drawing it again (docs/internals-docs/26-declarative-settings.md).
+ * emptying its controls and drawing it again (docs/internals-docs/20-declarative-settings.md).
  * A part built inside `render` would be built anew on every redraw and lose
  * what it was doing. So such a part is built once, kept here by name, and each
  * redraw puts the same element back into the row ({@link PersistentParts.mount}).

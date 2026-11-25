@@ -1,13 +1,13 @@
 # CSS generation
 
 [`src/manager/CSSInjector.ts`](../../src/manager/CSSInjector.ts), an explicit
-exception to the [source file size limit](20-build-test-release.md#source-file-size),
+exception to the [source file size limit](22-build-test-release.md#source-file-size),
 reads every `CalloutDefinition`
 from the registry and writes one CSS stylesheet that restyles Obsidian's block
 callouts and paints the plugin's own heading/inline DOM. It also paints icon
 DOM directly (not just via CSS) - see [Icon painting](#icon-painting) below.
 
-## Two write targets, and why both are necessary
+## Two write targets
 
 ```ts
 private ensureStyleSheet(): void   // document.adoptedStyleSheets - one per window
@@ -93,7 +93,7 @@ class:
 
 - **a settings save, twice per event** (about 18 ms each) - the theme's claims
   and readings were announced as persisting changes. They announce
-  `persists: false` now ([Callout registry § RegistryChange](05-callout-registry.md#registrychange---does-this-round-need-a-save));
+  `persists: false` now ([Callout registry § RegistryChange](05-callout-registry.md#registrychange-does-it-need-a-save));
 - **clearing the readings and publishing the same ones back** - two registry
   rounds, each an `inject()` and an outline refresh. A `css-change` that left
   the theme and snippet text unchanged no longer clears them
@@ -166,7 +166,7 @@ binding to a freshly-created or pre-existing element, `destroy()`), because in
 those cases the target may hold text this instance didn't write and can't be
 trusted as a comparison baseline.
 
-## The preview layer - a preview's rules in a sheet of their own
+## The preview layer
 
 The byte-identical short-circuit above saves the passes that change nothing. A
 colour drag in the palette editor is the opposite case: it changes something on
@@ -204,7 +204,7 @@ once the pass has written the main sheet (`endPass()`). There are two kinds.
 `registry.getDemoPreview()` on an id in `RESERVED_DEMO_IDS`: the callout
 editor's draft of any callout - its own, a built-in, a new one - which it
 registers under `PREVIEW_PLACEHOLDER_ID` (see
-[Callout editor § the preview slot](14-callout-editor.md#registering-the-in-progress-draft-the-preview-slot-from-the-editors-side)),
+[Callout editor § the preview slot](14-callout-editor.md#registering-the-draft)),
 and the style pages' demo (`STYLE_DEMO_ID`).
 
 **The main sheet never holds it, up or down.** Every pass leaves it out
@@ -331,7 +331,7 @@ it repainted on every step, and opening and closing the editor rewrote the
 whole sheet and rebuilt every settings row. The user asked for the notes to
 change only on Save.
 
-## `injectFromCache()` - the startup fast path
+## `injectFromCache()` at startup
 
 ```ts
 injectFromCache(): void   // called once, synchronously, before loadData() is even awaited
@@ -363,7 +363,7 @@ registry actually holds data) replaces it with a real generated pass.
                             shared page, inert in the vault (see "A page shared with Share Note")
 ```
 
-While a preview is lifted into the [preview layer](#the-preview-layer---a-previews-rules-in-a-sheet-of-their-own),
+While a preview is lifted into the [preview layer](#the-preview-layer),
 step 4 leaves it out. A reserved demo is also left out of step 2 and read out
 of step 6, and step 5 always keeps off the reserved ids.
 
@@ -389,7 +389,7 @@ hand-off point:
 
 | Variable | Owner | Behaviour |
 | --- | --- | --- |
-| `--callout-color` | Obsidian core | Spelled the way the **active theme's** read sites expect, not the way the running Obsidian does - `calloutColorValue(hex, dialect)`, see [Accent dialect](12-color-system.md#accent-dialect-version-drift-and-theme-drift). **Omitted entirely for an untouched built-in** - that's what lets core's own rule (and any theme overriding it) keep deciding the accent. |
+| `--callout-color` | Obsidian core | Spelled the way the **active theme's** read sites expect, not the way the running Obsidian does - `calloutColorValue(hex, dialect)`, see [Accent dialect](12-color-system.md#accent-dialect-and-drift). **Omitted entirely for an untouched built-in** - that's what lets core's own rule (and any theme overriding it) keep deciding the accent. |
 | `--cs-accent` | This plugin | Always a real colour on every Obsidian version, so it can feed `color-mix()`. On an untouched built-in it follows the same core variable (`--callout-info` etc.) so the plugin's own surfaces (heading bars, inline pills, borders, icon tints) move with the active theme in lockstep with the block callout itself. |
 | `--cs-accent-theme` | This plugin | What makes "always a real colour" true rather than merely intended. Registered `<color>` via `@property` in `styles.css`; a theme's value passes through it on the way to `--cs-accent`. The registration is the *last* line of defence, not the first: `calloutAccentVarRef` wraps the read in `rgb()` when the dialect says that theme declares the variable as a triplet, so the value arrives already a colour. Degrading to the registration's grey is what happens when that fails, and it is why the per-variable half of the dialect exists at all. Emitted **only** when there is a theme value to launder - the plugin's own hexes are validated into and out of storage and go direct. Deliberately a separate name, not a registration of `--cs-accent` itself: a registered property is never "undefined", which would kill the `var(--cs-accent, currentColor)` fallback the global border rule relies on. |
 | `--cs-color-rgb` | Legacy | Bare triplet retained for external consumers still reading it. Cannot follow a theme (a triplet can't be derived from a `var()`), so on an untouched built-in it's a best-effort snapshot of the shipped default. Nothing inside this plugin depends on it anymore. |
@@ -470,7 +470,7 @@ definition. Unknown ids still receive a correctly-spelled `--callout-color`;
 registering the callout is the route to the full per-id repair and
 Studio-strength styling.
 
-### Backgrounds are always translucent tints - never the authored hex
+### Backgrounds are translucent tints
 
 ```ts
 private bgProps(def, mode, important = false): string[]
@@ -491,7 +491,7 @@ the minimum renders this callout identically, so what it decides is how
 saturated a colour anything nested inside converges toward. It caps that at
 the callout's own accent - and drops a cap it cannot meet rather than let the
 background fall back to an opaque fill. See
-[Which alpha, and why it isn't simply the smallest](12-color-system.md#which-alpha-and-why-it-isnt-simply-the-smallest).
+[Which alpha](12-color-system.md#which-alpha).
 
 Because the tint is solved against each mode's own page, **any callout with a
 background gets a `.theme-dark` block**, even when its light and dark hexes are
@@ -664,7 +664,7 @@ fallback icon without Callout Studio reading the snippet file.
 > slot was compared before and after across theme, mode, accent and font-size
 > changes in a real Obsidian.
 
-### A callout that is not in the document yet
+### A callout not in the document yet
 
 Both of those branches - the unknown id and the theme's name - decide from the
 computed `--callout-icon`, and an element outside the document has no computed
@@ -695,7 +695,7 @@ it; the fake DOM's elements say for themselves whether they are on the page
 community plugin (`share-note`) does not render Markdown: it serves a note's
 reading view as it stands, its DOM plus every stylesheet in
 `document.styleSheets`. That is why this sheet's `<style>` element matters
-there too ([Two write targets](#two-write-targets-and-why-both-are-necessary)):
+there too ([Two write targets](#two-write-targets)):
 `adoptedStyleSheets` are not in that list. Colours, backgrounds, heading and
 inline tokens, metadata colours and the `::after` icons all arrive with nothing
 done for them.
@@ -769,9 +769,9 @@ as `iconOverrides.ts` does, so it is one upload, not two.
 Note's own lines ported, and asks that every name it produces has a drawing.
 What it cannot see - whether the mask paints, whether Share Note's Lucide fills
 a name - is checked by hand against a real server
-([Build, test, and release](20-build-test-release.md#checking-share-note-by-hand)).
+([Build, test, and release](22-build-test-release.md#checking-share-note-by-hand)).
 
-## Where the generated CSS actually lands in the cascade
+## Where the CSS lands in the cascade
 
 Worth getting exactly right, because the answer is more interesting than
 "plugins lose to themes" *and* more interesting than "we always win".
@@ -1093,7 +1093,7 @@ the block rules of any name the theme claims. Enabled snippet CSS still contribu
 specificity/dialect scan, but snippets are not scanned for definitions or
 promoted into an ownership model; they participate through the normal cascade.
 
-### Nothing is stored, and that is the design
+### Nothing is stored, by design
 
 Ownership is **derived on every read**, never written onto the row. Writing
 `source: "theme"` onto a matching row is the obvious "real" migration and it
@@ -1128,7 +1128,7 @@ another ownership abstraction. Saved colours, icons, backgrounds, global Block
 geometry, and Heading/Inline rendering become active again; Markdown and CSS
 snippet files are untouched. Affected upgrades receive one localized notice
 only after the cleaned settings state is known to be durable. See
-[Callout registry § Retiring personal-CSS ownership](05-callout-registry.md#retiring-personal-css-ownership-without-losing-the-saved-design).
+[Callout registry § Retiring personal-CSS ownership](05-callout-registry.md#retiring-personal-css-ownership).
 
 ### The one exception that was removed
 
@@ -1139,7 +1139,7 @@ the one a user is most likely to read as the plugin breaking their theme. The
 flag is preserved on the row and applies again the moment the plugin owns the
 callout.
 
-### What it emits for a theme callout: nothing, literally
+### Theme callouts: nothing is emitted
 
 There was one exception for a release. Heading callouts and inline callouts are
 the plugin's own `.cs-*` DOM, which no theme selector can match, so painting
@@ -1189,7 +1189,7 @@ A pre-existing callout that becomes theme-owned loses the two formats for
 exactly as long as the theme claims it, and gets them back with no migration:
 nothing left the definition, only what the renderer acts on.
 
-### Theme callout definitions are added manually
+### Theme callouts are added by hand
 
 A user-requested scan may add a theme's declared id as a durable fallback row, when a note uses it.
 Automatic theme appearance inspection updates only ownership and measured artwork.
@@ -1211,7 +1211,7 @@ with Obsidian's own values for the tokens core's callout CSS reads
 Nothing is
 left to compete with, so nothing can split. The mechanism, the windows it has to
 reach and the way back are in
-[18-theme-callout-discovery.md § Switching the theme's callout styling off](18-theme-callout-discovery.md#switching-the-themes-callout-styling-off).
+[18-theme-callout-discovery.md § Switching the theme's callout styling off](18-theme-callout-discovery.md#switching-theme-styling-off).
 
 What this file does differently while the switch is off:
 
@@ -1356,7 +1356,7 @@ ids are not excluded: the rule names no id. The standalone export drops the
 Metadata → Metadata colors) makes `activeMetadataColorEntries` return no entries, and the generator
 returns `""` - a test pins the empty string.
 
-## Unknown-callout fallback: deliberately weak on native Blocks
+## The unknown-callout fallback
 
 An unrecognized id has two different rendering surfaces, and treating them as
 one is what previously made normal CSS impossible to compose with the fallback.
@@ -1418,7 +1418,7 @@ hostile quoted/backslashed ids, theme/unknown geometry exclusion, and fallback
 restoration. It is a browser
 cascade regression, **not** an Obsidian integration test, and it is not part of
 `npm test`; the real-app visual pass described in
-[Build, test, and release](20-build-test-release.md#what-the-test-harness-can-and-cannot-see)
+[Build, test, and release](22-build-test-release.md#what-the-test-harness-can-and-cannot-see)
 is still required.
 
 
@@ -1436,7 +1436,7 @@ surfaces that *list* a callout this plugin does not paint - the settings row's
 two swatches and its icon, the small-list icon, the preview window. The probe's
 scheduling, the node ladder (`readCalloutStyle.ts`), the accent ladder and the
 five-rung icon ladder are all
-[18-theme-callout-discovery.md § Stage 5](18-theme-callout-discovery.md#stage-5---reading-the-colours-and-the-icon-back).
+[18-theme-callout-discovery.md § Stage 5](18-theme-callout-discovery.md#stage-5---colours-and-icon).
 
 One rule from there that everything else depends on: **the fallback is never the
 row's stored icon or colour.** Those describe a design that is not on screen.
@@ -1512,9 +1512,9 @@ scan asked two different questions:
 
 Collapsing the two breaks both. The scanner itself, the operator rules, what it
 can and cannot see, and the row-minting sweep built on top of it are
-[18-theme-callout-discovery.md § Stage 2](18-theme-callout-discovery.md#stage-2---scanning-the-stylesheet-for-callout-claims)
+[18-theme-callout-discovery.md § Stage 2](18-theme-callout-discovery.md#stage-2---scanning-for-claims)
 and
-[§ Stage 4](18-theme-callout-discovery.md#stage-4---the-overlay-and-adding-theme-types-permanently);
+[§ Stage 4](18-theme-callout-discovery.md#stage-4---the-overlay);
 when the scan re-runs is
 [§ When theme appearance refreshes](18-theme-callout-discovery.md#when-theme-appearance-refreshes).
 
@@ -1531,7 +1531,7 @@ when the scan re-runs is
 replaced mis-ranked five of the 53 themes surveyed, and over-counting is the
 dangerous direction: it makes the plugin emit heavier selectors than it needs.
 
-## Standing down - why "emit nothing" needs three separate mechanisms
+## Standing down: three mechanisms
 
 Because the generated CSS operates on several different scopes, "no styling"
 needs enforcement in three places:
@@ -1565,7 +1565,7 @@ owns. The catch-all also asks whether the fallback *template* is theme-owned and
 emits nothing when it is, so the fallback target needs no special case of its
 own.
 
-## `calloutSel` vs. `tokenAttrSel` - the selector escaping rule
+## `calloutSel` vs. `tokenAttrSel`
 
 [`src/utils/calloutSelector.ts`](../../src/utils/calloutSelector.ts) is the
 **only** place selectors are built, specifically because the escaping rule has

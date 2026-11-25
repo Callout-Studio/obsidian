@@ -1,4 +1,4 @@
-# Settings saving, synchronization, and recovery
+# Settings sync and recovery
 
 **Documented: 2026-09-24; updated 2026-09-27.** This chapter describes the
 implementation after the missing-file recovery investigation, and after the
@@ -15,11 +15,11 @@ where; this chapter explains when those stores may change. Read it before changi
 the settings writer, startup/reload paths, recovery UI, or sync protocol.
 
 For operational instructions, see the user guide's
-[Syncing and backups](../user-guide/13-syncing-and-backups.md). That guide is for
+[Syncing and backups](../user-guide/15-syncing-and-backups.md). That guide is for
 choosing actions in Obsidian; this chapter is for understanding and maintaining
 the code behind those actions.
 
-## The incident and the before-and-after behavior
+## The incident, before and after
 
 The reported setup used one iCloud vault on a Mac and an iPhone. After removing
 and reinstalling the plugin on the phone, previously configured callouts were
@@ -53,7 +53,7 @@ The repair deliberately does not make Retry silently write defaults. A deletion
 and a slow download can present the same observable absence, and a local timer
 cannot prove that a remote device has finished sending its settings.
 
-## Safety rules and the different kinds of state
+## Safety rules and kinds of state
 
 The following rules explain the checks that can otherwise look redundant:
 
@@ -159,7 +159,7 @@ checkpoint store returns a later build's copy as it is rather than rejecting it
 as invalid, and callers protect it; it is never displayed unless it also passes
 this build's gate.
 
-### Settling does not mean synchronization has finished
+### Settled is not synced
 
 `readSettledSettingsFile()` starts with one read, or a supplied initial result,
 then performs at most three more reads with a default 150 ms pause between them.
@@ -201,7 +201,7 @@ A rested launch returns `confirmLater`, and `runLaunchSequence()` pays at
 layout-ready what the window would have seen. The pause is moved out of
 `onload`, not dropped. A launch that settled returns `confirmLater` for a
 loaded file as well, for a reason of its own
-([the look every launch takes at layout-ready](#the-look-every-launch-takes-at-layout-ready)):
+([the look every launch takes at layout-ready](#the-check-at-layout-ready)):
 
 - **A loaded file** owes its second read, unless the launch ended frozen: a
   paused session is rechecked by its own means. `confirmLaunchRead()` is started
@@ -229,7 +229,7 @@ broken and then replaced more than once inside those seconds, which passing
 version is read first depends on that schedule, as it always depended on the
 150 ms one.
 
-### The look every launch takes at layout-ready
+### The check at layout-ready
 
 `confirmLaunchRead()` is not only the read a rested launch skipped. Every
 launch that ends with a file loaded and saving not paused runs it, a launch
@@ -439,7 +439,7 @@ here. Loading or syncing a settings file never starts a scan.
 The real plugin routes external-settings events and document-foreground checks
 through `ReloadQueue`. The look a launch takes at layout-ready enters the same
 queue when it finds the file changed (see
-[The look every launch takes at layout-ready](#the-look-every-launch-takes-at-layout-ready)).
+[The check at layout-ready](#the-check-at-layout-ready)).
 Obsidian's settings-change hook is a useful signal, not a
 promise that every deletion, placeholder eviction, or conflict-sidecar arrival
 will generate a notification. Pre-save reads remain necessary.
@@ -550,7 +550,7 @@ build may need manual recovery from a preserved incoming version. Upgrade device
 together; a new format guard cannot control code in a released build that lacks
 the guard.
 
-### A device's first file and the shipped defaults
+### A device's first file
 
 Every field a user has not edited since 2.13.1 carries no stamp (`[0, ""]`). In
 2.13.1 - 2.14.1, a device that had never adopted a file - a new phone, a reinstall
@@ -728,7 +728,7 @@ The adoption preflight checkpoints the durable accepted file, or a freshly
 stamped snapshot of the registry (`settingsWriter.stamped()`), never the raw
 `toSaveData()` of the moment.
 
-### Backup predicate, verification, and retention
+### Backup rules and retention
 
 `backUpBeforeAdoption()` asks whether incoming state changes/removes a current
 callout row, replaces normalized preferences (including palettes, commands and
@@ -930,7 +930,7 @@ If the current read establishes absence, the explicit retry can use the ordinary
 fresh-install save authority. It still passes the normal freshness checks. Merely
 opening a new installation and clicking Retry cannot create defaults.
 
-### Explicit restoration of the displayed settings
+### Restoring the displayed settings
 
 The internal entry point remains named `startFreshSettings()` for its existing
 callers. Its current meaning is **save the displayed configuration into a missing
@@ -1009,7 +1009,7 @@ its dialog closes, because saving can pause while the dialog is open.
 **The settings are read-only while paused.** Every row that would change a
 setting is disabled or dimmed, and every change refuses with its reason, even
 one a disabled row cannot stop (a drag, the Delete key): see
-[26 § Read-only while saving is paused](26-declarative-settings.md#read-only-while-saving-is-paused).
+[26 § Read-only while saving is paused](20-declarative-settings.md#read-only-while-saving-is-paused).
 The settings redraw whenever the writer freezes or thaws (the saving status is
 one of their signals). A change made while paused used to look applied and
 vanish on the next launch. Export, Version history, Convert to standard
@@ -1320,7 +1320,7 @@ resume, and such a pause keeps its original start. A pause shorter than
 retries) ended by itself and is not announced; nor is a new install's quiet
 provisional pause, or anything once the writer is destroyed.
 
-### Changes replaced by another device, and diagnostics
+### Overwritten changes and diagnostics
 
 Merging is per field and deterministic. With Lamport stamps alone it cannot
 tell a concurrent edit from a later one, so an overwritten value is not, by
@@ -1373,7 +1373,7 @@ appropriate checking/recovery action, not an instruction to loop indefinitely.
 They document current behavior and its boundaries; they are not a claim that
 every combination of OS, provider and hardware has been exercised.
 
-### Missing files, startup, and device history
+### Missing files and device history
 
 | Case | What the implementation must do / how to proceed |
 | --- | --- |
@@ -1389,7 +1389,7 @@ every combination of OS, provider and hardware has been exercised.
 | Unknown/corrupt local marker storage | Do not conclude “new installation.” Require recovery or an explicit reviewed creation decision. |
 | Different config folders | Primary paths and checkpoint keys follow the configured folder. This code does not copy one profile into another. |
 
-### Readability, versions, and incoming changes
+### Readability and incoming changes
 
 | Case | What the implementation must do / how to proceed |
 | --- | --- |
@@ -1427,7 +1427,7 @@ every combination of OS, provider and hardware has been exercised.
 | Unload after physical write starts | Do not promise cancellation of the adapter. Stop follow-ups/publication into the destroyed instance; a later launch must classify disk and checkpoint again. |
 | Only a status observer throws | Log it without interrupting persistence or preventing other observers from receiving the change. |
 
-## Provider behavior and the limits of the abstraction
+## How sync providers behave
 
 The implementation operates on files exposed by Obsidian. It does not authenticate
 to a provider, force a cloud download, inspect an upload queue, choose a cloud
@@ -1537,4 +1537,5 @@ ownership check without accounting for the await it protects.
 ---
 Previous chapter: [07-persistence-and-caching.md](07-persistence-and-caching.md)
 
+---
 Next chapter: [09-render-roles.md](09-render-roles.md)

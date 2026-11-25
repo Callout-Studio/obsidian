@@ -1,3 +1,14 @@
+---
+name: store-bento-artwork
+description: >-
+    How the Obsidian store's image 05 - the bento overview of real UI
+    components, desktop and its portrait adaptation - is built and re-rendered:
+    the renderers, the five isolated captures, the composition, where each
+    tile's content comes from, and how to review it. Use when touching
+    scripts/render-store-bento*.mjs, scripts/store-bento/, anything named
+    05-* under assets/store-screenshots/, or when changing what image 05 shows.
+---
+
 # Store artwork: image 05
 
 Image 05 is a bento overview of actual production UI components. It complements
@@ -45,7 +56,7 @@ They write `05-autocomplete.svg`, `05-find.svg`, `05-ribbon.svg`,
 `05-context-menu.svg`, and `05-saved-palettes.svg` in
 `assets/store-screenshots/desktop/components/`. These captures require the same
 installed Obsidian assets and existing Playwright runtime as
-[the user-guide renderer](20-build-test-release.md#user-guide-svg-renders).
+[the user-guide renderer](../../../docs/internals-docs/22-build-test-release.md#user-guide-svg-renders).
 `PLAYWRIGHT_MODULE`, `BROWSER_EXECUTABLE`, and the Obsidian asset overrides apply.
 No new dependency is installed and no network requests are permitted.
 
@@ -204,10 +215,10 @@ Custom shortcuts occupies the upper-right tile.
 
 | Position | Feature | Genuine component source and scope |
 | --- | --- | --- |
-| Left, tall | [Find callouts](../user-guide/12-find-callouts.md) | Type and format selectors, uniform summary text, file grouping, and heading, block, and inline source references from `05-find.svg`. |
-| Upper middle-left | [Saved color palettes](../user-guide/03-custom-color-palettes.md) | Three native palette rows from `05-saved-palettes.svg`: Coral (solid), Mint glass (transparent checkerboard), and Twilight (three-circle gradient), with pencil and trash controls. |
-| Upper middle-right | [Quick insert](../user-guide/15-quick-insert.md) | Native-styled ribbon, real selected plugin icon, production tooltip, and nearby abstract file bars without arrows from `05-ribbon.svg`. |
-| Upper right | [Custom shortcuts](../user-guide/09-commands-and-hotkeys.md) | Editorial collapsed Idea command box and Command, Shift, and C keycaps representing a possible user-assigned shortcut. No default hotkey is implied. |
-| Right, tall | [Autocomplete](../user-guide/01-the-three-callout-types.md#picking-from-the-autocomplete-menu) | Real CodeMirror input and production suggestions in the dedicated capture. |
-| Lower left, double-width | [Version history](../user-guide/13-syncing-and-backups.md) | One crop of `version-history.svg`, scaled to the tile's width: today's heading on the timeline and its first two versions, with their times, dots, and eye/delete/Restore actions. A third version (the guide's "Before Reset everything") follows the second with the same gap and is cut off by the tile's bottom edge, with the timeline carried on beside it, so the list reads as continuing; the guide's "yesterday" heading between them is skipped because it would not fit. This restores plugin settings, not note history. |
-| Lower middle-right | [Right-click menu](../user-guide/08-the-right-click-menu.md) | The actual five block-callout actions and icons from `05-context-menu.svg`, centered over a partial Idea block that continues beyond the tile's right edge. The block sits at y = 53 so the raised menu overlaps the lower portion of its Idea title, with extra space below the menu. |
+| Left, tall | [Find callouts](../../../docs/user-guide/10-find-callouts.md) | Type and format selectors, uniform summary text, file grouping, and heading, block, and inline source references from `05-find.svg`. |
+| Upper middle-left | [Saved color palettes](../../../docs/user-guide/03-custom-color-palettes.md) | Three native palette rows from `05-saved-palettes.svg`: Coral (solid), Mint glass (transparent checkerboard), and Twilight (three-circle gradient), with pencil and trash controls. |
+| Upper middle-right | [Quick insert](../../../docs/user-guide/11-quick-insert.md) | Native-styled ribbon, real selected plugin icon, production tooltip, and nearby abstract file bars without arrows from `05-ribbon.svg`. |
+| Upper right | [Custom shortcuts](../../../docs/user-guide/09-commands-and-hotkeys.md) | Editorial collapsed Idea command box and Command, Shift, and C keycaps representing a possible user-assigned shortcut. No default hotkey is implied. |
+| Right, tall | [Autocomplete](../../../docs/user-guide/01-the-three-callout-types.md#picking-from-the-autocomplete-menu) | Real CodeMirror input and production suggestions in the dedicated capture. |
+| Lower left, double-width | [Version history](../../../docs/user-guide/15-syncing-and-backups.md) | One crop of `version-history.svg`, scaled to the tile's width: today's heading on the timeline and its first two versions, with their times, dots, and eye/delete/Restore actions. A third version (the guide's "Before Reset everything") follows the second with the same gap and is cut off by the tile's bottom edge, with the timeline carried on beside it, so the list reads as continuing; the guide's "yesterday" heading between them is skipped because it would not fit. This restores plugin settings, not note history. |
+| Lower middle-right | [Right-click menu](../../../docs/user-guide/08-the-right-click-menu.md) | The actual five block-callout actions and icons from `05-context-menu.svg`, centered over a partial Idea block that continues beyond the tile's right edge. The block sits at y = 53 so the raised menu overlaps the lower portion of its Idea title, with extra space below the menu. |

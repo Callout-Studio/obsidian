@@ -101,7 +101,7 @@ what to do about it, then **end the turn** - do not attempt a workaround.
    A build that names a tag the remote does not have ships a Download button
    that can only fail - for every library, since they share the one tag. If
    this fails, pack files were regenerated but never published; see
-   "Refreshing icon pack artwork" in `docs/internals-docs/22-extending.md`.
+   "Refreshing icon pack artwork" in `docs/internals-docs/24-extending.md`.
 
 ## Step 2 - Decide the version
 

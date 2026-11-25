@@ -39,7 +39,7 @@ node assets/website/generator/build.mjs
 ```
 
 `PLAYWRIGHT_MODULE` and `BROWSER_EXECUTABLE` work exactly as for the
-[user-guide renderer](../../docs/internals-docs/20-build-test-release.md#user-guide-svg-renders).
+[user-guide renderer](../../docs/internals-docs/22-build-test-release.md#user-guide-svg-renders).
 No network request is made. The build overwrites the nine SVGs in this folder; copy them into the
 website repo afterwards:
 

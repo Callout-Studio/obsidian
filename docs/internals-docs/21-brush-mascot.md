@@ -1,4 +1,4 @@
-# The brush mascot - the plugin's icon with a face
+# The brush mascot
 
 The mascot is Lucide's **paintbrush**, the plugin's own icon (`PLUGIN_ICON_ID`),
 able to show a face and move. It appears in empty lists, searches that found
@@ -516,3 +516,5 @@ then asks for frames, and it stops with the notice. What it cannot see - how it
 looks and moves - was checked by rendering every animation frame by frame in
 Chrome and in WebKit.
 
+---
+Next chapter: [22-build-test-release.md](22-build-test-release.md)

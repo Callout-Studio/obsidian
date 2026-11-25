@@ -49,7 +49,7 @@ Block callouts include the broadest set of controls:
 
 ![The Block callout settings page in dark mode: the live preview, corner rounding and alignment, the border switches and font scale](../../assets/user-guide/global-block.svg)
 
-These settings shape callouts drawn by Callout Studio. If your active theme owns a callout, the theme keeps control of its appearance; see [Theme integration](17-theme-integration.md). Turn off **Use your theme's callout styles** and Callout Studio draws every callout, with these global settings included; see [Turning your theme's callout styles off](17-theme-integration.md#turning-your-themes-callout-styles-off).
+These settings shape callouts drawn by Callout Studio. If your active theme owns a callout, the theme keeps control of its appearance; see [Theme integration](19-theme-integration.md). Turn off **Use your theme's callout styles** and Callout Studio draws every callout, with these global settings included; see [Turning your theme's callout styles off](19-theme-integration.md#turning-your-themes-callout-styles-off).
 
 ---
-**Next:** [The right-click menu](08-the-right-click-menu.md)
+**Next:** [Editing, replacing & deleting](07-editing-replacing-and-deleting.md)

@@ -44,7 +44,7 @@ Callout Studio needs Obsidian 1.13.4 or later.
 
 [Obsidian community directory](https://community.obsidian.md/plugins/callout-studio): Find Callout Studio's listing and add it to Obsidian. You can also open **Settings → Community plugins → Browse**, search for **Callout Studio**, and select **Install**, then **Enable**.
 
-[Manual installation](docs/internals-docs/20-build-test-release.md#manual-installation-from-a-release): Instructions for downloading a release and installing its files in your vault.
+[Manual installation](docs/internals-docs/22-build-test-release.md#manual-installation-from-a-release): Instructions for downloading a release and installing its files in your vault.
 
 ## Developers
 
@@ -58,9 +58,9 @@ Callout Studio needs Obsidian 1.13.4 or later.
 
 [Settings sync and recovery](docs/internals-docs/08-settings-sync-and-recovery.md): How Callout Studio keeps a local recovery copy of its settings in case sync replaces `data.json` while the plugin is closed, merges valid concurrent edits and recognized conflict copies, and preserves damaged or unsupported data for recovery. For the safest sync setup, install the same up-to-date build on every device.
 
-[Privacy & permissions](docs/internals-docs/25-privacy-and-permissions.md): A full explanation of every download and where data is stored. Callout Studio never sends your vault content anywhere and collects no telemetry or analytics. It only downloads icon artwork you choose and, when needed, a translation for the plugin interface.
+[Privacy & permissions](docs/internals-docs/27-privacy-and-permissions.md): A full explanation of every download and where data is stored. Callout Studio never sends your vault content anywhere and collects no telemetry or analytics. It only downloads icon artwork you choose and, when needed, a translation for the plugin interface.
 
-[Convert to standard Markdown](docs/user-guide/14-danger-zone.md): A guide to converting heading and inline callouts. The action reads Markdown notes locally for a selectable preview and, after a separate irreversible-action confirmation, rewrites the callout syntax and updates links to changed headings. Back up your vault first.
+[Convert to standard Markdown](docs/user-guide/18-danger-zone.md): A guide to converting heading and inline callouts. The action reads Markdown notes locally for a selectable preview and, after a separate irreversible-action confirmation, rewrites the callout syntax and updates links to changed headings. Back up your vault first.
 
 ## License & Third-Party Assets
 

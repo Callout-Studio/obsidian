@@ -2,7 +2,7 @@
 
 Obsidian Publish, Quartz and Digital Garden turn a vault into a website, but none of them runs plugins. Two things go wrong there:
 
-- A heading callout or an inline callout is Callout Studio's own format, so on the site it shows as the text you typed, such as `[!tip]`.
+- A heading callout or an inline callout is Callout Studio's own format, so on the site it shows as the text you typed, such as `[!example]`.
 - A block callout is drawn by the site itself, but the site knows only Obsidian's built-in callouts. A callout you made yourself is drawn as a plain note, and a built-in you changed keeps the site's color and icon.
 
 Callout Studio fixes both, in a different way for each service, because each service gives a different place to do it. Your notes stay exactly as they are.
@@ -135,7 +135,7 @@ In the same file, add `CalloutStudio(),` to the `transformers` list, on the line
       Plugin.Description(),
 ```
 
-The place matters. After `Plugin.Description()`, the callouts are still drawn on the page, but search and RSS show `[!tip]`. Quartz prints a warning when this happens.
+The place matters. After `Plugin.Description()`, the callouts are still drawn on the page, but search and RSS show `[!example]`. Quartz prints a warning when this happens.
 
 Commit and push `package.json`, `package-lock.json` and `quartz.config.ts`, all three together. Your site is built from what you push, not from your computer, and its build installs the plugin from `package-lock.json` along with Quartz's own packages, so you don't need to change how your site is built. If `quartz.config.ts` is pushed without the other two, or `package.json` without `package-lock.json`, the build stops with an error that names `quartz-plugin-callout-studio`.
 
@@ -269,7 +269,7 @@ The site draws its block callouts itself. Callout Studio adds styles on top, so 
 
 - **Carried to the site:** the callout's color in light and dark mode, its background (plain, gradient or none), the text color you chose, its icon and the icon's size and position, and a gradient title.
 - **Global callout style:** only the settings you changed. A border, a corner radius, a title size or a content size you set is carried. A setting you left alone stays as the site draws it.
-- **Metadata colors:** a callout written `> [!tip|pink]` is pink on the site too (see [Callout metadata](18-callout-metadata.md)).
+- **Metadata colors:** a callout written `> [!tip|pink]` is pink on the site too (see [Callout metadata](13-callout-metadata.md)).
 - **Left to the site:** its spacing, its fonts and its fold arrow.
 
 Two kinds of callout keep the site's own look:
@@ -282,25 +282,28 @@ Nothing here needs JavaScript. The styles are part of the files Callout Studio a
 ## What to expect
 
 - **Light and dark.** The callouts follow the site's own light or dark mode.
-- **Tables of contents.** A heading callout shows its title without the `[!tip]` in front. A heading with no title shows the callout's name.
+- **Tables of contents.** A heading callout shows its title without the `[!example]` in front. A heading with no title shows the callout's name.
 - **Links to headings keep working.** The heading's address on the page does not change.
 - **Only the note's content is changed.** Text in the site's navigation and file list is left as it is.
 - **Your Obsidian theme is not on the site.** A callout your theme restyles is drawn as you set it up in Callout Studio. A callout type that only your theme adds is unknown to the site, so it is drawn with your fallback callout's look.
 - **A block callout is the site's, so its details can differ.** Quartz gives a callout a thin border and a lighter background than Obsidian does. Callout Studio keeps that frame and puts your colors in it.
-- **The files are not a Callout Studio backup.** To move your setup to another vault, use the JSON backup (see [Import, export & sharing](10-import-export-and-sharing.md)).
+- **The files are not a Callout Studio backup.** To move your setup to another vault, use the JSON backup (see [Import, export & sharing](14-import-export-and-sharing.md)).
 
 ## Limitations
 
-- **An escaped callout is drawn as a callout.** In a note, `\[!note]` stays as text. A finished web page no longer has the backslash, so the site cannot tell the two apart. To show the text itself, put it in inline code: `` `[!note]` ``. This is true for every service.
-- **Digital Garden: text in braces at the very end of a paragraph.** The garden reads `{…}` at the end of a paragraph, a heading or a list item as its own syntax, and removes it. An inline callout such as `[!note]{my text}` then shows the callout's name instead of your text. Put any character after the closing brace, such as a period, and it works.
+- **An escaped callout is drawn as a callout.** In a note, `\[!example]` stays as text. A finished web page no longer has the backslash, so the site cannot tell the two apart. To show the text itself, put it in inline code: `` `[!example]` ``. This is true for every service.
+- **Digital Garden: text in braces at the very end of a paragraph.** The garden reads `{…}` at the end of a paragraph, a heading or a list item as its own syntax, and removes it. An inline callout such as `[!example]{my text}` then shows the callout's name instead of your text. Put any character after the closing brace, such as a period, and it works.
 - **Quartz: the note has to reach the folder your site is built from.** It does when your vault is that folder, or the whole Quartz repository, and through Obsidian Sync or Git. A plugin that copies only the notes you choose sends it only if you publish it (see [If a plugin publishes your notes](#if-a-plugin-publishes-your-notes)).
 - **Quartz: a theme can restyle block callouts.** A Quartz theme draws block callouts its own way, for example their titles in its text color. Your colors, backgrounds and icons stay. Heading and inline callouts look as you set them up.
 - **Only these services.** Callout Studio writes files for Obsidian Publish, Quartz and Digital Garden only, and works with the Share Note plugin. On a site made some other way, heading and inline callouts show as the text you typed.
 - **Share Note: an unknown callout far down a long note.** A callout type that isn't in your callout list, and wasn't on screen yet when you shared the note, can show a pencil instead of your fallback callout's icon. Its colors are right. Scroll through the note in Reading view before you share it.
 - **Share Note: printing a page.** A block callout whose icon is a picture, an emoji or an icon from another library prints with a pencil instead. The colors print.
-- **Obsidian Publish needs a custom domain**, as described above. On Obsidian Publish, a reader with JavaScript off sees `[!tip]` as text. So do search results and link previews.
-- **The text of a link to a heading callout is not changed.** A link such as `[[Note#[!tip] Title]]` shows the heading as you typed it. Give the link its own text: `[[Note#[!tip] Title|Title]]`. Quartz 4 does not turn such a link into a link at all.
+- **Obsidian Publish needs a custom domain**, as described above. On Obsidian Publish, a reader with JavaScript off sees `[!example]` as text. So do search results and link previews.
+- **The text of a link to a heading callout is not changed.** A link such as `[[Note#[!example] Title]]` shows the heading as you typed it. Give the link its own text: `[[Note#[!example] Title|Title]]`. Quartz 4 does not turn such a link into a link at all.
 - **A block callout whose name isn't plain letters.** Quartz and Digital Garden recognize a block callout only when its name is made of English letters, digits, hyphens and underscores. A name in another script, such as `[!הערה]`, stays a quotation there, and styles cannot change that. Obsidian Publish has no such limit.
 - **Digital Garden: the icon appears a moment late.** A garden adds the icon to a block callout after the page has loaded. Your icon appears at that moment.
 - **Printing a page.** Obsidian Publish and Digital Garden print a block callout with the site's own icon instead of yours. The colors print.
 - **Pictures make the files larger.** A callout whose icon is a picture you uploaded carries that picture in the styles. A few large pictures can double the size of the files.
+
+---
+**Next:** [Languages](17-languages.md)

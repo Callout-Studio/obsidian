@@ -1,4 +1,4 @@
-# Manual discovery, statistics, replace, and delete
+# Vault discovery and actions
 
 ## One discovery entry point
 
@@ -70,7 +70,7 @@ A settings change detected during discovery cancels publication. For external
 file adoption, generic conflict protection preserves a backup before replacing
 local definitions; see [Multi-device sync](08-settings-sync-and-recovery.md#multi-device-sync).
 
-## Read-only occurrence index and navigation
+## The occurrence index
 
 `src/usage/CalloutOccurrenceIndex.ts` owns an in-memory index of Markdown source,
 preferring current editor buffers for open notes and saved content for closed notes.
@@ -362,7 +362,7 @@ zone stays drawn in full.
 What does not help, measured in the live app: `content-visibility`, `contain`,
 `visibility: hidden`, and reducing the rows' own elements. The elements still
 exist for the browser; only `display: none` or a detached element is free. See
-[Common pitfalls](23-common-pitfalls.md#everything-drawn-in-the-window-slows-the-editor).
+[Common pitfalls](25-common-pitfalls.md#drawing-slows-the-editor).
 
 ### Cursor-follow
 
@@ -494,7 +494,7 @@ irreversible flow and does not use the journal.
 `portableCallouts.ts` is the pure converter used by **Danger zone → Convert to
 standard Markdown**. What each token becomes is `convertCalloutLine`
 (`calloutPlainTextLine.ts`), shared with
-[Convert uses to plain text](#convertcalloutstoplaintextinvault---role-specific-stripping);
+[Convert uses to plain text](#converting-uses-to-plain-text);
 this file adds the export's own masks and reparse check. It uses the shared
 source lexer and token grammar, with
 additional conservative masks in `portableCalloutExclusions.ts` for math, HTML
@@ -721,7 +721,7 @@ after a successful callback; it is not a filesystem lock. There is no automatic
 backup or undo. The UI asks users to back up notes and pause editing/sync, and
 separates read-only review from the irreversible final confirmation.
 
-### `convertCalloutsToPlainTextInVault` - role-specific stripping
+### Converting uses to plain text
 
 Converts every occurrence of a set of ids into plain text. The block role is
 this flow's own. Heading and inline tokens go through `convertCalloutLine`

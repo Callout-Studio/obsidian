@@ -30,7 +30,7 @@ A language you have already downloaded switches at once, without a message.
 
 Non-English translations were created with AI assistance, so an awkward phrase or small error may remain. Press **Open an issue** (the bug) in the row at the bottom of the plugin settings to report a correction or suggestion. Say which language and which text should change.
 
-See [Privacy & permissions](../internals-docs/25-privacy-and-permissions.md) for how translation files are downloaded and stored.
+See [Privacy & permissions](../internals-docs/27-privacy-and-permissions.md) for how translation files are downloaded and stored.
 
 ---
-**Next:** [Find callouts](12-find-callouts.md)
+**Next:** [Danger zone](18-danger-zone.md)

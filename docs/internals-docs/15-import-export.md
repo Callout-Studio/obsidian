@@ -115,7 +115,7 @@ the settings writer or recovery service.
    }
    ```
    `getExportableDefinitions()` is `getUserDefined()` **plus every modified
-   built-in** - see [Callout registry](05-callout-registry.md#which-rows-are-persisted-the-built-in-rule).
+   built-in** - see [Callout registry](05-callout-registry.md#which-rows-are-saved).
    The v2 JSON backup is the **only supported full-fidelity restore and
    cross-vault transfer format** for Callout Studio. It is the format users
    should choose when the destination vault also has the plugin installed.
@@ -469,7 +469,7 @@ target carries, from one registry read:
   `--callout-default`, which a published site does not define. Then
   `CSSInjector.generateWebBlockCSS(defs, site, artwork)`: the block callout,
   for the site the target is - see
-  [Block callouts](#block-callouts-a-stylesheet-in-each-sites-own-terms)
+  [Block callouts](#a-block-stylesheet-per-site)
   below. This last part is why the snapshot is built for a target
   (`buildWebBundleData(plugin, target)`); everything before it is the same for
   all three.
@@ -490,7 +490,7 @@ theme restyles is drawn as its own definition says (`paintOwnRoleIcon`, not
 holds all three.
 
 [`targets.ts`](../../src/manager/web/targets.ts) joins that snapshot with the
-renderer and a host ([Render roles § A published site](09-render-roles.md#a-published-site-one-renderer-three-hosts))
+renderer and a host ([Render roles § A published site](09-render-roles.md#published-sites-one-renderer))
 into each service's files. A target is only the joining - which host, which
 module format, where the stylesheet travels:
 
@@ -514,9 +514,9 @@ A fourth target, `script` - one file, `callout-studio-web.js`, for any other
 site - was taken out on 2026-11-16: hardly anyone hosts notes that way, and
 its tab and its stylesheet guess cost more than they served. How it worked,
 and every place that would take it back, is in
-[The Another site target](web-target-another-site.md).
+the `web-target-another-site` skill (`.agents/skills/web-target-another-site/`).
 
-### Block callouts: a stylesheet in each site's own terms
+### A block stylesheet per site
 
 A published site builds `> [!tip]` itself, and the export first left it at
 that. It was not enough: a site ships Obsidian's thirteen callouts and nobody
@@ -603,7 +603,7 @@ split as Digital Garden is:
   (`scripts/lib/quartzPlugin.mjs`) and published from a repository of its own,
   `QUARTZ_PLUGIN_REPO_URL`. Both installers take a whole repository, so it
   cannot be this one. See
-  [Build, test & release](20-build-test-release.md#the-quartz-plugin).
+  [Build, test & release](22-build-test-release.md#the-quartz-plugin).
 - **The snapshot** is a note, `callout-studio-quartz.md`, the same shape as the
   garden's ([`web/static/webNote.ts`](../../src/web/static/webNote.ts), with
   Quartz's name, property and words in
@@ -715,7 +715,7 @@ So the two halves travel separately:
   is in Digital Garden's community list it can be installed by pasting the
   repository's address under **Install from GitHub**; the panel stopped
   showing that address on 2026-11-16 night, at the user's request. See
-  [Build, test & release](20-build-test-release.md#the-digital-garden-plugin).
+  [Build, test & release](22-build-test-release.md#the-digital-garden-plugin).
 - **The snapshot** is a note, which the user publishes like any other. Its
   format is [`web/static/gardenNote.ts`](../../src/web/static/gardenNote.ts),
   imported by both readers:
@@ -1005,7 +1005,7 @@ The page is one row near the foot of a long settings page, and the people it
 is for are the ones least likely to go looking: they already have a site that
 works. So when the vault looks published, the settings page says so once, in
 the notices' box
-([Declarative settings § The notices at the top](26-declarative-settings.md#the-notices-at-the-top)):
+([Declarative settings § The notices at the top](20-declarative-settings.md#the-notices-at-the-top)):
 *It looks like this vault is published with Quartz. Would you like your
 callouts to look the same on your site?*, with **Show me** and ✕.
 [`webOffer.ts`](../../src/manager/web/webOffer.ts) decides which services it
@@ -1121,7 +1121,7 @@ table is changed by this hardening.
 - **IDs**: `ID_BAD_CHAR_RE` rejects pipes, brackets, and non-space
   whitespace (tabs/newlines) - but explicitly **permits** spaces (multi-word
   labels are valid) and, notably, permits `"` and `\`. This is exactly the
-  gap [CSS generation § selector escaping](06-css-generation.md#calloutsel-vs-tokenattrsel---the-selector-escaping-rule)
+  gap [CSS generation § selector escaping](06-css-generation.md#calloutsel-vs-tokenattrsel)
   exists to cover - an imported id can carry those characters into the
   registry with nothing here to stop it.
 - **Colours**: `HEX_COLOR_RE` - `#rgb` or `#rrggbb` only.
@@ -1157,7 +1157,7 @@ table is changed by this hardening.
   personal-CSS ownership mode: the imported callout uses its stored appearance
   normally, and an import does not trigger the load-migration notice.
 
-### `missingImageIssues` - pictures that didn't travel with their callout
+### `missingImageIssues`
 
 This check runs for both the v2 envelope and legacy flat arrays. A legacy array
 cannot carry pictures itself, so its image ids must already exist in the target
@@ -1172,7 +1172,7 @@ picture the target vault **already holds** under that id is fine - the id
 alone is enough, and re-importing a callout back onto the device that first
 made the picture is the ordinary, expected case.
 
-### Applying: add-or-update, never a blind overwrite
+### Applying: add or update
 
 ```ts
 for (const def of defs) {
@@ -1219,7 +1219,7 @@ registry mutation:
 The foreign-plugin window (`PluginImportModal.apply`) takes steps 2 - 4 as well;
 its report or its explicit **Import** click is the confirmation.
 
-### Settings import: restore the groups the file carries; three lists merge by id
+### Importing settings
 
 ```ts
 const present = presentSettingGroups(parsed);  // the settings keys the file itself carries
@@ -1295,7 +1295,7 @@ now-merged-away id, with a one-time notice.
 
 An import that adds callouts also triggers `ensureIconArtworkFor()` for
 every imported icon whose callout doesn't hide it - see
-[Icons § the only repair path](13-icons.md#ensureartworkforicons---the-only-repair-path).
+[Icons § the only repair path](13-icons.md#ensureartworkforicons).
 
 ## The plugin import window
 
@@ -1592,7 +1592,7 @@ file - an `admonitions.json` its export button wrote, a shared pack, or a
   all libraries this plugin also carries. Pictures the user uploaded into
   Admonition come across into **Your images**
   (`convertAdmonitionImage` - same re-encode-through-canvas pipeline as a
-  fresh upload, see [Icons § Your images](13-icons.md#your-images---the-local-never-downloaded-source)).
+  fresh upload, see [Icons § Your images](13-icons.md#your-images-the-local-source)).
 - **A missing colour** defaults to `#448aff` (Obsidian's own Note blue) -
   deliberately **not** Admonition's own behaviour of picking a random colour
   per import, which the source comment calls out as "friendly in the moment

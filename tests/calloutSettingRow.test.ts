@@ -244,7 +244,7 @@ describe("a callout row stays two lines", () => {
 		assert.doesNotMatch(body, /flex-direction|align-items|padding/);
 		assert.ok(!css.includes(".is-phone .modal .setting-item.cs-callout-row"));
 		// A row that is a size container meets Obsidian's unnamed container queries
-		// (docs/internals-docs/23-common-pitfalls.md). Nothing measures this one's
+		// (docs/internals-docs/25-common-pitfalls.md). Nothing measures this one's
 		// width any more: the colour is shown by device, not by how wide the row is.
 		assert.doesNotMatch(body, /container-type/);
 		assert.ok(!css.includes("@container (max-width: 280px)"), "the old narrow-row rule is gone");

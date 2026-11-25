@@ -1,4 +1,4 @@
-# Declarative settings - the tab as a tree Obsidian draws
+# Declarative settings
 
 Since Obsidian 1.13 a settings tab can describe itself as data instead of
 drawing itself: `getSettingDefinitions()` returns a tree of rows, boxes, lists
@@ -380,7 +380,7 @@ user's own `[!warning]`. The `.cs-banners` rules in `styles.css` make the box
 and its rows invisible, so only the notices show, with the box's gap between
 them.
 
-## Fallback, language and the theme's styles
+## Fallback, language and theme
 
 [`declarative/generalRows.ts`](../../src/settings/declarative/generalRows.ts)
 draws the plugin-wide row of the main page's first box, and what goes with the
@@ -391,7 +391,7 @@ language. The controls come from `sections/` (`fallbackPicker.ts` and
 row: `drawLanguageMenu` draws the footer's globe (`footerGroup.ts`) and
 `languageChooser(ctx)` is the paused-guarded pick it calls. A language that has
 to be downloaded adds nothing to the page: it is told in notices (see
-[Localization § what happens when a translation download fails](17-i18n.md#what-happens-when-a-translation-download-fails)).
+[Localization § what happens when a translation download fails](17-i18n.md#when-a-translation-download-fails)).
 
 | Row (`id`) | Kind | Notes |
 |---|---|---|
@@ -879,3 +879,6 @@ searchSettings(tab.settingItems, "palette");  // what Search settings… finds
 
 What it leaves out: the pointer drag engine, control types other than toggle
 and slider, animations and focus moves. Those are checked in the real app.
+
+---
+Next chapter: [21-brush-mascot.md](21-brush-mascot.md)

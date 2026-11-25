@@ -6,7 +6,7 @@ Obsidian lets you add words after a pipe in a callout's brackets: `[!note|wide]`
 
 Write a color after the pipe to paint that one callout in it. Every other callout of the same type keeps its own color.
 
-```md
+```md preview
 > [!mark|pink] Sequence break
 > ...
 
@@ -16,7 +16,7 @@ Write a color after the pipe to paint that one callout in it. Every other callou
 
 It works the same in all three forms:
 
-```md
+```md preview
 ## [!mark|pink] A pink heading callout
 
 A pink [!mark|pink] inline callout, and one [!mark|pink]{with its own text}.
@@ -71,7 +71,7 @@ Themes are pickier than that. Each theme decides how it reads its own words:
 
 The autocomplete menu knows each word's rule. It only offers a word where it would work, and says when a word needs spaces, has to come first or last, or only works on its own.
 
-## Typing metadata with the autocomplete menu
+## Typing metadata from the menu
 
 In the menu that opens after `[!`:
 
@@ -118,7 +118,7 @@ Write one color. If a callout names two, the result doesn't depend on their orde
 - a saved palette wins over a built-in color;
 - Obsidian's colors win over the extra presets.
 
-## When your theme or a snippet uses the same word
+## When your theme uses the same word
 
 Some themes react to color words themselves. Dune reads `red`, `blue`, `green` and `gray`, and Notation 2 and Blue Topaz read `pink` and others. With such a theme, both the theme and Callout Studio color the callout, and the theme may win the background. The line at the bottom of the menu says **Your theme also styles this word** for these words. Other plugins that read color words, such as Callout Metadata, color those callouts too.
 
@@ -126,7 +126,7 @@ A word that one of your own CSS snippets styles is left to that snippet. Callout
 
 ## When your theme draws the callout
 
-Some themes draw Obsidian's built-in callouts themselves (Lumines draws all thirteen), and Callout Studio leaves their look alone (see [Theme integration](17-theme-integration.md)). A color you write after `|` is different: you asked for it on that one callout, so a block callout like `[!note|red]` takes it anyway. Besides the accent and the background, Callout Studio then also colors the frame, the title and the icon, which such a theme paints from its own colors. Every other `note` keeps the theme's look.
+Some themes draw Obsidian's built-in callouts themselves (Lumines draws all thirteen), and Callout Studio leaves their look alone (see [Theme integration](19-theme-integration.md)). A color you write after `|` is different: you asked for it on that one callout, so a block callout like `[!note|red]` takes it anyway. Besides the accent and the background, Callout Studio then also colors the frame, the title and the icon, which such a theme paints from its own colors. Every other `note` keeps the theme's look.
 
 This is the best Callout Studio can do from outside the theme. A theme that draws a callout in a way of its own, such as a stripe made with a shadow, may keep some of its own color. Heading and inline callouts of a type your theme draws aren't available, because they stay plain text there, so the menu offers no colors for them. The exported CSS snippet leaves this part out, because it doesn't know your theme.
 
@@ -145,7 +145,7 @@ Deleting a palette never changes your notes. Callouts that name it go back to th
 
 ## Where it works
 
-Metadata colors work in Reading view, Live Preview and PDF exports. The CSS snippet you can export (see [Import, export & sharing](10-import-export-and-sharing.md)) includes them for block callouts, and a website you set up (see [Publish to the web](19-publish-to-the-web.md)) shows them on all three callout types. They need a recent engine: iOS 16.5 or later on iPhone and iPad, and on a computer an up-to-date Obsidian installer. Where it is older, callouts simply keep their own colors.
+Metadata colors work in Reading view, Live Preview and PDF exports. The CSS snippet you can export (see [Import, export & sharing](14-import-export-and-sharing.md)) includes them for block callouts, and a website you set up (see [Publish to the web](16-publish-to-the-web.md)) shows them on all three callout types. They need a recent engine: iOS 16.5 or later on iPhone and iPad, and on a computer an up-to-date Obsidian installer. Where it is older, callouts simply keep their own colors.
 
 ---
-**Next:** [Publish to the web](19-publish-to-the-web.md)
+**Next:** [Import, export & sharing](14-import-export-and-sharing.md)

@@ -46,7 +46,7 @@ callout left out of the list still works in your notes, and typing its full
 name never offers to create it again.
 
 The menu after `|` has a switch of its own on the same page (see
-[Callout metadata](18-callout-metadata.md#metadata-settings)).
+[Callout metadata](13-callout-metadata.md#metadata-settings)).
 
 Nothing is saved until you click **Create callout**. If you close the editor, the unknown token remains in the note and uses the default fallback style.
 

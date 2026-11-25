@@ -31,7 +31,7 @@ export const PACKS_TAG = "packs-v3";
 /**
  * This repository on GitHub. Releases up to 3.1.0 have its first address here,
  * which works only while GitHub forwards it: see "The repository's address" in
- * docs/internals-docs/20-build-test-release.md.
+ * docs/internals-docs/22-build-test-release.md.
  */
 const REPO = "Callout-Studio/obsidian";
 

@@ -3,7 +3,7 @@
  * screenshot of each SVG at its own size and a device scale of 1, encoded with
  * `cwebp -lossless -z 9`. Only images that already have a `webp/` file are
  * exported; pass names such as `desktop/01-settings` to export a few.
- * See docs/internals-docs/20-build-test-release.md, Store screenshots.
+ * See docs/internals-docs/22-build-test-release.md, Store screenshots.
  */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";

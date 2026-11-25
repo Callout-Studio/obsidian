@@ -72,6 +72,8 @@ scripts/hooks/post-checkout
 !.agents/skills/callout-metadata-pipe/
 !.agents/skills/ci-quality-gates/
 !.agents/skills/localization-change-safety/
+!.agents/skills/store-bento-artwork/
+!.agents/skills/web-target-another-site/
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store

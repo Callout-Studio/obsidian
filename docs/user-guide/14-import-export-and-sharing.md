@@ -27,7 +27,7 @@ It does not scan, import, enable, disable, or modify existing files in the
 vault's CSS snippets folder.
 
 Before applying anything, Callout Studio saves a copy of your current setup to
-its [backups folder](13-syncing-and-backups.md#automatic-backups). While saving
+its [backups folder](15-syncing-and-backups.md#automatic-backups). While saving
 is paused, the import is refused and the window stays open, so you can try again
 once saving works.
 
@@ -53,7 +53,7 @@ size limit, so a small compressed file can still be rejected.
 
 ## Import a Callout Studio backup
 
-Choose the Callout Studio backup format when you want to bring back a setup that was previously exported from Callout Studio. To return to a version saved automatically, [Restore an earlier version](13-syncing-and-backups.md#version-history) lists those versions newest first, grouped by day. Identical copies form one row. Its **View details** eye button opens directly to **What changed**, comparing your current setup with what would change after restoring that version, including visual previews of affected callouts. Earlier versions are compared and restored there; **Export** in settings saves the setup currently displayed.
+Choose the Callout Studio backup format when you want to bring back a setup that was previously exported from Callout Studio. To return to a version saved automatically, [Restore an earlier version](15-syncing-and-backups.md#version-history) lists those versions newest first, grouped by day. Identical copies form one row. Its **View details** eye button opens directly to **What changed**, comparing your current setup with what would change after restoring that version, including visual previews of affected callouts. Earlier versions are compared and restored there; **Export** in settings saves the setup currently displayed.
 
 Before anything changes, Callout Studio shows what the file will do: how many callout types it adds, how many existing ones it replaces with the file's version, and how many groups of settings it restores. If the file has problems, the report lists them instead. Then a copy of your current setup is saved to the backups folder.
 
@@ -63,7 +63,7 @@ Before anything changes, Callout Studio shows what the file will do: how many ca
 - Saved palettes are merged by id and by name, so your other ones stay. A palette in the file that has the same name as one of yours replaces it instead of becoming a second palette with that name, and the callouts that use it take on the file's colors. Names are compared ignoring capitals and spaces around them.
 - While saving is paused, **Import** is unavailable. If the import is displayed but could not be saved, a message says so.
 
-For sync guidance and recovery steps, see [Syncing & backups](13-syncing-and-backups.md).
+For sync guidance and recovery steps, see [Syncing & backups](15-syncing-and-backups.md).
 
 ## Export a CSS snippet
 
@@ -85,7 +85,7 @@ A callout your active theme draws entirely is left out of the file. A callout th
 
 A site made with Obsidian Publish, Quartz or Digital Garden doesn't run Callout Studio. Heading and Inline callouts show there as the text you typed, and a Block callout loses the color and icon you gave it. Under **Website** in the settings, select **Set up** beside **Publish to the web**. A panel opens in the right sidebar. Choose your service, then select **Create files** (**Create note** for Quartz and Digital Garden). Callout Studio writes what that service needs into your vault, and the panel lists the steps to do once on your site.
 
-The files are **not a Callout Studio backup**. They are a copy of your callouts, and once written Callout Studio writes them again by itself after you change a callout. [Publish to the web](19-publish-to-the-web.md) explains each service.
+The files are **not a Callout Studio backup**. They are a copy of your callouts, and once written Callout Studio writes them again by itself after you change a callout. [Publish to the web](16-publish-to-the-web.md) explains each service.
 
 ---
-**Next:** [Languages](11-languages.md)
+**Next:** [Syncing & backups](15-syncing-and-backups.md)

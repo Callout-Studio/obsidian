@@ -48,7 +48,7 @@ settings-display, theme-change, or modal-close hook runs callout discovery.
    (`confirmLaunchRead`, started beside the sequence and not awaited by it):
    Obsidian starts watching the configuration folder only after every plugin
    has loaded, so a file replaced before then is reported to no one
-   ([the look every launch takes](08-settings-sync-and-recovery.md#the-look-every-launch-takes-at-layout-ready)).
+   ([the look every launch takes](08-settings-sync-and-recovery.md#the-check-at-layout-ready)).
    For a launch that skipped the settling window this is also the read it
    skipped, and a provisional fresh install waits the skipped pause before it
    is confirmed. After confirming whether this
@@ -86,7 +86,7 @@ Closing a modal, clearing a preview, or finishing a write releases a pending rel
 Successful adoption refreshes theme appearance, command registration and the
 settings view without re-discovering callouts. The complete read/merge/backup,
 ownership, and missing-file behavior is owned by
-[Settings saving, synchronization, and recovery](08-settings-sync-and-recovery.md#multi-device-sync).
+[Settings sync and recovery](08-settings-sync-and-recovery.md#multi-device-sync).
 This chapter describes when those operations are wired into the plugin lifecycle.
 
 ## Unload

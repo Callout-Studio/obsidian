@@ -100,7 +100,7 @@ It also has a shared SVG complexity limit. A backup import that would exceed
 the limits after combining with your existing pictures is rejected. An
 Admonition import reports new pictures it cannot add and keeps existing ones.
 
-Uploaded files remain on your device and are stored with the plugin settings. See [Privacy & permissions](../internals-docs/25-privacy-and-permissions.md) for the storage and download details.
+Uploaded files remain on your device and are stored with the plugin settings. See [Privacy & permissions](../internals-docs/27-privacy-and-permissions.md) for the storage and download details.
 
 ## Adjust or remove the icon
 

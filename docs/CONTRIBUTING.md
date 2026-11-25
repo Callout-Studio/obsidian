@@ -6,7 +6,7 @@ Contributions of any kind and size are warmly welcomed - whether you found a bug
 
 I am always looking for ways to expand and improve the plugin. At the same time, I want to keep it clean and easy to use without overloading it with too many features. Finding the right balance is key! Because of this, I apologize in advance if a specific feature suggestion doesn't end up making it into the plugin - but I would still love to chat, hear your thoughts, and read your feedback either way.
 
-Every piece of feedback, bug report, or pull request is a wonderful gift to this project. As a small token of my gratitude for taking your time to help improve it, I would be honored to add your name to my [💖 Special Thanks](../README.md#special-thanks) list!
+Every piece of feedback, bug report, or pull request is a wonderful gift to this project. As a small token of my gratitude for taking your time to help improve it, I would be honored to add your name to my [Special Thanks](https://github.com/Callout-Studio/obsidian#special-thanks) list!
 
 ## Setup
 
@@ -17,7 +17,7 @@ npm run dev     # watch build, esbuild with inline sourcemaps
 
 You'll need a current Node LTS.
 
-Code formatting is automatic - you never need to think about tabs, line breaks or quotes. Open the repository folder in VS Code and install the two extensions it recommends (**Prettier** and **ESLint**); from then on every save formats the file with [Prettier](https://prettier.io), using the project's settings. In another editor, or if you'd rather not install anything, the pre-commit hook formats whatever you commit, and `npm run format` formats everything at once. CI rejects unformatted code, so it can't slip through. See [Code formatting](internals-docs/20-build-test-release.md#code-formatting) for what is and isn't formatted.
+Code formatting is automatic - you never need to think about tabs, line breaks or quotes. Open the repository folder in VS Code and install the two extensions it recommends (**Prettier** and **ESLint**); from then on every save formats the file with [Prettier](https://prettier.io), using the project's settings. In another editor, or if you'd rather not install anything, the pre-commit hook formats whatever you commit, and `npm run format` formats everything at once. CI rejects unformatted code, so it can't slip through. See [Code formatting](internals-docs/22-build-test-release.md#code-formatting) for what is and isn't formatted.
 
 ```bash
 npm test        # every tests/*.test.ts, bundled by esbuild and run by node:test
@@ -42,7 +42,7 @@ Describe the problem you're trying to solve rather than a finished spec. There's
 ## Submitting a change
 
 1. Fork the repo, branch off `master` (`feature/short-description` or `fix/short-description`).
-2. Make your change. [`docs/internals-docs/README.md`](internals-docs/README.md) is the architecture reference - read [03-plugin-lifecycle.md](internals-docs/03-plugin-lifecycle.md) and [06-css-generation.md](internals-docs/06-css-generation.md) for the registry → CSS injector → re-render loop before touching anything under `src/manager/`; a couple of real bugs here have come from missing one of those steps. It also has step-by-step checklists for adding a setting/command/callout field/icon source ([22-extending.md](internals-docs/22-extending.md)). [AGENTS.md](../AGENTS.md) is just the short entry point that links here.
+2. Make your change. [`docs/internals-docs/README.md`](internals-docs/README.md) is the architecture reference - read [03-plugin-lifecycle.md](internals-docs/03-plugin-lifecycle.md) and [06-css-generation.md](internals-docs/06-css-generation.md) for the registry → CSS injector → re-render loop before touching anything under `src/manager/`; a couple of real bugs here have come from missing one of those steps. It also has step-by-step checklists for adding a setting/command/callout field/icon source ([24-extending.md](internals-docs/24-extending.md)). [AGENTS.md](../AGENTS.md) is just the short entry point that links here.
 3. Run `npm run format`, `npm run lint`, `npm run build` and `npm test` before pushing. CI runs the same checks on every push and PR (formatting as the read-only `npm run format:check`), so anything that fails locally will fail there too. A `todo` entry in a suite is a known bug someone wrote down, not a test that's allowed to stay red.
 4. Add or extend a test where the change is testable without Obsidian - that's the first place a change is proved. Then check it in Obsidian too (see Setup above), and say how you tested it in the PR description; for anything visual that's the only signal a reviewer has.
 
@@ -52,7 +52,7 @@ Keep PRs to one change. A fix bundled with an unrelated refactor just makes both
 
 Full list in [AGENTS.md](../AGENTS.md). The ones that bite most often:
 - Strict TypeScript - no `any` without an ESLint-disable comment explaining why.
-- Handwritten source files have a 500-line limit, excluding blank and comment-only lines. `npm test` and CI fail above it unless the exact repository-relative path is listed in [`scripts/source-size-exceptions.json`](../scripts/source-size-exceptions.json); exceptions have no per-file size cap. Split by responsibility when it improves the code. See [Source file size](internals-docs/20-build-test-release.md#source-file-size) for the scope and exception format.
+- Handwritten source files have a 500-line limit, excluding blank and comment-only lines. `npm test` and CI fail above it unless the exact repository-relative path is listed in [`scripts/source-size-exceptions.json`](../scripts/source-size-exceptions.json); exceptions have no per-file size cap. Split by responsibility when it improves the code. See [Source file size](internals-docs/22-build-test-release.md#source-file-size) for the scope and exception format.
 - Listeners and intervals go through `this.registerEvent` / `registerInterval` / `registerDomEvent`, not raw `addEventListener` or `setInterval`, so they don't leak past plugin unload.
 - Command IDs don't change once released - they're part of the public surface.
 - User-facing text goes through `t()`, with the key added to `src/i18n/en.ts`.
